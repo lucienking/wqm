@@ -1,2 +1,0 @@
-# wqm
-A private project. 
