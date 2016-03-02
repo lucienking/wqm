@@ -37,6 +37,7 @@
 				</td>
 				<td colspan="1" width="10%" align="left" >
 				   <a class="easyui-linkbutton" href="#" id="waterSearchButton">&nbsp;查&nbsp;询&nbsp;</a>
+				    <a class="easyui-linkbutton" href="#" id="waterResetButton">&nbsp;重&nbsp;置&nbsp;</a>
 				</td>
 			</tr>
 		</table>
