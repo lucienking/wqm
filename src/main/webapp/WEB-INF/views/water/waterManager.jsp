@@ -337,19 +337,6 @@ $("#search_parentId").combobox({
     method:'GET'
 });
 
-/**
- * 水体类型为栏目时 水体链接默认为"/" 不允许更改 
- */
-$("#waterIsLeaf").combobox({
-    onChange: function (n,o) { 
-    	if(n == 'false') {
-    		$("#waterUrl").textbox('setValue',"/");
-    		$("#waterUrl").textbox("readonly",true); 
-    	}else{
-    		$("#waterUrl").textbox("readonly",false); 
-    	}
-    }
-});
 
 // /*
 //  * 必填项检测
