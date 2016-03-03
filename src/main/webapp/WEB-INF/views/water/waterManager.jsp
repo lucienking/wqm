@@ -19,8 +19,8 @@
 					<label for="search_waterIsLeaf">水体类型</label>
 					<select id="search_waterIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
 						<option value="" selected="selected">--请选择--</option>
-					    <option value="false">区域</option>
-					    <option value="true">水体</option>
+					    <option value="false">水体</option>
+					    <option value="true">断面</option>
 					</select>
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
@@ -57,12 +57,12 @@
 			<input id="waterStatus" name="waterStatus" class="easyui-textbox" style="width:120px;"/> 
 		</div>
 		<div class="line-div">
-			水体权限：
-			<input id="waterAuthorId" name="authorId" class="easyui-textbox" style="width:120px;" data-option="required:true"/>
+			水体图标：
+			<input id="waterIconCls" name="iconCls" value="" class="easyui-textbox" style="width:120px;"/>
 			水体类型：
 			<select id="waterIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
-			    <option value="false" selected="selected">栏目</option>
-			    <option value="true">水体</option>
+			    <option value="false" selected="selected">水体</option>
+			    <option value="true">断面</option>
 			</select>
 		</div>
 		<div class="line-div">
@@ -70,18 +70,6 @@
 			<input id="waterSortNum" name="sortNum" value="1" class="easyui-textbox" style="width:120px;"/>
 			父水体号：
 			<input id="waterParentId" name="parentId" style="width:120px;" />
-		</div>
-		<div class="line-div">
-			水体图标：
-			<input id="waterIconCls" name="iconCls" value="" class="easyui-textbox" style="width:120px;"/>
-			打开方式：
-			<!-- <select id="waterOpenType" class="easyui-combobox" name="openType" style="width:120px;">
-			    <option value="IFRAME" selected="selected">iframe方式</option>
-			    <option value="HREF">href方式</option>
-			</select> -->
-			<jksb:diction id="waterOpenType" name="openType" groupId="MENU_OPEN_TYPE"  cssClass="easyui-combobox" style="width:120px" defaultValue="IFRAME">
-				&nbsp;
-			</jksb:diction>
 		</div>
 		<div class="line-div">
 			水体链接：
@@ -324,7 +312,7 @@ $(p).pagination({
  * 父水体选项
  */
 $("#waterParentId").combobox({
-    url:'${ctx}/water/water/getParents',
+    url:'${ctx}/water/getParents',
     valueField:'id',
     textField:'name',
     method:'GET'
