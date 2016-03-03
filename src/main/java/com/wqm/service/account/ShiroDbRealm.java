@@ -39,6 +39,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	
 	private final static Logger logger = LoggerFactory.getLogger(ShiroDbRealm.class);
 
+	@Autowired
 	public UserService userService;
 
 	/**
@@ -147,7 +148,6 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		}
 	}
 
-	@Autowired 
 	public UserService getUserService() {
 		return userService;
 	}
