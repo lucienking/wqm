@@ -11,8 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wqm.entity.water.WaterEntity;
-import com.wqm.repository.water.WaterDao;
+import com.wqm.entity.water.AreaEntity;
+import com.wqm.repository.water.AreaDao;
+
 
 
 @Component
@@ -20,14 +21,14 @@ import com.wqm.repository.water.WaterDao;
 public class AreaService {
 	
 	@Autowired
-	private WaterDao waterDao;
+	private AreaDao areaDao;
 	
 	/**
 	 * 获取一级水体
 	 * @return
 	 */
-	public List<WaterEntity> getWaterListByRoot(){
-		return waterDao.getWatersByParentCode("root",new Sort(Direction.ASC, "sortNum"));
+	public List<AreaEntity> getAreaListByRoot(){
+		return areaDao.getAreasByParentCode("root",new Sort(Direction.ASC, "sortNum"));
 	}
 	
 	/**
@@ -35,8 +36,8 @@ public class AreaService {
 	 * @param id
 	 * @return
 	 */
-	public WaterEntity getWaterById(Long id){
-		return waterDao.findOne(id);
+	public AreaEntity getAreaById(Long id){
+		return areaDao.findOne(id);
 	}
 	
 	/**
@@ -44,8 +45,8 @@ public class AreaService {
 	 * @param id
 	 * @return
 	 */
-	public List<WaterEntity> getWaterListById(String code,Sort sort){
-		return waterDao.getWatersByParentCode(code,sort);
+	public List<AreaEntity> getAreaListById(String code,Sort sort){
+		return areaDao.getAreasByParentCode(code,sort);
 	}
 	
 	/**
@@ -53,16 +54,16 @@ public class AreaService {
 	 * @param id
 	 * @return
 	 */
-	public List<WaterEntity> getWaterListById(String code){
-		return waterDao.getWatersByParentId(code);
+	public List<AreaEntity> getAreaListById(String code){
+		return areaDao.getAreasByParentId(code);
 	}
 	
 	/**
 	 * 获取全部水体
 	 * @return
 	 */
-	public List<WaterEntity> getAllWaters(){
-		return (List<WaterEntity>) waterDao.findAll();
+	public List<AreaEntity> getAllAreas(){
+		return (List<AreaEntity>) areaDao.findAll();
 	}
 	
 	/**
@@ -72,37 +73,37 @@ public class AreaService {
 	 * @param spec
 	 * @return
 	 */
-	public Page<WaterEntity> getWatersByPage(Specification<WaterEntity> spec,PageRequest pageRequest){
-		return waterDao.findAll(spec,pageRequest);
+	public Page<AreaEntity> getAreasByPage(Specification<AreaEntity> spec,PageRequest pageRequest){
+		return areaDao.findAll(spec,pageRequest);
 	}
 	
 	/**
 	 * 获取全部的父水体项
 	 * @return
 	 */
-	public List<WaterEntity> getAllParents(){
-		List<WaterEntity> waters = (List<WaterEntity>) waterDao.findAllParents();
-		WaterEntity water = new WaterEntity();
-		water.setId(0L);
-		water.setName("全部水体");
-		waters.add(water);
-		return waters;
+	public List<AreaEntity> getAllParents(){
+		List<AreaEntity> areas = (List<AreaEntity>) areaDao.findAllParents();
+		AreaEntity area = new AreaEntity();
+		area.setId(0L);
+		area.setName("全部水体");
+		areas.add(area);
+		return areas;
 	}
 	
 	/**
 	 * 保存水体
-	 * @param water
+	 * @param area
 	 * @return
 	 */
-	public WaterEntity saveWater(WaterEntity water){
-		return waterDao.save(water);
+	public AreaEntity saveArea(AreaEntity area){
+		return areaDao.save(area);
 	}
 	
 	/**
 	 * 删除水体
 	 * @param ids
 	 */
-	public void deleWater(List<Long> ids){
-		waterDao.deleWatersByIds(ids);
+	public void deleArea(List<Long> ids){
+		areaDao.deleAreasByIds(ids);
 	}
 }
