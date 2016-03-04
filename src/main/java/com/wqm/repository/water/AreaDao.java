@@ -26,13 +26,6 @@ public interface AreaDao extends PagingAndSortingRepository<AreaEntity, Long>,Jp
 	public List<AreaEntity> getAreasByParentId(String code);
 	
 	/**
-	 * 获得全部的父水体项
-	 * @return
-	 */
-	@Query("select area from AreaEntity area where area.isLeaf = 'false'")
-	public List<AreaEntity> findAllParents();
-	
-	/**
 	 * 删除水体
 	 */
 	@Modifying
