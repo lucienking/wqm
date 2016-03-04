@@ -51,7 +51,7 @@
 	<table id="menuDatagrid" style="width:100%;"></table>
 </div>
 <div id="menuDataDialog"  style="display:none">
-	<form id="meunDataForm" style="margin:10px" >
+	<form id="menuDataForm" style="margin:10px" >
 		<input type="hidden" id="menuId" name="id"  ></input>
 		<input type="hidden" id="menuSaveType" name ="saveType" value="create"></input>
 		<div class="line-div">
@@ -94,7 +94,7 @@
 	</form>
 </div>
 
-<div id="toolbar">
+<div id="menu_toolbar">
 	<jksb:hasAutority authorityId="007001001">
 		<a href="javascript:menuAddData()" id = "menuAddButton" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" >新增</a>
 	</jksb:hasAutority>
@@ -155,7 +155,7 @@ $('#menuDatagrid').datagrid({
         {field:'updateDate',title:'修改日期',width:'10%'}
     ]],
     queryParams:$('#menuSearchConditionForm').getFormData(), 
-    toolbar:"#toolbar",					//根据权限动态生成按钮
+    toolbar:"#menu_toolbar",					//根据权限动态生成按钮
  /* toolbar: [{							//工具栏
     		id:'addButton',
     		text:'新增',
@@ -247,7 +247,7 @@ function menuSave(){
 		$.ajax({
 			type: "POST",
 			url:"${ctx}/sys/menu/"+saveType,
-			data:$('#meunDataForm').serialize(), //将Form 里的值序列化
+			data:$('#menuDataForm').serialize(), //将Form 里的值序列化
 			asyn:false,
 		    error: function(jqXHR, textStatus, errorMsg) {
 		    	$.messager.alert('操作结果',""+jqXHR.responseText);
@@ -326,7 +326,7 @@ function setMenuFormValue(selected){
 	 $("#menuSaveType").val("update");
 }
 function clearMenuForm(){
-//	 $("#meunDataForm")[0].reset();       //此为调用DOM 的方法来reset,手动reset如下
+//	 $("#menuDataForm")[0].reset();       //此为调用DOM 的方法来reset,手动reset如下
  	 $("#menuName").textbox('setValue',"");
 	 $("#menuStatus").textbox('setValue',"");
 	 $("#menuUrl").textbox('setValue',"/");
