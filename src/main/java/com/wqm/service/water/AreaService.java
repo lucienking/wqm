@@ -24,7 +24,7 @@ public class AreaService {
 	private AreaDao areaDao;
 	
 	/**
-	 * 获取一级水体
+	 * 获取一级区域
 	 * @return
 	 */
 	public List<AreaEntity> getAreaListByRoot(){
@@ -32,7 +32,7 @@ public class AreaService {
 	}
 	
 	/**
-	 * 按ID查找水体
+	 * 按ID查找区域
 	 * @param id
 	 * @return
 	 */
@@ -41,7 +41,7 @@ public class AreaService {
 	}
 	
 	/**
-	 * 按ID获取子水体
+	 * 按ID获取子区域
 	 * @param id
 	 * @return
 	 */
@@ -50,7 +50,7 @@ public class AreaService {
 	}
 	
 	/**
-	 * 按code获取子水体
+	 * 按code获取子区域
 	 * @param id
 	 * @return
 	 */
@@ -59,7 +59,7 @@ public class AreaService {
 	}
 	
 	/**
-	 * 获取全部水体
+	 * 获取全部区域
 	 * @return
 	 */
 	public List<AreaEntity> getAllAreas(){
@@ -67,7 +67,7 @@ public class AreaService {
 	}
 	
 	/**
-	 * 分页查询水体
+	 * 分页查询区域
 	 * 带查询条件spec
 	 * @param pageRequest
 	 * @param spec
@@ -78,20 +78,7 @@ public class AreaService {
 	}
 	
 	/**
-	 * 获取全部的父水体项
-	 * @return
-	 */
-	public List<AreaEntity> getAllParents(){
-		List<AreaEntity> areas = (List<AreaEntity>) areaDao.findAllParents();
-		AreaEntity area = new AreaEntity();
-		area.setId(0L);
-		area.setName("全部水体");
-		areas.add(area);
-		return areas;
-	}
-	
-	/**
-	 * 保存水体
+	 * 保存区域
 	 * @param area
 	 * @return
 	 */
@@ -100,7 +87,7 @@ public class AreaService {
 	}
 	
 	/**
-	 * 删除水体
+	 * 删除区域
 	 * @param ids
 	 */
 	public void deleArea(List<Long> ids){
