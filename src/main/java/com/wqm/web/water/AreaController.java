@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wqm.common.persistence.SearchFilter.Operator;
 import com.wqm.common.persistence.SpecificationFactory;
 import com.wqm.entity.water.AreaEntity;
-import com.wqm.service.sys.DictionaryService;
 import com.wqm.service.water.AreaService;
 import com.wqm.web.BaseController;
 
@@ -43,9 +42,6 @@ public class AreaController extends BaseController{
 
 	@Autowired
 	private AreaService areaService;
-	
-	@Autowired
-	private DictionaryService dictionaryService;
 	
 	private final static Logger logger = LoggerFactory.getLogger(AreaController.class);
 	
@@ -87,7 +83,7 @@ public class AreaController extends BaseController{
 	 */
 	@RequestMapping(method = RequestMethod.GET,value = "/areaManager")
 	public String  areasManager(Model model){		 
-		return "/area/areaManager";
+		return "/water/areaManager";
 	}
 	
 	/**
@@ -106,7 +102,7 @@ public class AreaController extends BaseController{
 		}
 		model.addAttribute("area",area);
 		model.addAttribute("sortType", sortType);
-		return "/area/areaForm";
+		return "/water/areaForm";
 	}
 	
 	/**
@@ -131,13 +127,11 @@ public class AreaController extends BaseController{
 	public Map<String,Object> getAreasPage(HttpServletRequest request){
 		//查询条件
 		SpecificationFactory<AreaEntity> specf = new SpecificationFactory<AreaEntity>();
-		specf.addSearchParam("name", Operator.LIKE, request.getParameter("areaName"));
+		specf.addSearchParam("name", Operator.LIKE, request.getParameter("name"));
+		specf.addSearchParam("code", Operator.LIKE, request.getParameter("code"));
 		specf.addSearchParam("user.name", Operator.LIKE,  request.getParameter("userName"));
-		specf.addSearchParam("authorId", Operator.LIKE,  request.getParameter("authorId"));
 		specf.addSearchParam("parentCode", Operator.EQ,  StringUtils.isBlank(request.getParameter("parentId"))?
-				"":Long.valueOf(request.getParameter("parentId")));
-		specf.addSearchParam("isLeaf", Operator.EQ,  StringUtils.isBlank(request.getParameter("isLeaf"))?
-				"":Boolean.valueOf(request.getParameter("isLeaf")));
+				"":Long.valueOf(request.getParameter("parentCode")));
 		//分页排序信息
 		Page<AreaEntity> areas= areaService.getAreasByPage(specf.getSpecification(),buildPageRequest(request));
 		return convertToResult(areas);
@@ -221,5 +215,16 @@ public class AreaController extends BaseController{
 		if (id != -1) {
 			model.addAttribute("area", areaService.getAreaById(id));
 		}
+	}
+	
+	/**
+	 * 获得全部的父水体项，即所有的栏目。
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getParents")
+	public List<AreaEntity> getParents(){
+		List<AreaEntity> areas= areaService.getAllAreas();
+		return areas;
 	}
 }

@@ -49,6 +49,15 @@ public class WaterService {
 	}
 	
 	/**
+	 * 按区域获得水体
+	 * @param areaCode
+	 * @return
+	 */
+	public List<WaterEntity> getWaterByAreaCode(String areaCode){
+		return waterDao.getWaterByAreaCode(areaCode);
+	}
+	
+	/**
 	 * 按code获取子水体
 	 * @param id
 	 * @return
@@ -84,6 +93,7 @@ public class WaterService {
 		List<WaterEntity> waters = (List<WaterEntity>) waterDao.findAllParents();
 		WaterEntity water = new WaterEntity();
 		water.setId(0L);
+		water.setCode("0");
 		water.setName("全部水体");
 		waters.add(water);
 		return waters;

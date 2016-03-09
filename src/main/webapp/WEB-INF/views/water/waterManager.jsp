@@ -18,9 +18,9 @@
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_waterIsLeaf">水体类型</label>
 					<select id="search_waterIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
-						<option value="" selected="selected">--请选择--</option>
-					    <option value="false">水体</option>
-					    <option value="true">断面</option>
+						 <option value="" selected="selected">--请选择--</option>
+					     <option value="true">水体</option>
+			   			 <option value="false">断面</option>
 					</select>
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
@@ -53,30 +53,32 @@
 		<div class="line-div">
 			水体名称：
 			<input id="waterName" name="name"  class="easyui-textbox" style="width:120px;"/>
-			水体状态：
-			<input id="waterStatus" name="waterStatus" class="easyui-textbox" style="width:120px;"/> 
-		</div>
-		<div class="line-div">
-			水体图标：
-			<input id="waterIconCls" name="iconCls" value="" class="easyui-textbox" style="width:120px;"/>
-			水体类型：
-			<select id="waterIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
-			    <option value="false" selected="selected">水体</option>
-			    <option value="true">断面</option>
-			</select>
+			水体编码：
+			<input id="waterCode" name="code" class="easyui-textbox" style="width:120px;"/> 
 		</div>
 		<div class="line-div">
 			水体顺序：
 			<input id="waterSortNum" name="sortNum" value="1" class="easyui-textbox" style="width:120px;"/>
-			父水体号：
-			<input id="waterParentId" name="parentId" style="width:120px;" />
+			水体类型：
+			<select id="waterIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
+			    <option value="true" selected="selected">水体</option>
+			    <option value="false">断面</option>
+			</select>
 		</div>
 		<div class="line-div">
-			水体链接：
-			<input id="waterUrl" name="waterUrl" class="easyui-textbox" style="width:310px;"/>
+			所属区域：
+			<input id="belong_area" name="areaCode" class="easyui-textbox" style="width:120px;"/>
+			父水体号：
+			<input id="waterParentId" name="parentCode" style="width:120px;" />
 		</div>
 	</form>
 </div>
+
+<form id="waterMonitorItemForm" style="margin:10px" >
+	<div id="waterMonitorItemDialog"  style="display:none;">
+		<ul id="waterMonitorItemTree"></ul>
+	</div>
+</form>
 
 <div id="water_toolbar">
 	<jksb:hasAutority authorityId="007001001">
@@ -88,15 +90,9 @@
 	<jksb:hasAutority authorityId="007001002">
 		<a href="javascript:waterDeleData()" id = "waterDeleButton" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true,disabled:true," >删除</a>
 	</jksb:hasAutority>
-	<jksb:hasAutority authorityId="007001003">
-		<a href="#" id = "waterEnableButton" class="easyui-linkbutton" data-options="iconCls:'pic_17',plain:true,disabled:true" >启用</a>
+	<jksb:hasAutority authorityId="007001002">
+		<a href="javascript:waterMonitorItem()" id = "waterMonitorItemButton" class="easyui-linkbutton" data-options="iconCls:'pic_18',plain:true,disabled:true," >设置监测项</a>
 	</jksb:hasAutority>
-	<jksb:hasAutority authorityId="007001003">
-		<a href="#" id = "waterDisableButton" class="easyui-linkbutton" data-options="iconCls:'pic_18',plain:true,disabled:true" >停用</a>
-	</jksb:hasAutority>
-</div>
-
-<div id="dataDialog2"  >
 </div>
 
 <script type="text/javascript">
@@ -104,29 +100,28 @@
  *  datagrid 初始化 
  */
 $('#waterDatagrid').datagrid({
-    url:"${ctx}/water/water/getWatersPage",
+    url:"${ctx}/water/getWatersPage",
     method:'get',
     pagination:true,
     columns:[[
         {checkbox:true,field:'',title:'' },
         {field:'id',title:'编号',width:'5%',sortable:true},
         {field:'name',title:'水体名称',width:'10%'},
-        {field:'name',title:'水体编码',width:'10%'},
-        {field:'status',title:'状态',width:'5%',formatter:function(value,rec){
-        	if(value=="1")  
-        		return "启用";
-        	else if(value=="0")  		  
-        		return "<span style='color:red'>停用</span>";
+        {field:'code',title:'水体编码',width:'10%'},
+        {field:'area',title:'所属区域',width:'10%',formatter:function(value,rec){
+        	if(rec.area)  
+        		return rec.area.name;
+        	else  		  
+        		return "未知";
         }},
         {field:'sortNum',title:'排序',width:'5%'},
         {field:'isLeaf',title:'是否水体',width:'5%',formatter:function(value,rec){
         	if(value)  
         		return "水体";
         	else  		  
-        		return "区域";
+        		return "断面";
         }},
-        {field:'parentId',title:'父水体',width:'5%'},
-        {field:'authorId',title:'权限编码',width:'8%'},
+        {field:'parentCode',title:'父水体',width:'5%'},
         {field:'user',title:'操作员',width:'8%',formatter:function(value,rec){
         	if(rec.user)  
         		return rec.user.name;
@@ -138,24 +133,6 @@ $('#waterDatagrid').datagrid({
     ]],
     queryParams:$('#waterSearchConditionForm').getFormData(), 
     toolbar:"#water_toolbar",					//根据权限动态生成按钮
- /* toolbar: [{							//工具栏
-    		id:'addButton',
-    		text:'新增',
-			iconCls: 'icon-add',
-			handler: function(){addData();}
-		},'-',{
-			id:'editButton',
-			text:'编辑',
-			iconCls: 'icon-edit',
-			disabled:true,
-			handler: function(){editData();}
-		},'-',{
-			id:'deleButton',
-			text:'删除',
-			iconCls: 'icon-remove',
-			disabled:true,
-			handler: function(){deleData();}
-	}], */
 	onSelect: function(index,row){waterSelectChange(index,row);},
 	onUnselect: function(index,row){waterSelectChange(index,row);},
     onDblClickRow:function (index,row){	   //双击行事件 
@@ -167,18 +144,16 @@ function waterSelectChange(index,row){ 		// 选择行事件 通用。
 	var selectedNum = $('#waterDatagrid').datagrid('getSelections').length;
 	if(selectedNum==1){
 		$("#waterEditButton").linkbutton("enable");
+		$("#waterMonitorItemButton").linkbutton("enable");
 		$("#waterDeleButton").linkbutton("enable");
-		if($('#waterDatagrid').datagrid('getSelected').waterStatus == '0')
-			$("#waterEnableButton").linkbutton("enable");
-		else if($('#waterDatagrid').datagrid('getSelected').waterStatus == '1')
-			$("#waterDisableButton").linkbutton("enable");
-		
 	}else if(selectedNum==0 ){
 		$("#waterDeleButton").linkbutton("disable");
 		$("#waterEditButton").linkbutton("disable");
 		$("#waterEnableButton").linkbutton("disable");
 		$("#waterDisableButton").linkbutton("disable");
+		$("#waterMonitorItemButton").linkbutton("disable");
 	}else{
+		$("#waterMonitorItemButton").linkbutton("disable");
 		$("#waterEditButton").linkbutton("disable");
 		$("#waterEnableButton").linkbutton("disable");
 		$("#waterDisableButton").linkbutton("disable");
@@ -191,13 +166,16 @@ $('#waterSearchButton').click(function(){
 
 function waterAddData(){
 	waterDataDialog("水体新增",null);		 
-	// dataDialog2("水体新增",null);  
 }
 function waterEditData(){
 	var selected = $('#waterDatagrid').datagrid('getSelected');
 	waterDataDialog("水体编辑",selected);      //该方法 弹出圣诞框内容为页面DIV  water对象由DataGrid 传送 
-	// dataDialog2("水体编辑",selected);  //该方法 弹出对话框内容为另一页面，water对象由后台传送
 }
+function waterMonitorItem(){
+	var selected = $('#waterDatagrid').datagrid('getSelected');
+	waterMonitorItemDialog("设置监测项",selected);
+}
+
 function waterDeleData(){
 	var selections = $('#waterDatagrid').datagrid('getSelections');
 	var num = selections.length;
@@ -209,7 +187,7 @@ function waterDeleData(){
 	    		if(sele<(num-1)) ids += ",";
 	    	}
 	    	$.ajax({
-	    		url:"${ctx}/water/water/delete",
+	    		url:"${ctx}/water/delete",
 	    		type:'GET',
 	    		data: { 'ids': ids },  
 	    		success:function(data){
@@ -225,10 +203,10 @@ function waterDeleData(){
 }
 function waterSave(){
 	var saveType =$("#waterSaveType").val();
-	if(checkNotNull('waterName',"水体名称")&&checkNotNull('waterAuthorId',"水体权限")){
+	if(checkNotNull('waterName',"水体名称")&&checkNotNull('waterCode',"水体编码")){
 		$.ajax({
 			type: "POST",
-			url:"${ctx}/water/water/"+saveType,
+			url:"${ctx}/water/"+saveType,
 			data:$('#waterDataForm').serialize(), //将Form 里的值序列化
 			asyn:false,
 		    error: function(jqXHR, textStatus, errorMsg) {
@@ -245,6 +223,31 @@ function waterSave(){
 	}
 }
 
+function monitorItemSave(id){
+	var nodes = $('#waterMonitorItemTree').tree('getChecked');//获取:checked的结点.
+	var s = '';
+	for(var i=0; i<nodes.length; i++){
+		if(nodes[i].id !=''){
+			if (s != '') s += ',';
+			s += nodes[i].id; 
+		}
+	}
+ 	$.ajax({
+		type: "POST",
+		url:"${ctx}/water/saveMonitorItem",
+		data:{'itemList':s,'id':id},  
+		asyn:false,
+	    error: function(jqXHR, textStatus, errorMsg) {
+	    	$.messager.alert('操作结果',""+jqXHR.responseText);
+	   	 	$("#waterMonitorItemDialog").dialog("close");
+	    },
+	    success: function(data) {
+	    	$.messager.alert('操作结果',"<div style='text-align:center;width:100%;'>"+data.message+"</div>");
+		    $("#waterMonitorItemDialog").dialog("close");
+	    }
+	});  
+}
+
 /**
  * 本页面内DIV Dialog
  */
@@ -256,7 +259,7 @@ function waterDataDialog(title,selected){
     $("#waterDataDialog").dialog({
         title: title,
         width: 450,
-        height: 250,
+        height: 180,
         modal:true,
         buttons:[{
 			text:'保存',
@@ -268,33 +271,69 @@ function waterDataDialog(title,selected){
     });
 }
 
+/**
+ * 监测项编辑
+ */
+function waterMonitorItemDialog(title,selected){
+	/* if(selected!=null)
+		setWaterFormValue(selected); */
+	$.ajax({
+        url:"${ctx}/water/getWaterMonitorItemList",
+        dataType:"json",
+        data:{"id":3},
+        async:true,
+        success:function(data){
+            $(data).each(function(i, obj){
+                var n = $("#waterMonitorItemTree").tree('find',obj.code);
+                if(n){
+                    $("#waterMonitorItemTree").tree('check',n.target);
+                }
+            });
+        },
+        error:function(){alert("发送请求失败");}
+    });
+	$("#waterMonitorItemDialog").show(); //先显示，再弹出
+    $("#waterMonitorItemDialog").dialog({
+    	title:'监测项',
+        width: 170,
+        height:260,
+        modal:false,
+        buttons:[{
+			text:'保存',
+			handler:function(){monitorItemSave(selected.id);}
+		},{
+			text:'取消',
+			handler:function(){$("#waterMonitorItemDialog").dialog("close");}
+		}]
+    });
+}
+
+/**
+ * 监测项树
+ */
+$('#waterMonitorItemTree').tree({
+	url: '${ctx}/monitorItem/getMonitorItemsTree', 
+	method:"GET",
+	checkbox:true 
+});
+
+
 function setWaterFormValue(selected){
 	 $("#waterName").textbox('setValue',selected.name);
-	 $("#waterStatus").textbox('setValue',selected.waterStatus);
-	 $("#waterUrl").textbox('setValue',selected.waterUrl);
-	 $("#waterUrl").textbox('readonly',true);
-	 $("#waterIconCls").textbox('setValue',selected.iconCls);
-	 $("#waterOpenType").combobox('setValue',selected.openType);
-	 $("#waterIsLeaf").combobox('setValue',(selected.isLeaf).toString());
+	 $("#waterCode").textbox('setValue',selected.code);
 	 $('#waterParentId').combobox('reload'); 
  	 $('#waterParentId').combobox('setValue', selected.parentId );
 	 $("#waterSortNum").textbox('setValue',selected.sortNum);
-	 $("#waterAuthorId").textbox('setValue',selected.authorId);
 	 $("#waterId").val(selected.id);
 	 $("#waterSaveType").val("update");
 }
 function clearWaterForm(){
 //	 $("#waterDataForm")[0].reset();       //此为调用DOM 的方法来reset,手动reset如下
  	 $("#waterName").textbox('setValue',"");
-	 $("#waterStatus").textbox('setValue',"");
-	 $("#waterUrl").textbox('setValue',"/");
-//	 $("#waterOpenType").combobox('setValue',"HREF");
-	 $("#waterIconCls").textbox('setValue',"");
-	 $("#waterIsLeaf").combobox('setValue',"false");
+ 	 $("#waterCode").textbox('setValue',"");
 	 $('#waterParentId').combobox('reload'); 
 	 $('#waterParentId').combobox('setValue', '0');
 	 $("#waterSortNum").textbox('setValue',"1");
-	 $("#waterAuthorId").textbox('setValue',"");
 	 $("#waterId").val("");
 	 $("#waterSaveType").val("create"); 
 }
@@ -313,45 +352,25 @@ $(p).pagination({
  */
 $("#waterParentId").combobox({
     url:'${ctx}/water/getParents',
-    valueField:'id',
+    valueField:'code',
     textField:'name',
     method:'GET'
 });
 
 $("#search_parentId").combobox({
-    url:'${ctx}/water/water/getParents',
-    valueField:'id',
+    url:'${ctx}/water/getParents',
+    valueField:'code',
     textField:'name',
     method:'GET'
 });
 
-
-// /*
-//  * 必填项检测
-//  主要检测水体名称及权限
-//  */
-// function requiredCheck(){
-// 	if($('#waterName').val()==""){
-// 		$.messager.alert("出错！","请填写水体名称",'error',focusWaterName);
-// 	}else if($('#waterAuthorId').val()==""){
-// 		$.messager.alert("出错！","请填写水体权限",'error',focusWaterAuthor);
-// 		$('#waterAuthorId').focus();
-// 	}else{
-// 		return true;
-// 	}
-// }
-// /*
-//  * 获取水体名称焦点函数，easyUI中的input需要深入几层才可以获取真正的input
-//  */
-// var focusWaterName=function(){
-// 	$('#waterName').textbox().next('span').find('input').focus();
-// }
-// /*
-//  * 获取水体权限焦点函数，easyUI中的input需要深入几层才可以获取真正的input
-//  */
-// var focusWaterAuthor=function(){
-// 	$('#waterAuthorId').textbox().next('span').find('input').focus();
-// }
+$("#belong_area").combobox({
+    url:'${ctx}/area/getAreasList',
+    valueField:'code',
+    textField:'name',
+    method:'GET'
+});
+ 
 var checkNotNull=function(ID,idName){
 	var refId=$('#'+ID);
 	if(refId.val()==""){
@@ -374,7 +393,7 @@ function waterEnableDisable(status){
 	var selected = $('#waterDatagrid').datagrid('getSelected');
 	$.ajax({
 		type: "GET",
-		url:"${ctx}/water/water/updateStatus",
+		url:"${ctx}/water/updateStatus",
 		data:{"id":selected.id,"waterStatus":status},  
 	    error: function(jqXHR, textStatus, errorMsg) {
 	    	$.messager.alert('操作结果',""+jqXHR.responseText);

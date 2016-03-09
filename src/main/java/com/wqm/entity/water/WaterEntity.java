@@ -1,9 +1,12 @@
 package com.wqm.entity.water;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -34,6 +37,8 @@ public class WaterEntity extends IdEntity {
 	
 	private String sortNum;     //排序号
 	
+	private AreaEntity area;	//所属区域
+	
 	private boolean isLeaf;		//水体类型  true:水体 false:区域
 	
 	private String iconCls;		//水体图标
@@ -45,6 +50,8 @@ public class WaterEntity extends IdEntity {
 	private Date createDate;	//创建时间
 	
 	private Date updateDate;	//更新日期
+	
+	private List<MonitorItem> monitorItem;
 
 	public String getName() {
 		return name;
@@ -103,6 +110,16 @@ public class WaterEntity extends IdEntity {
 
 	public void setUser(UserEntity user) {
 		this.user = user;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "areaId")
+	public AreaEntity getArea() {
+		return area;
+	}
+
+	public void setArea(AreaEntity area) {
+		this.area = area;
 	}
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
@@ -165,5 +182,16 @@ public class WaterEntity extends IdEntity {
 
 	public void setLeaf(boolean isLeaf) {
 		this.isLeaf = isLeaf;
+	}
+
+	@ManyToMany
+	@JoinTable(name = "BUSI_WTR_WATERMONITORITEM", joinColumns = { @JoinColumn(name ="waterCode" ,referencedColumnName = "code")}, 
+	  inverseJoinColumns = { @JoinColumn(name = "moniterItemCode",referencedColumnName = "code") })
+	public List<MonitorItem> getMonitorItem() {
+		return monitorItem;
+	}
+
+	public void setMonitorItem(List<MonitorItem> monitorItem) {
+		this.monitorItem = monitorItem;
 	}
 }

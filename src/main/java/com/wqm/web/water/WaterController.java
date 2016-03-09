@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wqm.common.persistence.SearchFilter.Operator;
 import com.wqm.common.persistence.SpecificationFactory;
+import com.wqm.entity.water.MonitorItem;
 import com.wqm.entity.water.WaterEntity;
-import com.wqm.service.sys.DictionaryService;
+import com.wqm.service.water.AreaService;
+import com.wqm.service.water.MonitorItemService;
 import com.wqm.service.water.WaterService;
 import com.wqm.web.BaseController;
 
@@ -44,7 +46,10 @@ public class WaterController extends BaseController{
 	private WaterService waterService;
 	
 	@Autowired
-	private DictionaryService dictionaryService;
+	private MonitorItemService monitorItemService;
+	
+	@Autowired
+	private AreaService areaService;
 	
 	private final static Logger logger = LoggerFactory.getLogger(WaterController.class);
 	
@@ -126,6 +131,19 @@ public class WaterController extends BaseController{
 	}
 	
 	/**
+	 * 获取水体全部监测项
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getWaterMonitorItemList")
+	public List<MonitorItem> getWaterMonitorItemList(@RequestParam(value = "id", defaultValue = "0") Long id){
+		WaterEntity water = waterService.getWaterById(id);
+		List<MonitorItem> items = water.getMonitorItem();
+		return items;
+	}
+	
+	/**
 	 * 分页查询水体
 	 * @param model
 	 * @return
@@ -135,11 +153,9 @@ public class WaterController extends BaseController{
 	public Map<String,Object> getWatersPage(HttpServletRequest request){
 		//查询条件
 		SpecificationFactory<WaterEntity> specf = new SpecificationFactory<WaterEntity>();
-		specf.addSearchParam("name", Operator.LIKE, request.getParameter("waterName"));
+		specf.addSearchParam("name", Operator.LIKE, request.getParameter("name"));
+		specf.addSearchParam("code", Operator.LIKE, request.getParameter("code"));
 		specf.addSearchParam("user.name", Operator.LIKE,  request.getParameter("userName"));
-		specf.addSearchParam("authorId", Operator.LIKE,  request.getParameter("authorId"));
-		specf.addSearchParam("parentCode", Operator.EQ,  StringUtils.isBlank(request.getParameter("parentId"))?
-				"":Long.valueOf(request.getParameter("parentId")));
 		specf.addSearchParam("isLeaf", Operator.EQ,  StringUtils.isBlank(request.getParameter("isLeaf"))?
 				"":Boolean.valueOf(request.getParameter("isLeaf")));
 		//分页排序信息
@@ -159,18 +175,30 @@ public class WaterController extends BaseController{
 	}
 	
 	/**
+	 * 获得全部的水体项，通过区域编码。
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getWaterByAreaCode")
+	public List<WaterEntity> getWaterByAreaCode(@RequestParam(value = "areaCode", defaultValue = "0") String areaCode){
+		List<WaterEntity> waters= waterService.getWaterByAreaCode(areaCode);
+		return waters;
+	}
+	
+	/**
 	 * 创建水体<br/>
 	 * @param water
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public Map<String,Object>  createWater(@Valid WaterEntity water){
+	public Map<String,Object>  createWater(@Valid WaterEntity water,@RequestParam(value = "areaCode", defaultValue = "0") String areaCode){
 		Date date = new Date();
 		
 		water.setCreateDate(date);
 		water.setUpdateDate(date);
 		water.setUser(this.getCurrentUser()); 
+		water.setArea(areaService.getAreaByCode(areaCode));
 		waterService.saveWater(water);
 		return convertToResult("message","新增成功");
 	}
@@ -184,10 +212,34 @@ public class WaterController extends BaseController{
 	@ResponseBody
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@RequiresPermissions("007001003")
-	public Map<String,Object>  updateWater(@Valid @ModelAttribute("water") WaterEntity water){
+	public Map<String,Object>  updateWater(@Valid @ModelAttribute("water") WaterEntity water
+			,@RequestParam(value = "areaCode", defaultValue = "0") String areaCode){
 		Date date = new Date();
 		water.setUpdateDate(date);
 		water.setUser(this.getCurrentUser()); 
+		water.setArea(areaService.getAreaByCode(areaCode));
+		waterService.saveWater(water);
+		return convertToResult("message","更新成功");
+	}
+	
+	/**
+	 * 更新水体<br/>
+	 * 权限编码 007001003
+	 * @param water
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/saveMonitorItem", method = RequestMethod.POST)
+	public Map<String,Object>  saveMonitorItem(@Valid @ModelAttribute("water") WaterEntity water
+			,@RequestParam(value = "itemList", defaultValue = "") String itemList){
+		List<String> list = new ArrayList<String>();
+		list.toArray(itemList.split(","));
+		List<MonitorItem> items = water.getMonitorItem();
+		for(String s:itemList.split(",")){
+			MonitorItem item = monitorItemService.getMonitorItemByCode(s);
+			if(!items.contains(item)) items.add(item);
+		}
+		water.setMonitorItem(items);
 		waterService.saveWater(water);
 		return convertToResult("message","更新成功");
 	}

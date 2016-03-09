@@ -31,6 +31,13 @@ public interface WaterDao extends PagingAndSortingRepository<WaterEntity, Long>,
 	public List<WaterEntity> findAllParents();
 	
 	/**
+	 * 按code获得全部的水体项
+	 * @return
+	 */
+	@Query("select water from WaterEntity water where water.isLeaf = 'false' and water.area.code = ?1")
+	public List<WaterEntity> getWaterByAreaCode(String code);
+	
+	/**
 	 * 删除水体
 	 */
 	@Modifying

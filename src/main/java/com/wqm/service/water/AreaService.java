@@ -63,7 +63,21 @@ public class AreaService {
 	 * @return
 	 */
 	public List<AreaEntity> getAllAreas(){
+		List<AreaEntity> areas =  (List<AreaEntity>) areaDao.findAll();
+		AreaEntity area = new AreaEntity();
+		area.setId(0L);
+		area.setCode("0");
+		area.setName("海南");
+		areas.add(area);
 		return (List<AreaEntity>) areaDao.findAll();
+	}
+	
+	/**
+	 * 按code获取地区
+	 * @return
+	 */
+	public AreaEntity getAreaByCode(String code){
+		return (AreaEntity) areaDao.findAreaByCode(code);
 	}
 	
 	/**
