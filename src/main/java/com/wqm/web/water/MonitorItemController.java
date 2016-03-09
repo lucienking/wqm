@@ -3,13 +3,13 @@ package com.wqm.web.water;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map; 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ import com.wqm.service.water.MonitorItemService;
 import com.wqm.web.BaseController;
 
 /**
- * 区域管理Controller
+ * 监测项管理Controller
  * 
  * @author wangxj
  *
@@ -40,18 +40,18 @@ public class MonitorItemController extends BaseController{
 	private MonitorItemService monitorItemService;
 	
 	/**
-	 * 区域管理界面<br/>
+	 * 监测项管理界面<br/>
 	 * @param model
 	 * @return
 	 * 
 	 */
 	@RequestMapping(method = RequestMethod.GET,value = "/monitorItemManager")
 	public String  monitorItemsManager(Model model){		 
-		return "/monitorItem/monitorItemManager";
+		return "/water/monitorItemManager";
 	}
 	
 	/**
-	 * 区域编辑，新增界面
+	 * 监测项编辑，新增界面
 	 * @param model
 	 * @param id
 	 * @return
@@ -66,11 +66,11 @@ public class MonitorItemController extends BaseController{
 		}
 		model.addAttribute("monitorItem",monitorItem);
 		model.addAttribute("sortType", sortType);
-		return "/monitorItem/monitorItemForm";
+		return "/water/monitorItemForm";
 	}
 	
 	/**
-	 * 获取全部区域
+	 * 获取全部监测项
 	 * @param model
 	 * @return
 	 */
@@ -81,8 +81,28 @@ public class MonitorItemController extends BaseController{
 		return monitorItems;
 	}
 	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getMonitorItemsTree")
+	public List<Map<String,Object>>  getMonitorItemsTree(){
+		List<MonitorItem> monitorItems= monitorItemService.getAllMonitorItems();
+		List<Map<String,Object>> tree =  new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> ctree =  new ArrayList<Map<String,Object>>();
+		Map<String, Object> pmap = new HashMap<String, Object>();
+		for(MonitorItem mi:monitorItems){
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id",mi.getCode());
+			map.put("text", mi.getName());
+			ctree.add(map);
+		}
+		pmap.put("id", "");
+		pmap.put("text", "全部监测项");
+		pmap.put("children", ctree);
+		tree.add(pmap);
+		return tree;
+	}
+	
 	/**
-	 * 分页查询区域
+	 * 分页查询监测项
 	 * @param model
 	 * @return
 	 */
@@ -91,20 +111,16 @@ public class MonitorItemController extends BaseController{
 	public Map<String,Object> getMonitorItemsPage(HttpServletRequest request){
 		//查询条件
 		SpecificationFactory<MonitorItem> specf = new SpecificationFactory<MonitorItem>();
-		specf.addSearchParam("name", Operator.LIKE, request.getParameter("monitorItemName"));
+		specf.addSearchParam("code", Operator.LIKE, request.getParameter("code"));
+		specf.addSearchParam("name", Operator.LIKE, request.getParameter("name"));
 		specf.addSearchParam("user.name", Operator.LIKE,  request.getParameter("userName"));
-		specf.addSearchParam("authorId", Operator.LIKE,  request.getParameter("authorId"));
-		specf.addSearchParam("parentCode", Operator.EQ,  StringUtils.isBlank(request.getParameter("parentId"))?
-				"":Long.valueOf(request.getParameter("parentId")));
-		specf.addSearchParam("isLeaf", Operator.EQ,  StringUtils.isBlank(request.getParameter("isLeaf"))?
-				"":Boolean.valueOf(request.getParameter("isLeaf")));
 		//分页排序信息
 		Page<MonitorItem> monitorItems= monitorItemService.getMonitorItemsByPage(specf.getSpecification(),buildPageRequest(request));
 		return convertToResult(monitorItems);
 	}
 	
 	/**
-	 * 创建区域<br/>
+	 * 创建监测项<br/>
 	 * @param monitorItem
 	 * @return
 	 */
@@ -121,7 +137,7 @@ public class MonitorItemController extends BaseController{
 	}
 	
 	/**
-	 * 更新区域<br/>
+	 * 更新监测项<br/>
 	 * 权限编码 007001003
 	 * @param monitorItem
 	 * @return
@@ -137,7 +153,7 @@ public class MonitorItemController extends BaseController{
 	}
 	
 	/**
-	 * 更改区域状态<br/>
+	 * 更改监测项状态<br/>
 	 * @param monitorItem
 	 * @return
 	 */
@@ -148,11 +164,11 @@ public class MonitorItemController extends BaseController{
 		monitorItem.setUpdateDate(date);
 		monitorItem.setUser(this.getCurrentUser()); 
 		monitorItemService.saveMonitorItem(monitorItem);
-		return convertToResult("message","更新区域状态成功");
+		return convertToResult("message","更新监测项状态成功");
 	}
 	
 	/**
-	 *  删除区域 <br/>
+	 *  删除监测项 <br/>
 	 * @param request
 	 * @return Map<String,Object>
 	 */

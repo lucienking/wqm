@@ -20,4 +20,13 @@ public interface MonitorItemDao extends PagingAndSortingRepository<MonitorItem, 
 	@Modifying
 	@Query("delete from MonitorItem monitorItem where monitorItem.id in (?1)")
 	public void deleMonitorItemsByIds(List<Long> ids);
+	
+	/**
+	 * 查询监测项
+	 */
+	@Modifying
+	@Query("select monitorItem from MonitorItem monitorItem where monitorItem.code in (?1)")
+	public List<MonitorItem> getMonitorItemsByCodes(List<String> codes);
+	
+	public MonitorItem getMonitorItemByCode(String code);
 }

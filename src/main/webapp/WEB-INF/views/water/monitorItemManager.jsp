@@ -8,20 +8,12 @@
 		<table style="width:99%;height:80px;margin-buttom:10px">
 			<tr>
 				<td width="18%" align="center" style="min-width:150px">
-					<label for="search_monitorItemName">区域名称</label>
+					<label for="search_monitorItemName">监测项名称</label>
 					<input id="search_monitorItemName" name="name" class="easyui-textbox" style="width:120px;"/>
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
-					<label for="search_monitorItemCode">区域编码</label>
+					<label for="search_monitorItemCode">监测项编码</label>
 					<input id="search_monitorItemCode" name="code" class="easyui-textbox" style="width:120px;"/>
-				</td>
-				<td width="18%" align="center" style="min-width:150px">
-					<label for="search_monitorItemIsLeaf">区域类型</label>
-					<select id="search_monitorItemIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
-						<option value="" selected="selected">--请选择--</option>
-					    <option value="false">区域</option>
-					    <option value="true">断面</option>
-					</select>
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_userName">操作员</label>
@@ -32,7 +24,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="4"  width="90%" >
+				<td colspan="3"  width="90%" >
 					&nbsp;
 				</td>
 				<td colspan="1" width="10%" align="left" >
@@ -51,29 +43,16 @@
 		<input type="hidden" id="monitorItemId" name="id"  ></input>
 		<input type="hidden" id="monitorItemSaveType" name ="saveType" value="create"></input>
 		<div class="line-div">
-			区域名称：
+			监测项编码：
+			<input id="monitorItemCode" name="code" class="easyui-textbox"  style="width:120px;" />
+			监测项名称：
 			<input id="monitorItemName" name="name"  class="easyui-textbox" style="width:120px;"/>
-			区域状态：
-			<input id="monitorItemStatus" name="monitorItemStatus" class="easyui-textbox" style="width:120px;"/> 
 		</div>
 		<div class="line-div">
-			区域图标：
-			<input id="monitorItemIconCls" name="iconCls" value="" class="easyui-textbox" style="width:120px;"/>
-			区域类型：
-			<select id="monitorItemIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
-			    <option value="false" selected="selected">区域</option>
-			    <option value="true">断面</option>
-			</select>
-		</div>
-		<div class="line-div">
-			区域顺序：
+			监测项顺序：
 			<input id="monitorItemSortNum" name="sortNum" value="1" class="easyui-textbox" style="width:120px;"/>
-			父区域号：
-			<input id="monitorItemParentId" name="parentId" style="width:120px;" />
-		</div>
-		<div class="line-div">
-			区域链接：
-			<input id="monitorItemUrl" name="monitorItemUrl" class="easyui-textbox" style="width:310px;"/>
+			监测项图标：
+			<input id="monitorItemIconCls" name="iconCls" value="" class="easyui-textbox" style="width:120px;"/>
 		</div>
 	</form>
 </div>
@@ -88,12 +67,6 @@
 	<jksb:hasAutority authorityId="007001002">
 		<a href="javascript:monitorItemDeleData()" id = "monitorItemDeleButton" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true,disabled:true," >删除</a>
 	</jksb:hasAutority>
-	<jksb:hasAutority authorityId="007001003">
-		<a href="#" id = "monitorItemEnableButton" class="easyui-linkbutton" data-options="iconCls:'pic_17',plain:true,disabled:true" >启用</a>
-	</jksb:hasAutority>
-	<jksb:hasAutority authorityId="007001003">
-		<a href="#" id = "monitorItemDisableButton" class="easyui-linkbutton" data-options="iconCls:'pic_18',plain:true,disabled:true" >停用</a>
-	</jksb:hasAutority>
 </div>
 
 <div id="dataDialog2"  >
@@ -104,29 +77,16 @@
  *  datagrid 初始化 
  */
 $('#monitorItemDatagrid').datagrid({
-    url:"${ctx}/monitorItem/monitorItem/getMonitorItemsPage",
+    url:"${ctx}/monitorItem/getMonitorItemsPage",
     method:'get',
     pagination:true,
     columns:[[
         {checkbox:true,field:'',title:'' },
         {field:'id',title:'编号',width:'5%',sortable:true},
-        {field:'name',title:'区域名称',width:'10%'},
-        {field:'name',title:'区域编码',width:'10%'},
-        {field:'status',title:'状态',width:'5%',formatter:function(value,rec){
-        	if(value=="1")  
-        		return "启用";
-        	else if(value=="0")  		  
-        		return "<span style='color:red'>停用</span>";
-        }},
+        {field:'code',title:'监测项编码',width:'10%'},
+        {field:'name',title:'监测项名称',width:'10%'},
         {field:'sortNum',title:'排序',width:'5%'},
-        {field:'isLeaf',title:'是否区域',width:'5%',formatter:function(value,rec){
-        	if(value)  
-        		return "区域";
-        	else  		  
-        		return "区域";
-        }},
-        {field:'parentId',title:'父区域',width:'5%'},
-        {field:'authorId',title:'权限编码',width:'8%'},
+        {field:'iconCls',title:'图标',width:'5%'},
         {field:'user',title:'操作员',width:'8%',formatter:function(value,rec){
         	if(rec.user)  
         		return rec.user.name;
@@ -159,7 +119,7 @@ $('#monitorItemDatagrid').datagrid({
 	onSelect: function(index,row){monitorItemSelectChange(index,row);},
 	onUnselect: function(index,row){monitorItemSelectChange(index,row);},
     onDblClickRow:function (index,row){	   //双击行事件 
-    	monitorItemDataDialog("区域编辑",row);
+    	monitorItemDataDialog("监测项编辑",row);
     } 
 });
 
@@ -190,13 +150,13 @@ $('#monitorItemSearchButton').click(function(){
 });
 
 function monitorItemAddData(){
-	monitorItemDataDialog("区域新增",null);		 
-	// dataDialog2("区域新增",null);  
+	monitorItemDataDialog("监测项新增",null);		 
+	// dataDialog2("监测项新增",null);  
 }
 function monitorItemEditData(){
 	var selected = $('#monitorItemDatagrid').datagrid('getSelected');
-	monitorItemDataDialog("区域编辑",selected);      //该方法 弹出圣诞框内容为页面DIV  monitorItem对象由DataGrid 传送 
-	// dataDialog2("区域编辑",selected);  //该方法 弹出对话框内容为另一页面，monitorItem对象由后台传送
+	monitorItemDataDialog("监测项编辑",selected);      //该方法 弹出圣诞框内容为页面DIV  monitorItem对象由DataGrid 传送 
+	// dataDialog2("监测项编辑",selected);  //该方法 弹出对话框内容为另一页面，monitorItem对象由后台传送
 }
 function monitorItemDeleData(){
 	var selections = $('#monitorItemDatagrid').datagrid('getSelections');
@@ -209,7 +169,7 @@ function monitorItemDeleData(){
 	    		if(sele<(num-1)) ids += ",";
 	    	}
 	    	$.ajax({
-	    		url:"${ctx}/monitorItem/monitorItem/delete",
+	    		url:"${ctx}/monitorItem/delete",
 	    		type:'GET',
 	    		data: { 'ids': ids },  
 	    		success:function(data){
@@ -225,10 +185,10 @@ function monitorItemDeleData(){
 }
 function monitorItemSave(){
 	var saveType =$("#monitorItemSaveType").val();
-	if(checkNotNull('monitorItemName',"区域名称")&&checkNotNull('monitorItemAuthorId',"区域权限")){
+	if(checkNotNull('monitorItemName',"监测项名称")&&checkNotNull('monitorItemAuthorId',"监测项权限")){
 		$.ajax({
 			type: "POST",
-			url:"${ctx}/monitorItem/monitorItem/"+saveType,
+			url:"${ctx}/monitorItem/"+saveType,
 			data:$('#monitorItemDataForm').serialize(), //将Form 里的值序列化
 			asyn:false,
 		    error: function(jqXHR, textStatus, errorMsg) {
@@ -256,7 +216,7 @@ function monitorItemDataDialog(title,selected){
     $("#monitorItemDataDialog").dialog({
         title: title,
         width: 450,
-        height: 250,
+        height: 160,
         modal:true,
         buttons:[{
 			text:'保存',
@@ -270,31 +230,18 @@ function monitorItemDataDialog(title,selected){
 
 function setMonitorItemFormValue(selected){
 	 $("#monitorItemName").textbox('setValue',selected.name);
-	 $("#monitorItemStatus").textbox('setValue',selected.monitorItemStatus);
-	 $("#monitorItemUrl").textbox('setValue',selected.monitorItemUrl);
-	 $("#monitorItemUrl").textbox('readonly',true);
+	 $("#monitorItemCode").textbox('setValue',selected.code);
 	 $("#monitorItemIconCls").textbox('setValue',selected.iconCls);
-	 $("#monitorItemOpenType").combobox('setValue',selected.openType);
-	 $("#monitorItemIsLeaf").combobox('setValue',(selected.isLeaf).toString());
-	 $('#monitorItemParentId').combobox('reload'); 
- 	 $('#monitorItemParentId').combobox('setValue', selected.parentId );
 	 $("#monitorItemSortNum").textbox('setValue',selected.sortNum);
-	 $("#monitorItemAuthorId").textbox('setValue',selected.authorId);
 	 $("#monitorItemId").val(selected.id);
 	 $("#monitorItemSaveType").val("update");
 }
 function clearMonitorItemForm(){
 //	 $("#monitorItemDataForm")[0].reset();       //此为调用DOM 的方法来reset,手动reset如下
  	 $("#monitorItemName").textbox('setValue',"");
-	 $("#monitorItemStatus").textbox('setValue',"");
-	 $("#monitorItemUrl").textbox('setValue',"/");
-//	 $("#monitorItemOpenType").combobox('setValue',"HREF");
+	 $("#monitorItemCode").textbox('setValue',"");
 	 $("#monitorItemIconCls").textbox('setValue',"");
-	 $("#monitorItemIsLeaf").combobox('setValue',"false");
-	 $('#monitorItemParentId').combobox('reload'); 
-	 $('#monitorItemParentId').combobox('setValue', '0');
 	 $("#monitorItemSortNum").textbox('setValue',"1");
-	 $("#monitorItemAuthorId").textbox('setValue',"");
 	 $("#monitorItemId").val("");
 	 $("#monitorItemSaveType").val("create"); 
 }
@@ -308,50 +255,6 @@ $(p).pagination({
     pageList: [10,15,20]
 });
 
-/**
- * 父区域选项
- */
-$("#monitorItemParentId").combobox({
-    url:'${ctx}/monitorItem/getParents',
-    valueField:'id',
-    textField:'name',
-    method:'GET'
-});
-
-$("#search_parentId").combobox({
-    url:'${ctx}/monitorItem/monitorItem/getParents',
-    valueField:'id',
-    textField:'name',
-    method:'GET'
-});
-
-
-// /*
-//  * 必填项检测
-//  主要检测区域名称及权限
-//  */
-// function requiredCheck(){
-// 	if($('#monitorItemName').val()==""){
-// 		$.messager.alert("出错！","请填写区域名称",'error',focusMonitorItemName);
-// 	}else if($('#monitorItemAuthorId').val()==""){
-// 		$.messager.alert("出错！","请填写区域权限",'error',focusMonitorItemAuthor);
-// 		$('#monitorItemAuthorId').focus();
-// 	}else{
-// 		return true;
-// 	}
-// }
-// /*
-//  * 获取区域名称焦点函数，easyUI中的input需要深入几层才可以获取真正的input
-//  */
-// var focusMonitorItemName=function(){
-// 	$('#monitorItemName').textbox().next('span').find('input').focus();
-// }
-// /*
-//  * 获取区域权限焦点函数，easyUI中的input需要深入几层才可以获取真正的input
-//  */
-// var focusMonitorItemAuthor=function(){
-// 	$('#monitorItemAuthorId').textbox().next('span').find('input').focus();
-// }
 var checkNotNull=function(ID,idName){
 	var refId=$('#'+ID);
 	if(refId.val()==""){
@@ -374,7 +277,7 @@ function monitorItemEnableDisable(status){
 	var selected = $('#monitorItemDatagrid').datagrid('getSelected');
 	$.ajax({
 		type: "GET",
-		url:"${ctx}/monitorItem/monitorItem/updateStatus",
+		url:"${ctx}/monitorItem/updateStatus",
 		data:{"id":selected.id,"monitorItemStatus":status},  
 	    error: function(jqXHR, textStatus, errorMsg) {
 	    	$.messager.alert('操作结果',""+jqXHR.responseText);
