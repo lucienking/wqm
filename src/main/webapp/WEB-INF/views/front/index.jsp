@@ -8,15 +8,23 @@
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-
+<link type="text/css" href="static/styles/front/header_footer.css" rel="Stylesheet" />
 </head>
 <body>
     <div class="easyui-layout" data-options="fit:true">
         <div data-options="region:'north'" style="height:100px">
-        	水质监测系统
+        	<div id="north">
+	        	<div class="frosted_glass">
+	        		<div id="title"><h1>海口市水务局水体质量监测系统</h1></div>
+	        	</div>
+	        	<div class="logout_div">
+	        		<div><a href="#">退出登录</a></div>
+	        		<div><a href="#">修改密码</a></div>
+	        	</div>
+        	</div>
         </div>
         <div data-options="region:'south'" style="height:30px;text-align:center;font-size: 10px;color:gray;">
-        	©2015 水务局 copyright
+        	©2015 海口市龙华区水务局 copyright
         </div>
         <div data-options="region:'east'" style="width:210px;">
         	
