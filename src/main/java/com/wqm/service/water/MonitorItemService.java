@@ -23,7 +23,7 @@ public class MonitorItemService {
 	
 	
 	/**
-	 * 按ID查找区域
+	 * 按ID查找监测项
 	 * @param id
 	 * @return
 	 */
@@ -31,10 +31,8 @@ public class MonitorItemService {
 		return monitorItemDao.findOne(id);
 	}
 	
-	
-	
 	/**
-	 * 获取全部区域
+	 * 获取全部监测项
 	 * @return
 	 */
 	public List<MonitorItem> getAllMonitorItems(){
@@ -42,7 +40,23 @@ public class MonitorItemService {
 	}
 	
 	/**
-	 * 分页查询区域
+	 * 按codes获取全部监测项
+	 * @return
+	 */
+	public List<MonitorItem> getMonitorItemsByCodes(List<String> codes){
+		return (List<MonitorItem>) monitorItemDao.getMonitorItemsByCodes(codes);
+	}
+	
+	/**
+	 * 按code获取监测项
+	 * @return
+	 */
+	public MonitorItem getMonitorItemByCode(String code){
+		return (MonitorItem) monitorItemDao.getMonitorItemByCode(code);
+	}
+	
+	/**
+	 * 分页查询监测项
 	 * 带查询条件spec
 	 * @param pageRequest
 	 * @param spec
@@ -53,7 +67,7 @@ public class MonitorItemService {
 	}
 	
 	/**
-	 * 保存区域
+	 * 保存监测项
 	 * @param monitorItem
 	 * @return
 	 */
@@ -62,7 +76,7 @@ public class MonitorItemService {
 	}
 	
 	/**
-	 * 删除区域
+	 * 删除监测项
 	 * @param ids
 	 */
 	public void deleMonitorItem(List<Long> ids){

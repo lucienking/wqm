@@ -31,4 +31,11 @@ public interface AreaDao extends PagingAndSortingRepository<AreaEntity, Long>,Jp
 	@Modifying
 	@Query("delete from AreaEntity area where area.id in (?1)")
 	public void deleAreasByIds(List<Long> ids);
+	
+	/**
+	 * 按code 获取Area
+	 * @param code
+	 * @return
+	 */
+	public AreaEntity findAreaByCode(String code);
 }
