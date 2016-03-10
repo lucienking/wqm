@@ -55,7 +55,7 @@
 				</div>
 			<div id="monitorDataCreateDiv" class="line-div">
 				选择截面：
-				<input id="monitorDataName" name="name"  class="easyui-textbox" style="width:120px;"/>
+				<input id="monitor_LeafWater" name="" style="width:120px;" />
 				监测时间：
 				<input id="monitorDataName" name="name"  class="easyui-textbox" style="width:120px;"/>
 			
@@ -221,6 +221,7 @@ function monitorDataDataDialog(title,selected){
  * 监测项填写
  */
  function monitorDataItemDialog(){
+		
 		$("#monitorDataItemDialog").show(); //先显示，再弹出
 	    $("#monitorDataItemDialog").dialog({
 	        title: '监测数据填写',
@@ -278,14 +279,32 @@ var checkNotNull=function(ID,idName){
 
 $("#monitor_Area").combobox({
     url:'${ctx}/area/getParents',
-    valueField:'id',
+    valueField:'code',
     textField:'name',
-    method:'GET'
+    method:'GET',
+  //queryParams:{"farmCode":$("#contract_atFarmCode").val()},
+   	onSelect:function(value){
+   		$('#monitor_Water').combobox('clear'); 
+   		var url = ctx+'/water/getWaterByAreaCode?areaCode='+value.code;
+   		$('#monitor_Water').combobox('reload', url); 
+   	}
 });
 
 
 $("#monitor_Water").combobox({
     url:'${ctx}/water/getWaterByAreaCode',
+    valueField:'code',
+    textField:'name',
+    method:'GET',
+ 	onSelect:function(value){
+   		$('#monitor_LeafWater').combobox('clear'); 
+   		var url = ctx+'/water/getWatersByParent?code='+value.code;
+   		$('#monitor_LeafWater').combobox('reload', url); 
+   	}
+});
+
+$("#monitor_LeafWater").combobox({
+    url:'${ctx}/water/getWatersByParent',
     valueField:'code',
     textField:'name',
     method:'GET'

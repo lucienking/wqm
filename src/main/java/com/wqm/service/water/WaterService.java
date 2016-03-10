@@ -62,8 +62,8 @@ public class WaterService {
 	 * @param id
 	 * @return
 	 */
-	public List<WaterEntity> getWaterListById(String code){
-		return waterDao.getWatersByParentId(code);
+	public List<WaterEntity> getWaterListByCode(String code){
+		return waterDao.getWatersByParentCode(code);
 	}
 	
 	/**
