@@ -1,11 +1,12 @@
 @CHARSET "UTF-8";
-html,body,#map {
+/* map element */
+#map {
 	height: 100%;
 	width: 100%;
 	margin: 0;
 	padding: 0;
 }
-
+/* legend element */
 #info {
 	width: 14.0625em;
 	background-color: #fff;
@@ -16,4 +17,5 @@ html,body,#map {
 	padding-top: 10px;
 	border-top: 2px solid #AFA9A9;
 	border-left: 2px solid #AFA9A9;
+	border-radius:10px;
 }
