@@ -55,10 +55,9 @@
 				</div>
 			<div id="monitorDataCreateDiv" class="line-div">
 				选择截面：
-				<input id="monitor_LeafWater" name="" style="width:120px;" />
+				<input id="monitor_LeafWater" name="monitorLeafWaterId" style="width:120px;" />
 				监测时间：
-				<input id="monitorDataName" name="name"  class="easyui-textbox" style="width:120px;"/>
-			
+				<input id="contract_startDate" name="startDate" value="${startDate }" class="easyui-datebox" style="width:120px;"/>
 			</div>
 		</div>
 		<div id="monitorDataItemDialog"  style="display:none">
@@ -221,21 +220,31 @@ function monitorDataDataDialog(title,selected){
  * 监测项填写
  */
  function monitorDataItemDialog(){
-		
-		$("#monitorDataItemDialog").show(); //先显示，再弹出
-	    $("#monitorDataItemDialog").dialog({
-	        title: '监测数据填写',
-	        width: 450,
-	        height: 160,
-	        modal:true,
-	        buttons:[{
-				text:'保存',
-				handler:function(){monitorDataSave();}
-			},{
-				text:'取消',
-				handler:function(){$("#monitorDataItemDialog").dialog("close");}
-			}]
-	    });
+ 	$.ajax({
+		url:"${ctx}/water/getWaterMonitorItemByCode",
+		type:'GET',
+		data: { 'code': $("#monitor_LeafWater").combobox("getValue") },  
+		success:function(data){
+			$("#monitorDataItemDialog").append(data);
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown){
+			$.messager.alert('操作失败',"错误提示:"+XMLHttpRequest.responseText);
+		}
+	});
+	$("#monitorDataItemDialog").show(); //先显示，再弹出
+    $("#monitorDataItemDialog").dialog({
+        title: '监测数据填写',
+        width: 450,
+        height: 160,
+        modal:true,
+        buttons:[{
+			text:'保存',
+			handler:function(){monitorDataSave();}
+		},{
+			text:'取消',
+			handler:function(){$("#monitorDataItemDialog").dialog("close");}
+		}]
+    });
 	}
 
 function setMonitorDataFormValue(selected){

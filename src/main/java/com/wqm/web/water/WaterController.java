@@ -151,6 +151,19 @@ public class WaterController extends BaseController{
 	}
 	
 	/**
+	 * 获取水体全部监测项
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getWaterMonitorItemByCode")
+	public List<MonitorItem> getWaterMonitorItemByCode(@RequestParam(value = "code", defaultValue = "0") String code){
+		WaterEntity water = waterService.getWaterByCode(code);
+		List<MonitorItem> items = water.getMonitorItem();
+		return items;
+	}
+	
+	/**
 	 * 分页查询水体
 	 * @param model
 	 * @return

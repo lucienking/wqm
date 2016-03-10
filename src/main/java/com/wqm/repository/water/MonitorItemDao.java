@@ -24,7 +24,6 @@ public interface MonitorItemDao extends PagingAndSortingRepository<MonitorItem, 
 	/**
 	 * 查询监测项
 	 */
-	@Modifying
 	@Query("select monitorItem from MonitorItem monitorItem where monitorItem.code in (?1)")
 	public List<MonitorItem> getMonitorItemsByCodes(List<String> codes);
 	

@@ -88,7 +88,7 @@ $('#areaDatagrid').datagrid({
         {checkbox:true,field:'',title:'' },
         {field:'id',title:'编号',width:'5%',sortable:true},
         {field:'name',title:'区域名称',width:'10%'},
-        {field:'name',title:'区域编码',width:'10%'},
+        {field:'code',title:'区域编码',width:'10%'},
         {field:'sortNum',title:'排序',width:'5%'},
         {field:'parentCode',title:'父区域',width:'5%'},
         {field:'user',title:'操作员',width:'8%',formatter:function(value,rec){

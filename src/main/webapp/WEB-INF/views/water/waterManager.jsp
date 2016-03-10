@@ -19,8 +19,8 @@
 					<label for="search_waterIsLeaf">水体类型</label>
 					<select id="search_waterIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
 						 <option value="" selected="selected">--请选择--</option>
-					     <option value="true">水体</option>
-			   			 <option value="false">断面</option>
+					     <option value="false">水体</option>
+			   			 <option value="true">断面</option>
 					</select>
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
@@ -61,8 +61,8 @@
 			<input id="waterSortNum" name="sortNum" value="1" class="easyui-textbox" style="width:120px;"/>
 			水体类型：
 			<select id="waterIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
-			    <option value="true" selected="selected">水体</option>
-			    <option value="false">断面</option>
+			    <option value="false" selected="selected">水体</option>
+			    <option value="true">断面</option>
 			</select>
 		</div>
 		<div class="line-div">
@@ -117,9 +117,9 @@ $('#waterDatagrid').datagrid({
         {field:'sortNum',title:'排序',width:'5%'},
         {field:'isLeaf',title:'是否水体',width:'5%',formatter:function(value,rec){
         	if(value)  
-        		return "水体";
-        	else  		  
         		return "断面";
+        	else  		  
+        		return "水体";
         }},
         {field:'parentCode',title:'父水体',width:'5%'},
         {field:'user',title:'操作员',width:'8%',formatter:function(value,rec){
@@ -280,9 +280,10 @@ function waterMonitorItemDialog(title,selected){
 	$.ajax({
         url:"${ctx}/water/getWaterMonitorItemList",
         dataType:"json",
-        data:{"id":3},
+        data:{"id":selected.id},
         async:true,
         success:function(data){
+        	$("#waterMonitorItemTree").tree('clearChecked'); 
             $(data).each(function(i, obj){
                 var n = $("#waterMonitorItemTree").tree('find',obj.code);
                 if(n){
