@@ -93,8 +93,15 @@ require(
 			$('#indexTree').tree({
 				onClick: function(node){
 					alert(node.text);  // alert node text property when clicked
+					//断面
+					if(!$('#indexTree').tree('isLeaf',node.target)&&(node.id).substr(0,1)=="w"){
+						selectWater(node.id);
+					}else if($('#indexTree').tree('isLeaf',node.target)){
+						selectMontoringpoints(nide.id);
+					}
 				}
 			});
+
 			function monitoring_info() {
 				var fstCode = $('#scdCode').text();
 				console.log(fstCode);
