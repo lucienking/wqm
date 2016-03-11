@@ -55,7 +55,7 @@
 /*
  * 菜单栏点击事件
  */
- var ctx = "${ctx}";
+/*  var ctx = "${ctx}";
  $('#indexTree').tree({
 	onClick: function(node){
 		if($('#indexTree').tree('isLeaf',node.target)){
@@ -67,7 +67,8 @@
 			return;
 		}
 	}
-});  
+}); 
+  */
 </script>
 </body>
 </html>
