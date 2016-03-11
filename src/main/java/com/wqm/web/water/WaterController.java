@@ -61,11 +61,7 @@ public class WaterController extends BaseController{
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET,value = "/getWaters")
 	public List<Map<String,Object>> getWatersJson(@RequestParam(value = "code", defaultValue = "0") String code){
-		/* 启用水体状态功能 允许失效
-		 *  Sort sort = new Sort(Direction.ASC, "sortNum");
-			List<WaterEntity> waters= waterService.getWaterListById(id,sort);
-		*/
-		List<WaterEntity> waters= waterService.getWaterListById(code);
+		List<WaterEntity> waters= waterService.getWaterListByCode(code);
 		List<Map<String,Object>> tree =  new ArrayList<Map<String,Object>>();
 		for(WaterEntity water:waters){
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -81,8 +77,7 @@ public class WaterController extends BaseController{
 			Map<String,String> attribute = new HashMap<String,String>();
 			attribute.put("url", water.getWaterUrl());
 			map.put("attributes",attribute );
-		//水体权限	if(PrincipalUtil.isHavePermission(water.getAuthorId())||"admin".equals(PrincipalUtil.getCurrentUserName()))
-				tree.add(map);
+			tree.add(map);
 		}
 		logger.info("加载水体:"+tree.toString());
 		return tree;
@@ -131,6 +126,18 @@ public class WaterController extends BaseController{
 	}
 	
 	/**
+	 * 获取全部子水体
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getWatersByParent")
+	public List<WaterEntity> getWatersByParent(@RequestParam(value = "code", defaultValue = "0") String code){
+		List<WaterEntity> waters= waterService.getWaterListByCode(code);
+		return waters;
+	}
+	
+	/**
 	 * 获取水体全部监测项
 	 * @param model
 	 * @return
@@ -139,6 +146,19 @@ public class WaterController extends BaseController{
 	@RequestMapping(method = RequestMethod.GET,value = "/getWaterMonitorItemList")
 	public List<MonitorItem> getWaterMonitorItemList(@RequestParam(value = "id", defaultValue = "0") Long id){
 		WaterEntity water = waterService.getWaterById(id);
+		List<MonitorItem> items = water.getMonitorItem();
+		return items;
+	}
+	
+	/**
+	 * 获取水体全部监测项
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getWaterMonitorItemByCode")
+	public List<MonitorItem> getWaterMonitorItemByCode(@RequestParam(value = "code", defaultValue = "0") String code){
+		WaterEntity water = waterService.getWaterByCode(code);
 		List<MonitorItem> items = water.getMonitorItem();
 		return items;
 	}
