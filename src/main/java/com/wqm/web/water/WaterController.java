@@ -157,16 +157,18 @@ public class WaterController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET,value = "/getWaterMonitorItemByCode")
-	public Map<String,String> getWaterMonitorItemByCode(@RequestParam(value = "code", defaultValue = "0") String code){
+	public List<Map<String,String>> getWaterMonitorItemByCode(@RequestParam(value = "code", defaultValue = "0") String code){
 		WaterEntity water = waterService.getWaterByCode(code);
 		List<MonitorItem> items = water.getMonitorItem();
-		Map<String,String> result = new HashMap<String,String>();
+		List<Map<String,String>> results = new ArrayList<Map<String,String>>();
 		for(MonitorItem item:items){
+			Map<String,String> result = new HashMap<String,String>();
 			result.put("code", item.getCode());
 			result.put("name", item.getName());
 			result.put("id", item.getId()+"");
+			results.add(result);
 		}
-		return result;
+		return results;
 	}
 	
 	/**
