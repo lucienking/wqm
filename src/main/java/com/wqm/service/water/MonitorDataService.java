@@ -31,6 +31,10 @@ public class MonitorDataService {
 		return monitorDataDao.findOne(id);
 	}
 	
+	public List<MonitorData> getMonitorDataByCode(String code){
+		return monitorDataDao.getMonitorDataByWaterCode(code);
+	}
+	
 	/**
 	 * 获取全部监测数据
 	 * @return

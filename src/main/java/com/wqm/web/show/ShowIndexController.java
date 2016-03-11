@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wqm.entity.water.AreaEntity;
+import com.wqm.entity.water.MonitorData;
 import com.wqm.entity.water.WaterEntity;
 import com.wqm.service.water.AreaService;
+import com.wqm.service.water.MonitorDataService;
 import com.wqm.service.water.WaterService;
 import com.wqm.web.BaseController;
 
@@ -34,6 +36,9 @@ public class ShowIndexController extends BaseController{
 	
 	@Autowired
 	private AreaService areaService;
+	
+	@Autowired
+	private MonitorDataService monitorDataService;
 	
 	//private final static Logger logger = LoggerFactory.getLogger(ShowIndexController.class);
 	
@@ -98,4 +103,20 @@ public class ShowIndexController extends BaseController{
 		return tree;
 	}
 	
+	/*
+	 * 监测数据
+	 */
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getMonitorDataById")
+	public List<Map<String,Object>> getMonitorDataById(@RequestParam(value = "id", defaultValue = "0") String id){
+		List<Map<String,Object>> result =  new ArrayList<Map<String,Object>>();
+		List<MonitorData> datas= monitorDataService.getMonitorDataByCode(id);
+		for(MonitorData data:datas){
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("name",data.getItemName());
+			map.put("value", data.getItemValue());
+			result.add(map);
+		}
+		return result;
+	}
 }
