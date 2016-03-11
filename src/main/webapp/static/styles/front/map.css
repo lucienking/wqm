@@ -19,3 +19,8 @@
 	border-left: 2px solid #AFA9A9;
 	border-radius:10px;
 }
+/*overridemap*/
+.esriOverviewMap.ovwBL .ovwContainer {
+    border-left: 1px solid #95B8E7;
+	border-bottom:1px solid #95B8E7;
+}   
