@@ -40,6 +40,15 @@ public class WaterService {
 	}
 	
 	/**
+	 * 按ID查找水体
+	 * @param id
+	 * @return
+	 */
+	public WaterEntity getWaterByCode(String code){
+		return waterDao.getWaterEntityByCode(code);
+	}
+	
+	/**
 	 * 按ID获取子水体
 	 * @param id
 	 * @return
@@ -62,8 +71,8 @@ public class WaterService {
 	 * @param id
 	 * @return
 	 */
-	public List<WaterEntity> getWaterListById(String code){
-		return waterDao.getWatersByParentId(code);
+	public List<WaterEntity> getWaterListByCode(String code){
+		return waterDao.getWatersByParentCode(code);
 	}
 	
 	/**
