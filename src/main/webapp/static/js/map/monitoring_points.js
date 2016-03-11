@@ -1,6 +1,10 @@
 /**
  * 2016.03.04 author by tangweilong
  */
+var wkid = 4490;
+var serviceUrl = "http://10.215.201.151:6080/arcgis/rest/services/";
+var monitor_points_Url = serviceUrl + "monitor_points/MapServer";
+var water_pollution_Url = serviceUrl + "water_pollution/MapServer";
 require(
 		[ "esri/map", "esri/layers/WebTiledLayer", "esri/geometry/Extent",
 				"esri/geometry/Point", "esri/layers/TileInfo", "dojo/parser",
@@ -18,7 +22,6 @@ require(
 				InfoTemplate, on, dom, Legend, SimpleFillSymbol,
 				SimpleLineSymbol, Color, Graphic, Query, QueryTask) {
 
-			var wkid = 4490;
 			var bounds = new Extent({
 				"xmin" : 127.45141764160003,
 				"ymin" : 15.81985415245003,
@@ -32,9 +35,7 @@ require(
 				extent : bounds,
 				logo : false
 			});
-			var serviceUrl = "http://10.215.201.151:6080/arcgis/rest/services/";
-			var monitor_points_Url = serviceUrl + "monitor_points/MapServer";
-			var water_pollution_Url = serviceUrl + "water_pollution/MapServer";
+			
 			/**
 			 * 鹰眼图
 			 */
@@ -51,13 +52,12 @@ require(
 			var content = "<table cellspacing='0' border='1' width='260'>"
 					+ "<tr hidden='hidden'>"
 					+ "<td>二级编号:<b id='scdCode' hidden='hidden'>${scdCode}</b></td>"
-					+ "</tr>"
-					+ monitoring_info() + "</table>";
+					+ "</tr>" + monitoring_info() + "</table>";
 			var monitoring_point_info = new InfoTemplate();
 			monitoring_point_info.setTitle("监测点信息");
 			monitoring_point_info.setContent(content);
 			var water_pollution_filed = [ "water_body" ];
-			var monitoring_point_filed = ["scdCode", "fstCode" ];
+			var monitoring_point_filed = [ "scdCode", "fstCode" ];
 			var water_pollution_info = new InfoTemplate();
 			water_pollution_info.setTitle("水体信息");
 			water_pollution_info
@@ -90,9 +90,13 @@ require(
 			legend.startup();
 
 			map.addLayers([ water_pollution_layer, monitoring_point_layer ]);
-
+			$('#indexTree').tree({
+				onClick: function(node){
+					alert(node.text);  // alert node text property when clicked
+				}
+			});
 			function monitoring_info() {
-				var fstCode=$('#scdCode').text();
+				var fstCode = $('#scdCode').text();
 				console.log(fstCode);
 				var monitor_inf = [ {
 					"name" : "水温",
@@ -119,17 +123,21 @@ require(
 				var monitor_inf_length = getJsonObjLength(monitor_inf);
 				var monitor_inf_Element = '';
 				if (monitor_inf_length > 0) {
-					 monitor_inf_Element="<tr style='text-align:center;'><td colspan='2'><b>水质监测指标</b></td></tr>";
+					monitor_inf_Element = "<tr style='text-align:center;'><td colspan='2'><b>水质监测指标</b></td></tr>";
 					for (var i = 0; i < monitor_inf_length; i++) {
 						if (Math.round(i % 2) === 0) {
-							monitor_inf_Element += "<tr><td><strong>"+monitor_inf[i].name+":</strong>"+monitor_inf[i].value+"</td>";
+							monitor_inf_Element += "<tr><td><strong>"
+									+ monitor_inf[i].name + ":</strong>"
+									+ monitor_inf[i].value + "</td>";
 						} else {
-							monitor_inf_Element += "<td><strong>"+monitor_inf[i].name+":</strong>"+monitor_inf[i].value+"</td></tr>";
+							monitor_inf_Element += "<td><strong>"
+									+ monitor_inf[i].name + ":</strong>"
+									+ monitor_inf[i].value + "</td></tr>";
 						}
 					}
 				}
-				if(Math.round(monitor_inf_length % 2) != 0){
-					monitor_inf_Element +="<td>&nbsp;</td></tr>";
+				if (Math.round(monitor_inf_length % 2) != 0) {
+					monitor_inf_Element += "<td>&nbsp;</td></tr>";
 				}
 				return monitor_inf_Element;
 			}
@@ -142,17 +150,30 @@ require(
 				}
 				return Length;
 			}
-
-			function WaterISWhere(conditions) {
+			function calcOffset() {
+				return (map.extent.getWidth() / map.width);
+			}
+			
+			function WaterISWhere(id) {
 				var where = '';
-				for ( var index in conditions) {
-					var condition = conditions[index];
-					if (!condition.value || condition.value.length == 0)
-						continue;
-					if (where.length > 0) {
-						where += ' OR ';
-					}
-					where += 'time = ' + (parseFloat(condition.value));
+				if(conditions.length>0){
+					where += "water_id"+"='"+id+"'";
+				}
+//				for ( var index in conditions) {
+//					var condition = conditions[index];
+//					if (!condition.value || condition.value.length == 0)
+//						continue;
+//					if (where.length > 0) {
+//						where += ' OR ';
+//					}
+//					where += 'time = ' + (parseFloat(condition.value));
+//				}
+				return where;
+			}
+			function MontoringPiointISWhere(conditions) {
+				var where = '';
+				if(conditions.length>0){
+					where += "scdCode"+"='"+id+"'";
 				}
 				return where;
 			}
@@ -168,13 +189,13 @@ require(
 								SimpleLineSymbol.STYLE_SOLID, new Color([ 0,
 										255, 255 ]), 1), new Color([ 0, 255,
 								255, 1 ]));
-				var template = new InfoTemplate();
-				template.setTitle("水体信息");
+//				var template = new InfoTemplate();
+//				template.setTitle("水体信息");
 				for ( var index in queryResult) {
 					var feature = queryResult[index].feature;
 					var highlightGraphic = new Graphic(feature.geometry,
 							highlightSymbol);
-					template.setContent(getShowContent(feature.attributes));
+					//template.setContent(getShowContent(feature.attributes));
 					highlightGraphic.setInfoTemplate(template);
 					map.graphics.add(highlightGraphic);
 				}
@@ -183,15 +204,15 @@ require(
 			/**
 			 * 设置查询结果的信息框
 			 */
-			function getShowContent(attribute) {
-				var content = '';
-				content += '<strong>水体名称:</strong>' + attribute["water_body"]
-						+ '<br>';
-				content += '<strong>面积：</strong>'
-						+ (parseFloat(attribute["Shape.STArea()"]) / 666.67)
-								.toFixed(2) + '亩';
-				return content;
-			}
+			//function getShowContent(attribute) {
+//				var content = '';
+//				content += '<strong>水体名称:</strong>' + attribute["water_body"]
+//						+ '<br>';
+//				content += '<strong>面积：</strong>'
+//						+ (parseFloat(attribute["Shape.STArea()"]) / 666.67)
+//								.toFixed(2) + '亩';
+//				return content;
+			//}
 			/**
 			 * 获取结果集的范围
 			 */
@@ -230,15 +251,15 @@ require(
 				});
 			}
 
-			function selectWater() {
+			function selectWater(id) {
 				var query = new arcgisObj.Query();
 				var queryTask = new QueryTask(water_pollution_Url + "/0");
-				query.where = WaterISWhere();
+				query.where = WaterISWhere(id);
 				query.returnGeometry = true;
 				query.maxAllowableOffset = calcOffset();
 				query.num = 2000;
 				query.outFields = water_pollution_filed;
-				template.setTitle("水体信息");
+				//template.setTitle("水体信息");
 				var queryResult = [];
 				queryTask.execute(query, function(results) {
 					if (results.features) {
@@ -259,8 +280,33 @@ require(
 					}
 				});
 			}
+			function selectMontoringpoints(id) {
+				var query = new arcgisObj.Query();
+				var queryTask = new QueryTask(monitor_points_Url + "/0");
+				query.where = MontoringPiointISWhere(id);
+				query.returnGeometry = true;
+				query.maxAllowableOffset = calcOffset();
+				query.num = 2000;
+				query.outFields = water_pollution_filed;
 
-			function calcOffset() {
-				return (map.extent.getWidth() / map.width);
+				var queryResult = [];
+				queryTask.execute(query, function(results) {
+					if (results.features) {
+						for ( var index in results.features) {
+							var feature = results.features[index];
+							var extent = feature.geometry.getExtent();
+							var result = {
+								extent : extent,
+								feature : feature
+							};
+							queryResult.push(result);
+						}
+						if (queryResult.length > 0) {
+							displayResult(queryResult, wkid);
+						} else {
+							$.messager.alert('提示', '没有符合条件的地块', 'info');
+						}
+					}
+				});
 			}
 		});
