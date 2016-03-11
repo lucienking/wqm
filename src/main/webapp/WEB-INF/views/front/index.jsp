@@ -21,8 +21,11 @@
 	        		<div id="title"><h1>海口市水务局水体质量监测系统</h1></div>
 	        	</div>
 	        	<div class="logout_div">
-	        		<div><a href="#">退出登录</a></div>
-	        		<div><a href="#">修改密码</a></div>
+	        		<div class="re_div">
+		        		<div class="login_info">当前登录：${userName }</div>
+		        		<div class="login_info"><a href="#">退出登录</a></div>
+		        		<div class="login_info"><a href="#">修改密码</a></div>
+	        		</div>
 	        	</div>
         	</div>
         </div>
