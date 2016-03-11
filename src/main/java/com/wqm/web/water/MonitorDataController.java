@@ -1,8 +1,11 @@
 package com.wqm.web.water;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map; 
 
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wqm.common.persistence.SearchFilter.Operator;
 import com.wqm.common.persistence.SpecificationFactory;
+import com.wqm.common.util.JsonMapper;
 import com.wqm.entity.water.MonitorData;
 import com.wqm.service.water.MonitorDataService;
 import com.wqm.web.BaseController;
@@ -113,6 +117,37 @@ public class MonitorDataController extends BaseController{
 		monitorData.setUser(this.getCurrentUser()); 
 		monitorDataService.saveMonitorData(monitorData);
 		return convertToResult("message","新增成功");
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/saveMonitorData", method = RequestMethod.POST)
+	public Map<String,Object> saveMonitorData(@RequestParam(value = "itemData", defaultValue = "[]") String itemData,
+			@RequestParam(value = "waterName", defaultValue = "[]") String waterName,
+			@RequestParam(value = "waterCode", defaultValue = "[]") String waterCode,
+			@RequestParam(value = "monitorDate", defaultValue = "[]") String monitorDate){
+		JsonMapper jm = new JsonMapper();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date mdate;
+		try {
+			mdate = sdf.parse(monitorDate);
+		} catch (ParseException e) {
+			mdate = new Date();
+		}
+		for(String item:itemData.split("@@")){
+			Map<String,String> data = jm.fromJson(item,jm.contructMapType(HashMap.class, String.class, String.class));
+			MonitorData md = new MonitorData();
+			md.setCreateDate(new Date());
+			md.setItemName(data.get("name"));
+			md.setItemValue(data.get("value"));
+			md.setMonitorDate(mdate);
+			md.setUpdateDate(new Date());
+			md.setWaterCode(waterCode);
+			md.setWaterName(waterName);
+			md.setUser(getCurrentUser());
+			monitorDataService.saveMonitorData(md);
+		}
+		return convertToResult("message","录入成功");
 	}
 	
 	/**

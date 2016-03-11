@@ -22,8 +22,8 @@ public interface AreaDao extends PagingAndSortingRepository<AreaEntity, Long>,Jp
 	/**
 	 * 根据父Id获取全部子区域
 	 */
-	@Query("select area from AreaEntity area where area.status = '1' and area.parentCode = ?1 order by area.sortNum")
-	public List<AreaEntity> getAreasByParentId(String code);
+	@Query("select area from AreaEntity area where area.parentCode = ?1 order by area.sortNum")
+	public List<AreaEntity> getAreasByParentCode(String code);
 	
 	/**
 	 * 删除区域

@@ -22,13 +22,16 @@ public class MonitorData extends IdEntity {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private WaterEntity waterEntity;
+	//private WaterEntity waterEntity;        //不关联实体
+	private String waterCode;
+	
+	private String waterName;
 	
 	private Date monitorDate;
 	
 	private String itemName;
 	
-	private float  itemValue;
+	private String  itemValue;
 	
 	private UserEntity user;	//创建人员
 	
@@ -65,7 +68,7 @@ public class MonitorData extends IdEntity {
 		this.updateDate = updateDate;
 	}
 
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name = "waterCode",referencedColumnName = "code")
 	public WaterEntity getWaterEntity() {
 		return waterEntity;
@@ -73,7 +76,7 @@ public class MonitorData extends IdEntity {
 
 	public void setWaterEntity(WaterEntity waterEntity) {
 		this.waterEntity = waterEntity;
-	}
+	}*/
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	public Date getMonitorDate() {
@@ -92,11 +95,27 @@ public class MonitorData extends IdEntity {
 		this.itemName = itemName;
 	}
 
-	public float getItemValue() {
+	public String getItemValue() {
 		return itemValue;
 	}
 
-	public void setItemValue(float itemValue) {
+	public void setItemValue(String itemValue) {
 		this.itemValue = itemValue;
+	}
+
+	public String getWaterCode() {
+		return waterCode;
+	}
+
+	public void setWaterCode(String waterCode) {
+		this.waterCode = waterCode;
+	}
+
+	public String getWaterName() {
+		return waterName;
+	}
+
+	public void setWaterName(String waterName) {
+		this.waterName = waterName;
 	}
 }

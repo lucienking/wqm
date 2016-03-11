@@ -54,8 +54,8 @@ public class AreaService {
 	 * @param id
 	 * @return
 	 */
-	public List<AreaEntity> getAreaListById(String code){
-		return areaDao.getAreasByParentId(code);
+	public List<AreaEntity> getAreasByParentCode(String code){
+		return areaDao.getAreasByParentCode(code);
 	}
 	
 	/**

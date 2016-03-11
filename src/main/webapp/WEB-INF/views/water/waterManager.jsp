@@ -71,6 +71,13 @@
 			父水体号：
 			<input id="waterParentId" name="parentCode" style="width:120px;" />
 		</div>
+		<div class="line-div">
+			水体状态：
+			<select id="waterIsManaged" class="easyui-combobox" name="isManaged" style="width:120px;">
+			    <option value="N" selected="selected">未治理</option>
+			    <option value="Y">已治理</option>
+			</select>
+		</div>
 	</form>
 </div>
 
@@ -120,6 +127,12 @@ $('#waterDatagrid').datagrid({
         		return "断面";
         	else  		  
         		return "水体";
+        }},
+        {field:'isLeaf',title:'水体状态',width:'5%',formatter:function(value,rec){
+        	if(value=='Y')  
+        		return "已治理";
+        	else  		  
+        		return "未治理";
         }},
         {field:'parentCode',title:'父水体',width:'5%'},
         {field:'user',title:'操作员',width:'8%',formatter:function(value,rec){

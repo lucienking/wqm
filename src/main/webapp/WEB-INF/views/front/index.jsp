@@ -21,8 +21,11 @@
 	        		<div id="title"><h1>海口市水务局水体质量监测系统</h1></div>
 	        	</div>
 	        	<div class="logout_div">
-	        		<div><a href="#">退出登录</a></div>
-	        		<div><a href="#">修改密码</a></div>
+	        		<div class="re_div">
+		        		<div class="login_info">当前登录：${userName }</div>
+		        		<div class="login_info"><a href="#">退出登录</a></div>
+		        		<div class="login_info"><a href="#">修改密码</a></div>
+	        		</div>
 	        	</div>
         	</div>
         </div>
@@ -33,7 +36,10 @@
         	
         </div>
         <div data-options="region:'west'" style="width:250px;">
-        	
+        	<div class="easyui-panel" style="padding:5px;height:100%;border:0 solid #FFFFFF">
+				<ul id= "indexTree" class="easyui-tree"  data-options="url:'${ctx }/show/getWaterTree',method:'get'"> 
+				</ul>
+			</div>
         </div>
         <div data-options="region:'center',iconCls:'icon-ok'" style="padding:5px">
         	<div id="map">
@@ -45,5 +51,23 @@
     </div>
  	<script src="http://jsapi.thinkgis.cn/init.js"></script>
 	<script src="static/js/map/monitoring_points.js"></script>
+	<script>
+/*
+ * 菜单栏点击事件
+ */
+ var ctx = "${ctx}";
+ $('#indexTree').tree({
+	onClick: function(node){
+		if($('#indexTree').tree('isLeaf',node.target)){
+			
+			alert("调用地图");
+			return;
+		}else{
+			$('#indexTree').tree(node.state === 'closed' ? 'expand' : 'collapse', node.target);
+			return;
+		}
+	}
+});  
+</script>
 </body>
 </html>
