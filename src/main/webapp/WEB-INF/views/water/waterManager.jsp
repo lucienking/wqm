@@ -282,13 +282,16 @@ function waterMonitorItemDialog(title,selected){
         dataType:"json",
         data:{"id":selected.id},
         async:true,
+        cascadeCheck:false,
         success:function(data){
-        	$("#waterMonitorItemTree").tree('clearChecked'); 
+        	//$("#waterMonitorItemTree").tree('clearChecked'); 
+        	var root = $('#waterMonitorItemTree').tree('getRoot');  
+			$("#waterMonitorItemTree").tree('uncheck',root.target); 
             $(data).each(function(i, obj){
                 var n = $("#waterMonitorItemTree").tree('find',obj.code);
                 if(n){
                     $("#waterMonitorItemTree").tree('check',n.target);
-                }
+                } 
             });
         },
         error:function(){alert("发送请求失败");}
@@ -296,8 +299,8 @@ function waterMonitorItemDialog(title,selected){
 	$("#waterMonitorItemDialog").show(); //先显示，再弹出
     $("#waterMonitorItemDialog").dialog({
     	title:'监测项',
-        width: 170,
-        height:260,
+        width: 200,
+        height:400,
         modal:false,
         buttons:[{
 			text:'保存',

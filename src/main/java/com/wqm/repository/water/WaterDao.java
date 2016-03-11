@@ -18,9 +18,9 @@ public interface WaterDao extends PagingAndSortingRepository<WaterEntity, Long>,
 	public List<WaterEntity> getWatersByParentCode(String code,Sort sort);
 	
 	/**
-	 * 根据父Id获取全部子水体
+	 * 根据父code获取全部子水体
 	 */
-	@Query("select water from WaterEntity water where water.parentCode = ?1 order by water.sortNum")
+	@Query("select water from WaterEntity water where water.parentCode = ?1 and water.isLeaf = 'true' order by water.sortNum")
 	public List<WaterEntity> getWatersByParentCode(String code);
 	
 	/**

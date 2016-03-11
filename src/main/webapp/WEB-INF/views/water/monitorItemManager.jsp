@@ -185,7 +185,7 @@ function monitorItemDeleData(){
 }
 function monitorItemSave(){
 	var saveType =$("#monitorItemSaveType").val();
-	if(checkNotNull('monitorItemName',"监测项名称")&&checkNotNull('monitorItemAuthorId',"监测项权限")){
+	if( true){
 		$.ajax({
 			type: "POST",
 			url:"${ctx}/monitorItem/"+saveType,

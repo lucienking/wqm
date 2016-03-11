@@ -57,7 +57,7 @@
 				选择截面：
 				<input id="monitor_LeafWater" name="monitorLeafWaterId" style="width:120px;" />
 				监测时间：
-				<input id="contract_startDate" name="startDate" value="${startDate }" class="easyui-datebox" style="width:120px;"/>
+				<input id="monitor_Date" name="monitorDate" value="${currentDate }" class="easyui-datebox" style="width:120px;"/>
 			</div>
 		</div>
 		<div id="monitorDataItemDialog"  style="display:none">
@@ -296,6 +296,9 @@ $("#monitor_Area").combobox({
    		$('#monitor_Water').combobox('clear'); 
    		var url = ctx+'/water/getWaterByAreaCode?areaCode='+value.code;
    		$('#monitor_Water').combobox('reload', url); 
+   		$('#monitor_LeafWater').combobox('clear');
+   		var url = ctx+'/water/getWatersByParent?code=';
+   		$('#monitor_LeafWater').combobox('reload', url); 
    	}
 });
 
