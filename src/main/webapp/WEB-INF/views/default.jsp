@@ -22,7 +22,13 @@
 	opacity:0.5;
 }
 .frosted_glass #title{
-	margin:25px 0px 0px 60px;
+	margin:15px 0px -10px 30px;
+}
+#title img{
+	margin-bottom: -20px;
+}
+#title h1{
+	display:inline-block;
 }
 </style>
 </head>
