@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+/* map element */
+#map {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+/* legend element */
+#info {
+	width: 14.0625em;
+	background-color: #fff;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	padding-left: 10px;
+	padding-top: 10px;
+	border-top: 2px solid #AFA9A9;
+	border-left: 2px solid #AFA9A9;
+	border-radius:10px;
+}

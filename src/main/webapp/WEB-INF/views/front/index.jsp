@@ -9,6 +9,9 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <link type="text/css" href="static/styles/front/header_footer.css" rel="Stylesheet" />
+<link rel="stylesheet" href="http://jsapi.thinkgis.cn/dijit/themes/nihilo/nihilo.css">
+<link rel="stylesheet" href="http://jsapi.thinkgis.cn/esri/css/esri.css">
+<link type="text/css" href="static/styles/front/map.css" rel="Stylesheet" />
 </head>
 <body>
     <div class="easyui-layout" data-options="fit:true">
@@ -33,9 +36,14 @@
         	
         </div>
         <div data-options="region:'center',iconCls:'icon-ok'" style="padding:5px">
-        	
+        	<div id="map">
+			</div>
+			<div id="info">
+				<div id="legend"></div>
+			</div>
         </div>
     </div>
- 
+ 	<script src="http://jsapi.thinkgis.cn/init.js"></script>
+	<script src="static/js/map/monitoring_points.js"></script>
 </body>
 </html>
