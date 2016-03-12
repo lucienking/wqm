@@ -12,14 +12,14 @@ require(
 				"esri/layers/ArcGISDynamicMapServiceLayer",
 				"esri/layers/FeatureLayer", "esri/InfoTemplate", "dojo/on",
 				"dojo/dom", "esri/dijit/Legend",
-				"esri/symbols/SimpleFillSymbol",
+				"esri/symbols/SimpleFillSymbol","esri/symbols/SimpleMarkerSymbol",
 				"esri/symbols/SimpleLineSymbol", "esri/Color", "esri/graphic",
 				"esri/tasks/query", "esri/tasks/QueryTask",
 				"dijit/layout/BorderContainer", "dijit/layout/ContentPane",
 				"dojo/domReady!" ],
 		function(Map, WebTiledLayer, Extent, Point, TileInfo, parser,
 				OverviewMap,SpatialReference, ArcGISDynamicMapServiceLayer, FeatureLayer,
-				InfoTemplate, on, dom, Legend, SimpleFillSymbol,
+				InfoTemplate, on, dom, Legend, SimpleFillSymbol,SimpleMarkerSymbol,
 				SimpleLineSymbol, Color, Graphic, Query, QueryTask) {
 
 			var bounds = new Extent({
@@ -32,6 +32,7 @@ require(
 				}
 			});
 			var map = new Map("map", {
+				zoom: 16,
 				extent : bounds,
 				logo : false
 			});
@@ -88,8 +89,9 @@ require(
 				} ]
 			}, "legend");
 			legend.startup();
-
+			
 			map.addLayers([ water_pollution_layer, monitoring_point_layer ]);
+
 			$('#indexTree').tree({
 				onClick: function(node){
 					//alert(node.text);  // alert node text property when clicked
@@ -169,15 +171,6 @@ require(
 					var id_num=id.split('w')[1];
 					where += "water_id"+"='"+id_num+"'";
 				}
-//				for ( var index in conditions) {
-//					var condition = conditions[index];
-//					if (!condition.value || condition.value.length == 0)
-//						continue;
-//					if (where.length > 0) {
-//						where += ' OR ';
-//					}
-//					where += 'time = ' + (parseFloat(condition.value));
-//				}
 				return where;
 			}
 			function MontoringPiointISWhere(id) {
@@ -196,52 +189,41 @@ require(
 			function displayResult(queryResult, wkid,isPoint) { // 设置显示结果的符合颜色等
 				map.graphics.clear();
 				map.infoWindow.hide();
-				var highlightSymbol = new SimpleFillSymbol(
+				var waterSymbol = new SimpleFillSymbol(
 						SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(
 								SimpleLineSymbol.STYLE_SOLID, new Color([ 0,
 										255, 255 ]), 1), new Color([ 0, 255,
 								255, 1 ]));
-//				var template = new InfoTemplate();
-//				template.setTitle("水体信息");
-				
+				var pointSymbol = new SimpleMarkerSymbol(
+			            SimpleMarkerSymbol.STYLE_CIRCLE,
+			            18, new SimpleLineSymbol(
+			                SimpleLineSymbol.STYLE_NULL,
+			                new Color(0, 255, 255, 1),
+			                1), 
+			            new Color([0, 229, 238, 1])
+			        );
 				if(isPoint==true){
-					var feature;
-					for ( var index in queryResult) {
-						feature = queryResult[index].feature;
-						var highlightGraphic = new Graphic(feature.geometry,
-								highlightSymbol);
-						//template.setContent(getShowContent(feature.attributes));
-						//highlightGraphic.setInfoTemplate(template);
-						map.graphics.add(highlightGraphic);
-					}
-					var x=feature.geometry.x;
-					var y=feature.geometry.x;
-					var location=new Point(x,y, new SpatialReference({ wkid: wkid }));
-					//map.centerAndZoom(location,1);
-					map.centerAt(location);
+					var pointGeometry = queryResult[0].feature.geometry;
+					var x=pointGeometry.x;
+					var y=pointGeometry.y;
+					var location = new Point(x, y, new SpatialReference({wkid: wkid}));
+			        map.centerAt(location);
+			        var pointGraphic = new Graphic(location, pointSymbol);
+			        map.graphics.clear();
+			        map.infoWindow.hide();
+			        map.graphics.add(pointGraphic);
+			      
 				}else{
 					for ( var index in queryResult) {
 						var feature = queryResult[index].feature;
-						var highlightGraphic = new Graphic(feature.geometry,
-								highlightSymbol);
-						map.graphics.add(highlightGraphic);
+						var waterGraphic = new Graphic(feature.geometry,
+								waterSymbol);
+						map.graphics.add(waterGraphic);
 					}
 					map.setExtent(getExtent(queryResult, wkid));
 				}
 				
 			}
-			/**
-			 * 设置查询结果的信息框
-			 */
-			//function getShowContent(attribute) {
-//				var content = '';
-//				content += '<strong>水体名称:</strong>' + attribute["water_body"]
-//						+ '<br>';
-//				content += '<strong>面积：</strong>'
-//						+ (parseFloat(attribute["Shape.STArea()"]) / 666.67)
-//								.toFixed(2) + '亩';
-//				return content;
-			//}
 			/**
 			 * 获取结果集的范围
 			 */
@@ -285,10 +267,10 @@ require(
 				var queryTask = new QueryTask(water_pollution_Url + "/0");
 				query.where = WaterISWhere(id);
 				query.returnGeometry = true;
-				query.maxAllowableOffset = 10;
+				query.maxAllowableOffset = 0.01;
+				query.multipatchOption = "xyFootprint";
 				query.num = 2000;
 				query.outFields = water_pollution_filed;
-				//template.setTitle("水体信息");
 				var queryResult = [];
 				var isPoint=false;
 				queryTask.execute(query, function(results) {
@@ -315,7 +297,8 @@ require(
 				var queryTask = new QueryTask(monitor_points_Url + "/0");
 				query.where = MontoringPiointISWhere(id);
 				query.returnGeometry = true;
-				query.maxAllowableOffset = 10;
+				
+				query.maxAllowableOffset = 0.01;
 				query.num = 2000;
 				query.outFields = monitoring_point_filed;
 				var isPoint=true;	
