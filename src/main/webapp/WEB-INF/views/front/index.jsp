@@ -8,10 +8,10 @@
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-<link type="text/css" href="static/styles/front/header_footer.css" rel="Stylesheet" />
-<link rel="stylesheet" href="http://jsapi.thinkgis.cn/dijit/themes/nihilo/nihilo.css">
-<link rel="stylesheet" href="http://jsapi.thinkgis.cn/esri/css/esri.css">
-<link type="text/css" href="static/styles/front/map.css" rel="Stylesheet" />
+<link type="text/css" href="${ctx }/static/styles/front/header_footer.css" rel="Stylesheet" />
+<link rel="stylesheet" href="${ctx }/static/arcgisApi/3.16compact/dijit/themes/nihilo/nihilo.css">
+<link rel="stylesheet" href="${ctx }/static/arcgisApi/3.16compact/esri/css/esri.css">
+<link type="text/css" href="${ctx }/static/styles/front/map.css" rel="Stylesheet" />
 </head>
 <body>
     <div class="easyui-layout" data-options="fit:true">
@@ -79,8 +79,8 @@
 			</div>
         </div>
     </div>
- 	<script src="http://jsapi.thinkgis.cn/init.js"></script>
-	<script src="static/js/map/monitoring_points.js"></script>
+    <script src="${ctx }/static/arcgisApi/3.16compact/init.js"></script>
+	<script src="${ctx }/static/js/map/monitoring_points.js"></script>
 	<script>
 /*
  * 菜单栏点击事件
