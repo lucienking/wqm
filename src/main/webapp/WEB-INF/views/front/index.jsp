@@ -3,7 +3,7 @@
 <%@include file="/public/common.jsp"%>
 <html>
 <head>
-<title>水质监测系统</title>
+<title>海口市水务局水体质量监测系统</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -71,7 +71,7 @@
 				</ul>
 			</div>
         </div>
-        <div data-options="region:'center',iconCls:'icon-ok'" style="padding:5px">
+        <div data-options="region:'center',iconCls:'icon-ok'" style="padding:5px;">
         	<div id="map">
 			</div>
 			<div id="info">
