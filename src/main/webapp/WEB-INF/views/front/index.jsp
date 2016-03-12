@@ -33,7 +33,37 @@
         	©2015 海口市龙华区水务局 copyright
         </div>
         <div data-options="region:'east'" style="width:210px;">
-        	
+        	<div  class="easyui-panel" style="width:99%;height:30%;margin:2px 1px 1px 3px;border-radius: 7px;">
+        		<div style="width:99%;text-align:center;margin-top:2px;"><b>统计信息</b></div> 
+        		<div style="width:95%;margin-top:10px;;margin-left:5px;">
+        			治理状况： 
+        			<select id="waterIsManaged" class="easyui-combobox" name="isManaged" style="width:100px">
+					    <option value="" selected="selected">-请选择-</option>
+					    <option value="N">未治理</option>
+					    <option value="Y">已治理</option>
+					    <option value="M">治理中</option>
+					</select>
+				</div>
+				<div style="width:95%;margin-top:5px;;margin-left:5px;">
+					<label for="search_userName">筛选条件： </label>
+					<input id="search_userName" name="userName" class="easyui-textbox" style="width:100px;"/>
+				</div>
+				<div style="width:95%;margin-top:5px;;margin-left:5px;">
+					<label for="search_userName">筛选条件： </label>
+					<input id="search_userName" name="userName" class="easyui-textbox" style="width:100px;"/>
+				</div>
+				<div style="width:95%;margin-top:5px;;margin-left:5px;">
+					<label for="search_userName">筛选条件： </label>
+					<input id="search_userName" name="userName" class="easyui-textbox" style="width:100px;"/>
+				
+				</div>
+				<div style="width:99%;margin-top:10px;text-align:center;">
+					 <a class="easyui-linkbutton" href="#" id="monitorDataStautsQuery">&nbsp;查&nbsp;询&nbsp;</a>
+				</div>
+        	</div>
+        	<div  class="easyui-panel" style="width:99%;height:68%;margin:2px 1px 10px 3px;border-radius: 7px;">
+        		<div style="width:99%;text-align:center;margin-top:2px;"><b>详细信息</b></div> 
+        	</div>
         </div>
         <div data-options="region:'west'" style="width:250px;">
         	<div class="easyui-panel" style="padding:5px;height:100%;border:0 solid #FFFFFF">
