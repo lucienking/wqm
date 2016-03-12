@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -42,6 +43,8 @@ public class WaterEntity extends IdEntity {
 	private boolean isLeaf;		//水体类型  true:水体 false:区域
 	
 	private String iconCls;		//水体图标
+	
+	private String isManaged;  //水体状态  Y:已治理 N:未治理
 	
 	private String parentCode;	//父水体Code
 	
@@ -102,7 +105,7 @@ public class WaterEntity extends IdEntity {
 	}
 
 	// JPA 基于USERID列的多对一关系定义
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	public UserEntity getUser() {
 		return user;
@@ -180,10 +183,6 @@ public class WaterEntity extends IdEntity {
 		this.status = status;
 	}
 
-	public void setLeaf(boolean isLeaf) {
-		this.isLeaf = isLeaf;
-	}
-
 	@ManyToMany
 	@JoinTable(name = "BUSI_WTR_WATERMONITORITEM", joinColumns = { @JoinColumn(name ="waterCode" ,referencedColumnName = "code")}, 
 	  inverseJoinColumns = { @JoinColumn(name = "moniterItemCode",referencedColumnName = "code") })
@@ -193,5 +192,13 @@ public class WaterEntity extends IdEntity {
 
 	public void setMonitorItem(List<MonitorItem> monitorItem) {
 		this.monitorItem = monitorItem;
+	}
+
+	public String getIsManaged() {
+		return isManaged;
+	}
+
+	public void setIsManaged(String isManaged) {
+		this.isManaged = isManaged;
 	}
 }

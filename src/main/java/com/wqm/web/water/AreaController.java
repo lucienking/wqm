@@ -3,7 +3,6 @@ package com.wqm.web.water;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map; 
 
@@ -12,8 +11,6 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -43,37 +40,6 @@ public class AreaController extends BaseController{
 	@Autowired
 	private AreaService areaService;
 	
-	private final static Logger logger = LoggerFactory.getLogger(AreaController.class);
-	
-	/**
-	 * 按父节点加载区域，返回区域树JSON
-	 * @param id
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(method = RequestMethod.GET,value = "/getAreas")
-	public List<Map<String,Object>> getAreasJson(@RequestParam(value = "code", defaultValue = "0") String code){
-		/* 启用区域状态功能 允许失效
-		 *  Sort sort = new Sort(Direction.ASC, "sortNum");
-			List<AreaEntity> areas= areaService.getAreaListById(id,sort);
-		*/
-		List<AreaEntity> areas= areaService.getAreaListById(code);
-		List<Map<String,Object>> tree =  new ArrayList<Map<String,Object>>();
-		for(AreaEntity area:areas){
-			Map<String, Object> map = new HashMap<String, Object>();
-			String text = area.getName();
-			map.put("id",area.getId()+"");
-			map.put("iconCls", area.getIconCls());
-			map.put("text",text);
-			
-			Map<String,String> attribute = new HashMap<String,String>();
-			map.put("attributes",attribute );
-		//区域权限	if(PrincipalUtil.isHavePermission(area.getAuthorId())||"admin".equals(PrincipalUtil.getCurrentUserName()))
-				tree.add(map);
-		}
-		logger.info("加载区域:"+tree.toString());
-		return tree;
-	}
 	
 	/**
 	 * 区域管理界面<br/>

@@ -2,6 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="jksb" uri="http://www.jksb.com/common/tags"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<style>
+	.itemInputSpan{
+		margin:5px;
+		width:120px;
+		height:50px;
+		border:solid thin red;	
+		display:inline;
+	}
+</style>
 <div id= "monitorDataContainer">
 <div id="monitorDataSearchConditionPanel" title="查询条件" class="easyui-panel" style="width:100%;padding-top:10px;" data-options="collapsible:true">
 	<form id="monitorDataSearchConditionForm">
@@ -55,13 +64,12 @@
 				</div>
 			<div id="monitorDataCreateDiv" class="line-div">
 				选择截面：
-				<input id="monitor_LeafWater" name="monitorLeafWaterId" style="width:120px;" />
+				<input id="monitor_LeafWater" name="waterCode" style="width:120px;" />
 				监测时间：
-				<input id="contract_startDate" name="startDate" value="${startDate }" class="easyui-datebox" style="width:120px;"/>
+				<input id="monitor_Date" name="monitorDate" value="${currentDate }" class="easyui-datebox" style="width:120px;"/>
 			</div>
 		</div>
 		<div id="monitorDataItemDialog"  style="display:none">
-			ddddddddddddddddd
 		</div>
 	</form>
 
@@ -89,8 +97,8 @@ $('#monitorDataDatagrid').datagrid({
     columns:[[
         {checkbox:true,field:'',title:'' },
         {field:'id',title:'编号',width:'5%',sortable:true},
-        {field:'code',title:'区域',width:'10%'},
-        {field:'name',title:'水体',width:'10%'},
+        {field:'waterCode',title:'区域',width:'10%'},
+        {field:'waterName',title:'水体',width:'10%'},
         {field:'sortNum',title:'截面',width:'10%'},
         {field:'createDate',title:'监测日期',width:'10%'},
         {field:'user',title:'操作员',width:'8%',formatter:function(value,rec){
@@ -172,12 +180,14 @@ function monitorDataDeleData(){
 	});
 }
 function monitorDataSave(){
-	var saveType =$("#monitorDataSaveType").val();
-	if(checkNotNull('monitorDataName',"监测数据名称")&&checkNotNull('monitorDataAuthorId',"监测数据权限")){
+	if(true){
 		$.ajax({
 			type: "POST",
-			url:"${ctx}/monitorData/"+saveType,
-			data:$('#monitorDataDataForm').serialize(), //将Form 里的值序列化
+			url:"${ctx}/monitorData/saveMonitorData",
+			data:{"itemData":fomatterPamFromItemForm()
+				,"waterCode":$("#monitor_LeafWater").combobox("getValue")
+				,"waterName":$("#monitor_LeafWater").combobox("getText")
+				,"monitor_Date":$("#monitor_Date").textbox("getValue")},  
 			asyn:false,
 		    error: function(jqXHR, textStatus, errorMsg) {
 		    	$.messager.alert('操作结果',""+jqXHR.responseText);
@@ -225,7 +235,19 @@ function monitorDataDataDialog(title,selected){
 		type:'GET',
 		data: { 'code': $("#monitor_LeafWater").combobox("getValue") },  
 		success:function(data){
-			$("#monitorDataItemDialog").append(data);
+			var html = '';
+			html +="<table style='width:99%;height:80px;margin-buttom:10px'><tr>";
+			 $(data).each(function(i, obj){
+				html += "<td>"+obj.name +"<input type='text' name='_itemValue' value='0' class='easyui-textbox' style='width:60px;'/>";
+				html += "<input type='hidden' name='_itemName' value='"+obj.name+"' />";
+				html += "<input type='hidden' name='_itemCode' value='"+obj.code+"' />";
+				html += "</td>";
+				if((i+1)%3 == 0){
+					html+="</tr><tr>";
+			 	}
+			});
+			html +="</tr></table>";
+			$("#monitorDataItemDialog").html(html);
 		},
 		error:function(XMLHttpRequest, textStatus, errorThrown){
 			$.messager.alert('操作失败',"错误提示:"+XMLHttpRequest.responseText);
@@ -235,7 +257,6 @@ function monitorDataDataDialog(title,selected){
     $("#monitorDataItemDialog").dialog({
         title: '监测数据填写',
         width: 450,
-        height: 160,
         modal:true,
         buttons:[{
 			text:'保存',
@@ -296,6 +317,9 @@ $("#monitor_Area").combobox({
    		$('#monitor_Water').combobox('clear'); 
    		var url = ctx+'/water/getWaterByAreaCode?areaCode='+value.code;
    		$('#monitor_Water').combobox('reload', url); 
+   		$('#monitor_LeafWater').combobox('clear');
+   		var url = ctx+'/water/getWatersByParent?code=';
+   		$('#monitor_LeafWater').combobox('reload', url); 
    	}
 });
 
@@ -318,5 +342,16 @@ $("#monitor_LeafWater").combobox({
     textField:'name',
     method:'GET'
 });
+
+function fomatterPamFromItemForm(){
+	var result ="";
+	var names = $("*[name='_itemName']").map(function(){return $(this).val();}).get().join(",").split(",") ;
+	var values = $("*[name='_itemValue']").map(function(){return $(this).val();}).get().join(",").split(",") ;
+	$("input[name='_itemCode']").each(function(i,obj){  
+		result += '{"code":"'+obj.value+'","name":"'+names[i]+'","value":"'+values[i]+'"}';	
+		if(i!=(names.length-1)){result += "@@";}
+	});   	
+	return result;
+}
 </script>
 </div>
