@@ -298,11 +298,7 @@ require(
 				query.where = MontoringPiointISWhere(id);
 				query.returnGeometry = true;
 				
-<<<<<<< HEAD
 				query.maxAllowableOffset = 0.0001;
-=======
-				query.maxAllowableOffset = 0.01;
->>>>>>> origin/master
 				query.num = 2000;
 				query.outFields = monitoring_point_filed;
 				var isPoint=true;	
