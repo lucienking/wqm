@@ -305,7 +305,7 @@ require(
 						if (queryResult.length > 0) {
 							displayResult(queryResult, wkid,isPoint);
 						} else {
-							$.messager.alert('提示', '没有符合条件的地块', 'info');
+							$.messager.alert('提示', '没有符合条件的水体', 'info');
 						}
 					}
 				});
@@ -334,7 +334,7 @@ require(
 						if (queryResult.length > 0) {
 							displayResult(queryResult, wkid,isPoint);
 						} else {
-							$.messager.alert('提示', '没有符合条件的地块', 'info');
+							$.messager.alert('提示', '没有符合条件的断面', 'info');
 						}
 					}
 				});
