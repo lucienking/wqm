@@ -58,6 +58,7 @@ public class ShowIndexController extends BaseController{
 			for(AreaEntity area:areas){
 				Map<String, Object> map = new HashMap<String, Object>();
 				String text = area.getName();
+				text = "<span class='menuTreeParent'>"+text+"</span>" ;
 				map.put("id","a"+area.getCode());
 				map.put("iconCls", area.getIconCls());
 				map.put("text",text);
@@ -74,7 +75,6 @@ public class ShowIndexController extends BaseController{
 				map.put("iconCls", water.getIconCls());
 				if(!water.getIsLeaf()){
 					map.put("state","closed");
-					text = "<span class='menuTreeParent'>"+text+"</span>" ;
 				}
 				map.put("text",text);
 				
@@ -91,7 +91,6 @@ public class ShowIndexController extends BaseController{
 				map.put("iconCls", water.getIconCls());
 				if(!water.getIsLeaf()){
 					map.put("state","closed");
-					text = "<span class='menuTreeParent'>"+text+"</span>" ;
 				}
 				map.put("text",text);
 				
