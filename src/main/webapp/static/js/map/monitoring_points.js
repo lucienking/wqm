@@ -91,30 +91,7 @@ require(
 			legend.startup();
 			
 			map.addLayers([ water_pollution_layer, monitoring_point_layer ]);
-//			var x = 127.625198;
-//	        var y = 15.842302;
-//	        var location = new Point(x, y, new SpatialReference({wkid: wkid}));
-//	        //map.centerAndZoom(location,-1);
-//	        map.centerAt(location);
-//	        console.log(map.loaded);
-//	        var symbol = new SimpleMarkerSymbol(
-//	            SimpleMarkerSymbol.STYLE_CIRCLE,
-//	            18,
-//	            new SimpleLineSymbol(
-//	                SimpleLineSymbol.STYLE_NULL,
-//	                new Color(0, 255, 255, 1),
-//	                1
-//	            ), /**/
-//	            new Color([0, 229, 238, 1])
-//	        );
-//	        var graphic = new Graphic(location, symbol);
-//
-//
-//	        map.on("load", function () {
-//	            map.graphics.clear();
-//	            map.infoWindow.hide();
-//	            map.graphics.add(graphic);
-//	        });
+
 			$('#indexTree').tree({
 				onClick: function(node){
 					//alert(node.text);  // alert node text property when clicked
@@ -290,10 +267,10 @@ require(
 				var queryTask = new QueryTask(water_pollution_Url + "/0");
 				query.where = WaterISWhere(id);
 				query.returnGeometry = true;
-				query.maxAllowableOffset = 10;
+				query.maxAllowableOffset = 0.01;
+				query.multipatchOption = "xyFootprint";
 				query.num = 2000;
 				query.outFields = water_pollution_filed;
-				//template.setTitle("水体信息");
 				var queryResult = [];
 				var isPoint=false;
 				queryTask.execute(query, function(results) {
@@ -320,6 +297,7 @@ require(
 				var queryTask = new QueryTask(monitor_points_Url + "/0");
 				query.where = MontoringPiointISWhere(id);
 				query.returnGeometry = true;
+				
 				query.maxAllowableOffset = 0.01;
 				query.num = 2000;
 				query.outFields = monitoring_point_filed;
@@ -339,7 +317,7 @@ require(
 						if (queryResult.length > 0) {
 							displayResult(queryResult, wkid,isPoint);
 						} else {
-							$.messager.alert('提示', '没有符合条件的监测点', 'info');
+							$.messager.alert('提示', '没有符合条件的断面', 'info');
 						}
 					}
 				});
