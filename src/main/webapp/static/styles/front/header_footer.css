@@ -7,9 +7,9 @@ html,body{
 	 height:100%;
 	 width:100%;
 	 color:#000;
-	 background-image:url("../../image/materials/header_bg.png");
-	 background-position:-15px -180px;
-	 background-repeat:no-repeat;
+	 background-image:url("../../image/backimage.png");
+	 background-position:center;
+	 background-repeat:repeat-x;
 	 overflow:hidden;
 }
 .logout_div{
