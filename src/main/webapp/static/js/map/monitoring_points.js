@@ -267,7 +267,7 @@ require(
 				var queryTask = new QueryTask(water_pollution_Url + "/0");
 				query.where = WaterISWhere(id);
 				query.returnGeometry = true;
-				query.maxAllowableOffset = 0.01;
+				query.maxAllowableOffset = 0.000001;
 				query.multipatchOption = "xyFootprint";
 				query.num = 2000;
 				query.outFields = water_pollution_filed;
