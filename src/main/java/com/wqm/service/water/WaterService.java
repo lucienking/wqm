@@ -63,7 +63,8 @@ public class WaterService {
 	 * @return
 	 */
 	public List<WaterEntity> getWaterByAreaCode(String areaCode){
-		return waterDao.getWaterByAreaCode(areaCode);
+		List<WaterEntity> waters = waterDao.getWaterByAreaCode(areaCode);
+		return waters;
 	}
 	
 	/**

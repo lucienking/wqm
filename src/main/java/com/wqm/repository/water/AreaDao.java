@@ -20,7 +20,7 @@ public interface AreaDao extends PagingAndSortingRepository<AreaEntity, Long>,Jp
 	public List<AreaEntity> getAreasByParentCode(String code,Sort sort);
 	
 	/**
-	 * 根据父Id获取全部子区域
+	 * 根据父Code获取全部子区域
 	 */
 	@Query("select area from AreaEntity area where area.parentCode = ?1 order by area.sortNum")
 	public List<AreaEntity> getAreasByParentCode(String code);
