@@ -53,7 +53,7 @@
 			<input id="areaName" name="name"  class="easyui-textbox" style="width:120px;"/>
 		</div>
 		<div class="line-div">
-			父区域号：
+			父区域&nbsp;：
 			<input id="areaParentId" name="parentCode" style="width:120px;"/>
 			区域顺序：
 			<input id="areaSortNum" name="sortNum" value="1" class="easyui-textbox" style="width:120px;"/>
@@ -71,9 +71,6 @@
 	<jksb:hasAutority authorityId="007001002">
 		<a href="javascript:areaDeleData()" id = "areaDeleButton" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true,disabled:true," >删除</a>
 	</jksb:hasAutority>
-</div>
-
-<div id="dataDialog2"  >
 </div>
 
 <script type="text/javascript">
@@ -214,8 +211,8 @@ function areaDataDialog(title,selected){
 
 function setAreaFormValue(selected){
 	 $("#areaName").textbox('setValue',selected.name);
-	 $('#areaParentId').combobox('reload'); 
- 	 $('#areaParentId').combobox('setValue', selected.parentId );
+	 $('#areaParentId').combotree('reload'); 
+ 	 $('#areaParentId').combotree('setValue', selected.parentCode );
 	 $("#areaSortNum").textbox('setValue',selected.sortNum);
 	 $("#areaCode").textbox('setValue',selected.code);
 	 $("#areaId").val(selected.id);
@@ -224,8 +221,7 @@ function setAreaFormValue(selected){
 function clearAreaForm(){
 //	 $("#areaDataForm")[0].reset();       //此为调用DOM 的方法来reset,手动reset如下
  	 $("#areaName").textbox('setValue',"");
-	 $('#areaParentId').combobox('reload'); 
- 	 $('#areaParentId').combobox('setValue', "" );
+ 	 $('#areaParentId').combotree('setValue', "" );
 	 $("#areaSortNum").textbox('setValue',"");
 	 $("#areaCode").textbox('setValue',"");
 	 $("#areaId").val("");
@@ -244,53 +240,19 @@ $(p).pagination({
 /**
  * 父区域选项
  */
-$("#areaParentId").combobox({
-    url:'${ctx}/area/getParents',
+$("#areaParentId").combotree({
+    url:'${ctx}/area/getAreasTree',
     valueField:'id',
     textField:'name',
     method:'GET'
 });
-$("#search_areaParentId").combobox({
-    url:'${ctx}/area/getParents',
-    valueField:'id',
-    textField:'name',
-    method:'GET'
-});
-
-$("#search_parentId").combobox({
-    url:'${ctx}/area/getParents',
+$("#search_areaParentId").combotree({
+    url:'${ctx}/area/getAreasTree',
     valueField:'id',
     textField:'name',
     method:'GET'
 });
 
-
-// /*
-//  * 必填项检测
-//  主要检测区域名称及权限
-//  */
-// function requiredCheck(){
-// 	if($('#areaName').val()==""){
-// 		$.messager.alert("出错！","请填写区域名称",'error',focusAreaName);
-// 	}else if($('#areaAuthorId').val()==""){
-// 		$.messager.alert("出错！","请填写区域权限",'error',focusAreaAuthor);
-// 		$('#areaAuthorId').focus();
-// 	}else{
-// 		return true;
-// 	}
-// }
-// /*
-//  * 获取区域名称焦点函数，easyUI中的input需要深入几层才可以获取真正的input
-//  */
-// var focusAreaName=function(){
-// 	$('#areaName').textbox().next('span').find('input').focus();
-// }
-// /*
-//  * 获取区域权限焦点函数，easyUI中的input需要深入几层才可以获取真正的input
-//  */
-// var focusAreaAuthor=function(){
-// 	$('#areaAuthorId').textbox().next('span').find('input').focus();
-// }
 var checkNotNull=function(ID,idName){
 	var refId=$('#'+ID);
 	if(refId.val()==""){
@@ -303,12 +265,6 @@ var checkNotNull=function(ID,idName){
 	}
 };
 
-$("#areaEnableButton").click(function(){
-	 areaEnableDisable("1");
-});
-$("#areaDisableButton").click(function(){
-	 areaEnableDisable("0");
-});
 function areaEnableDisable(status){
 	var selected = $('#areaDatagrid').datagrid('getSelected');
 	$.ajax({

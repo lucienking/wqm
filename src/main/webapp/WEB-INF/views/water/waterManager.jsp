@@ -77,6 +77,8 @@
 			    <option value="N" selected="selected">未治理</option>
 			    <option value="Y">已治理</option>
 			</select>
+			水体图标：
+			<input id="waterIconCls" name="iconCls" value="1" class="easyui-textbox" style="width:120px;"/>
 		</div>
 	</form>
 </div>
@@ -272,7 +274,7 @@ function waterDataDialog(title,selected){
     $("#waterDataDialog").dialog({
         title: title,
         width: 450,
-        height: 180,
+        height: 230,
         modal:true,
         buttons:[{
 			text:'保存',
@@ -297,7 +299,6 @@ function waterMonitorItemDialog(title,selected){
         async:true,
         cascadeCheck:false,
         success:function(data){
-        	//$("#waterMonitorItemTree").tree('clearChecked'); 
         	var root = $('#waterMonitorItemTree').tree('getRoot');  
 			$("#waterMonitorItemTree").tree('uncheck',root.target); 
             $(data).each(function(i, obj){
@@ -312,8 +313,8 @@ function waterMonitorItemDialog(title,selected){
 	$("#waterMonitorItemDialog").show(); //先显示，再弹出
     $("#waterMonitorItemDialog").dialog({
     	title:'监测项',
-        width: 200,
-        height:400,
+        width: 240,
+        height:460,
         modal:false,
         buttons:[{
 			text:'保存',
@@ -338,19 +339,26 @@ $('#waterMonitorItemTree').tree({
 function setWaterFormValue(selected){
 	 $("#waterName").textbox('setValue',selected.name);
 	 $("#waterCode").textbox('setValue',selected.code);
-	 $('#waterParentId').combobox('reload'); 
- 	 $('#waterParentId').combobox('setValue', selected.parentId );
+ 	 $('#waterIsLeaf').combobox('reload'); 
+	 $('#waterIsLeaf').combobox('setValue',(selected.isLeaf).toString() );
+	 $('#belong_area').combotree('reload'); 
+	 $('#belong_area').combotree('setValue', selected.area.code );
+	 var url = ctx+"/water/getWaterByAreaCode?areaCode="+selected.area.code;
+	 $('#waterParentId').combobox('reload',url); 
+ 	 $('#waterParentId').combobox('setValue', selected.parentCode );
 	 $("#waterSortNum").textbox('setValue',selected.sortNum);
+	 $("#waterIconCls").textbox('setValue',selected.iconCls);
 	 $("#waterId").val(selected.id);
 	 $("#waterSaveType").val("update");
 }
 function clearWaterForm(){
-//	 $("#waterDataForm")[0].reset();       //此为调用DOM 的方法来reset,手动reset如下
- 	 $("#waterName").textbox('setValue',"");
- 	 $("#waterCode").textbox('setValue',"");
+	 $("#waterName").textbox('setValue',"");
+	 $("#waterCode").textbox('setValue',"");
+ 	 $('#waterIsLeaf').combobox('reload'); 
 	 $('#waterParentId').combobox('reload'); 
-	 $('#waterParentId').combobox('setValue', '0');
-	 $("#waterSortNum").textbox('setValue',"1");
+	 $('#belong_area').combotree('clear'); 
+	 $("#waterSortNum").textbox('setValue',"");
+	 $("#waterIconCls").textbox('setValue',"");
 	 $("#waterId").val("");
 	 $("#waterSaveType").val("create"); 
 }
@@ -367,27 +375,24 @@ $(p).pagination({
 /**
  * 父水体选项
  */
+$("#belong_area").combotree({
+    url:'${ctx}/area/getAreasTree',
+    valueField:'id',
+    textField:'name',
+    method:'GET',
+ 	onSelect:function(value){
+   		$('#waterParentId').combobox('clear'); 
+   		var url = ctx+"/water/getWaterByAreaCode?areaCode="+value.id;
+   		$('#waterParentId').combobox('reload',url); 
+   	} 
+});
 $("#waterParentId").combobox({
-    url:'${ctx}/water/getParents',
+    url:'${ctx}/water/getWaterByAreaCode',
     valueField:'code',
     textField:'name',
     method:'GET'
 });
 
-$("#search_parentId").combobox({
-    url:'${ctx}/water/getParents',
-    valueField:'code',
-    textField:'name',
-    method:'GET'
-});
-
-$("#belong_area").combobox({
-    url:'${ctx}/area/getAreasList',
-    valueField:'code',
-    textField:'name',
-    method:'GET'
-});
- 
 var checkNotNull=function(ID,idName){
 	var refId=$('#'+ID);
 	if(refId.val()==""){

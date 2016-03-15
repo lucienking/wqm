@@ -5,7 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <%@include file="/public/common.jsp"%>
-<title>网站管理员登陆</title>
+<title>海口市智慧水务管理平台</title>
 <link rel="stylesheet" href="${ctx }/static/styles/back/login.css"/>
 <body>
 <div id="background_plain">
@@ -14,7 +14,7 @@
 <!-- 		登录框 -->
 		<div class="login_container">
 			<div class="form_container">
-				<div class='from_title'>水质监测后台管理系统</div>
+				<div class='from_title'>海口市智慧水务管理平台后台管理系统</div>
 				<div class="from_content">
 					<form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
 						<div class="inner_frame">

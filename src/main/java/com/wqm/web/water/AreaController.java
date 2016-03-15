@@ -3,13 +3,13 @@ package com.wqm.web.water;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map; 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -84,6 +84,21 @@ public class AreaController extends BaseController{
 	}
 	
 	/**
+	 * 获取全部区域树
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getAreasTree")
+	public List<Map<String,Object>> getAreasTree(){
+		List<Map<String,Object>> tree =  new ArrayList<Map<String,Object>>();
+		Map<String,Object> root = new HashMap<String,Object>();
+		Map<String,Object> map = areaService.getChildAreas(root, "0");
+		tree.add(map);
+		return tree;
+	}
+	
+	/**
 	 * 分页查询区域
 	 * @param model
 	 * @return
@@ -96,8 +111,7 @@ public class AreaController extends BaseController{
 		specf.addSearchParam("name", Operator.LIKE, request.getParameter("name"));
 		specf.addSearchParam("code", Operator.LIKE, request.getParameter("code"));
 		specf.addSearchParam("user.name", Operator.LIKE,  request.getParameter("userName"));
-		specf.addSearchParam("parentCode", Operator.EQ,  StringUtils.isBlank(request.getParameter("parentId"))?
-				"":Long.valueOf(request.getParameter("parentCode")));
+		specf.addSearchParam("parentCode", Operator.EQ,   request.getParameter("parentCode"));
 		//分页排序信息
 		Page<AreaEntity> areas= areaService.getAreasByPage(specf.getSpecification(),buildPageRequest(request));
 		return convertToResult(areas);

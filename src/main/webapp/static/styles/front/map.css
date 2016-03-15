@@ -8,19 +8,26 @@
 }
 /* legend element */
 #info {
-	width: 14.0625em;
-	background-color: #fff;
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	padding-left: 10px;
-	padding-top: 10px;
-	border-top: 2px solid #AFA9A9;
-	border-left: 2px solid #AFA9A9;
-	border-radius:10px;
+    width: 25%;
+    height:25%;
+    background-color: #fff;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding-left: 10px;
+    padding-top: 10px;
+    border-radius: 10px;
+    border: 2px double #95B8E7;
 }
 /*overridemap*/
 .esriOverviewMap.ovwBL .ovwContainer {
-    border-left: 1px solid #95B8E7;
-	border-bottom:1px solid #95B8E7;
+	border:none;
+	border: 1px solid #95B8E7;
+    border-radius: 10px;
+	
 }   
+
+.esriOverviewMap .ovwContainer {
+	
+     background-color: #95B8E7; 
+}
