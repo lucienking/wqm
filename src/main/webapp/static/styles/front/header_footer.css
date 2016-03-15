@@ -59,3 +59,25 @@ html,body{
 	color:yellow;
 	text-decoration:none;
 }
+
+.module_div{
+	position:absolute;
+	top:70px;
+	left:350px;
+}
+.mo_div{
+	position:relative;
+}
+.module_div .module_info{
+	display: inline-block;
+	background-color:#87CEEB;
+	height: 24px;
+	line-height: 24px;
+	border-radius: 3px;
+	min-width: 50px;
+	padding: 0 5px;	
+	filter:alpha(opacity=80); 
+	-moz-opacity:0.8; 
+	opacity:0.8;
+	color:#fff;
+}
