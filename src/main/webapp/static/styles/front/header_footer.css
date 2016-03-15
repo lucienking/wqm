@@ -20,7 +20,8 @@ html,body{
 .frosted_glass{
 	position:absolute;
 	height:100%;
-	width:500px;
+	width:30%;
+	min-width:400px;
 	top:0px;
 	left:0px;
 	background-color:#fff;
@@ -62,22 +63,36 @@ html,body{
 
 .module_div{
 	position:absolute;
-	top:70px;
-	left:350px;
+	top:73px;
+	left:30.5%;
 }
 .mo_div{
 	position:relative;
 }
 .module_div .module_info{
 	display: inline-block;
-	background-color:#87CEEB;
+	background-color:#fff;
 	height: 24px;
+	text-align:center;
 	line-height: 24px;
-	border-radius: 3px;
-	min-width: 50px;
-	padding: 0 5px;	
-	filter:alpha(opacity=80); 
-	-moz-opacity:0.8; 
-	opacity:0.8;
-	color:#fff;
+	border-top:1px solid #a7c2df;
+	border-left:1px solid #e5ecf3;
+	min-width: 70px;
+	float:left;
+}
+.module_div .module_info:last-child{
+	border-right:1px solid #a7c2df;
+	border-radius: 0 15px 0 0;
+}
+.module_div .module_info:first-child{
+	border-left:1px solid #a7c2df;
+	border-radius: 15px 0 0 0;
+}
+.module_info a{
+	text-decoration:none;
+	color:#a7c2df;
+}
+.module_info a:hover{
+	text-decoration:none;
+	color:#48729f;
 }
