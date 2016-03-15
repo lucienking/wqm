@@ -17,7 +17,7 @@
 	        	<div class="frosted_glass">
 	        		<div id="title"><h1>海口市智慧水务管理平台</h1></div>
 	        	</div>
-	        	<div class="module_div">
+	        	<div id="module_div" class="module_div">
 	        		<div class="mo_div">
 		        		<div class="module_info"><a href="#">水体信息</a></div>
 		        		<div class="module_info"><a href="#">监测信息</a></div>
@@ -53,15 +53,11 @@
     </div>
 <script>
 var ctx = "${ctx}";
-$('#monitorDataTab').load(ctx+"/monitorData/monitorDataManager");
-$('#monitorDataMainTabs').tabs({
-	fit:true 
-});
 
 /*
  * 菜单栏点击事件
- */
-/*  var ctx = "${ctx}";
+ */ 
+ var ctx = "${ctx}";
  $('#indexTree').tree({
 	onClick: function(node){
 		if($('#indexTree').tree('isLeaf',node.target)){
@@ -74,7 +70,10 @@ $('#monitorDataMainTabs').tabs({
 		}
 	}
 }); 
-  */
+ $("#module_div a").click(function(){
+	 $("#indexTree").tree("options").url= ctx+"/sys/menu/getMenus";
+	 $('#indexTree').tree("reload");
+ });
 </script>
 </body>
 </html>
