@@ -126,4 +126,11 @@ public class ShowIndexController extends BaseController{
 	public String workbench(){
 		return "/front/mapIndex";
 	}
+	/**
+	 * 主index界面
+	 */
+	@RequestMapping(method = RequestMethod.GET,value="/index")
+	public String index(){
+		return "/front/index";
+	}
 }

@@ -42,9 +42,11 @@ public class WaterEntity extends IdEntity {
 	
 	private boolean isLeaf;		//水体类型  true:水体 false:区域
 	
+	private String isMonitored; //是否已监测 Y:是 N：否
+	
 	private String iconCls;		//水体图标
 	
-	private String isManaged;  //水体状态  Y:已治理 N:未治理
+	private String isManaged;  //水体状态  Y:已治理 N:未治理 M:治理中
 	
 	private String parentCode;	//父水体Code
 	
@@ -149,6 +151,14 @@ public class WaterEntity extends IdEntity {
 
 	public void setIsLeaf(boolean isLeaf) {
 		this.isLeaf = isLeaf;
+	}
+	
+	public String getIsMonitored() {
+		return isMonitored;
+	}
+
+	public void setIsMonitored(String isMonitored) {
+		this.isMonitored = isMonitored;
 	}
 
 	public String getIconCls() {
