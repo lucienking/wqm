@@ -1,6 +1,9 @@
 package com.wqm.service.water;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -56,6 +59,25 @@ public class AreaService {
 	 */
 	public List<AreaEntity> getAreasByParentCode(String code){
 		return areaDao.getAreasByParentCode(code);
+	}
+	
+	public Map<String,Object> getChildAreas(Map<String,Object> parent,String code){
+		List<AreaEntity> areas= areaDao.getAreasByParentCode(code);
+		List<Map<String,Object>> children =  new ArrayList<Map<String,Object>>();
+		for(AreaEntity area:areas){
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id",area.getCode());
+			map.put("text",area.getName());
+			map.put("state","open");
+			getChildAreas(map,area.getCode());
+			if(parent.isEmpty()) {
+				parent = map;
+			}else{
+				children.add(map);
+				parent.put("children",children ); 
+			}
+		}
+		return parent;
 	}
 	
 	/**

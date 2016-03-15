@@ -118,4 +118,12 @@ public class ShowIndexController extends BaseController{
 		}
 		return result;
 	}
+	
+	/**
+	 * 监测数据文字界面
+	 */
+	@RequestMapping(method = RequestMethod.GET,value="/mapIndex")
+	public String workbench(){
+		return "/front/mapIndex";
+	}
 }

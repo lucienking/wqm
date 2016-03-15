@@ -3,7 +3,7 @@
 <%@include file="/public/common.jsp"%>
 <html>
 <head>
-<title>海口市水务局水体质量监测系统</title>
+<title>海口市智慧水务管理平台</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -18,7 +18,7 @@
         <div data-options="region:'north'" style="height:100px">
         	<div id="north">
 	        	<div class="frosted_glass">
-	        		<div id="title"><h1>海口市水务局水体质量监测系统</h1></div>
+	        		<div id="title"><h1>海口市智慧水务管理平台</h1></div>
 	        	</div>
 	        	<div class="logout_div">
 	        		<div class="re_div">

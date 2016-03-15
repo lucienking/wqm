@@ -3,7 +3,7 @@
 <%@include file="/public/common.jsp"%>
 <html>
 <head>
-<title>智慧农场土地管理信息系统</title>
+<title>海口市智慧水务管理平台后台管理</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -39,7 +39,7 @@
 		<div class="frosted_glass">
 	        <div id="title">
 		        <img src="${ctx }/static/image/sheld_icons.png" width="60" height="60"/>
-		        <h1>海口市水务局水体质量监测后台管理系统</h1>
+		        <h1>海口市智慧水务管理平台后台管理</h1>
 	        </div>
 	    </div>
 		<span style="float: right; font-size: 12px; padding-top: 80px; padding-right: 10px;">
@@ -61,7 +61,7 @@
 <!-- center主要内容-->
 	<div data-options="region:'center',border:false">
 		<div id="mainTabs">
-			<div id="workbench" title="工作台" style="padding: 10px">	</div>	
+			<div id="workbench" title="首页" style="padding: 10px">	</div>	
 		</div>
 		<div id="tabMenu" style="width: 120px; display: none;">
 			<div data-options="name:'closeOthers'">关闭其他标签</div>

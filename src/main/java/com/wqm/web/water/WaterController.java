@@ -209,7 +209,12 @@ public class WaterController extends BaseController{
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET,value = "/getWaterByAreaCode")
 	public List<WaterEntity> getWaterByAreaCode(@RequestParam(value = "areaCode", defaultValue = "0") String areaCode){
-		List<WaterEntity> waters= waterService.getWaterByAreaCode(areaCode);
+		WaterEntity root = new WaterEntity();
+		root.setCode("0");
+		root.setName("全部水体");
+		root.setSortNum("0");
+		List<WaterEntity> waters = waterService.getWaterByAreaCode(areaCode);
+		waters.add(root);
 		return waters;
 	}
 	
