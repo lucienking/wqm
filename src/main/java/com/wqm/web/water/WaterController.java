@@ -219,6 +219,19 @@ public class WaterController extends BaseController{
 	}
 	
 	/**
+	 * 获得全部的已监测水体项。
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getMoniteredWater")
+	public Map<String,Object> getMoniteredWater(HttpServletRequest request){
+		SpecificationFactory<WaterEntity> specf = new SpecificationFactory<WaterEntity>();
+		specf.addSearchParam("isLeaf",Operator.EQ, true);
+		Page<WaterEntity> waters= waterService.getWatersByPage(specf.getSpecification(),buildPageRequest(request));
+		return convertToResult(waters);
+	}
+	
+	/**
 	 * 创建水体<br/>
 	 * @param water
 	 * @return

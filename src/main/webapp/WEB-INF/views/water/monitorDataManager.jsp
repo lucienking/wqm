@@ -91,24 +91,24 @@
  *  datagrid 初始化 
  */
 $('#monitorDataDatagrid').datagrid({
-    url:"${ctx}/monitorData/getMonitorDatasPage",
+    url:"${ctx}/water/getMoniteredWater",
     method:'get',
     pagination:true,
     columns:[[
         {checkbox:true,field:'',title:'' },
         {field:'id',title:'编号',width:'5%',sortable:true},
-        {field:'waterCode',title:'区域',width:'10%'},
-        {field:'waterName',title:'水体',width:'10%'},
-        {field:'sortNum',title:'截面',width:'10%'},
-        {field:'createDate',title:'监测日期',width:'10%'},
-        {field:'user',title:'操作员',width:'8%',formatter:function(value,rec){
-        	if(rec.user)  
-        		return rec.user.name;
+        {field:'code',title:'断面编码',width:'10%'},
+        {field:'name',title:'断面名称',width:'10%'},
+        {field:'area',title:'所属区域',width:'10%',formatter:function(value,rec){
+        	if(rec.area)  
+        		return rec.area.name;
         	else  		  
         		return "未知";
         }},
-        {field:'createDate',title:'创建日期',width:'10%'},
-        {field:'updateDate',title:'修改日期',width:'10%'}
+        {field:'parentCode',title:'所属水体',width:'10%'},
+        {field:'createDate',title:'最后监测日期',width:'10%'},
+        {field:'parentCode',title:'水体负责人',width:'10%'},
+        {field:'createDate',title:'联系方式',width:'10%'} 
     ]],
     queryParams:$('#monitorDataSearchConditionForm').getFormData(), 
     toolbar:"#monitorData_toolbar",					//根据权限动态生成按钮

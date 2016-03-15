@@ -26,7 +26,9 @@ import com.wqm.common.persistence.SearchFilter.Operator;
 import com.wqm.common.persistence.SpecificationFactory;
 import com.wqm.common.util.JsonMapper;
 import com.wqm.entity.water.MonitorData;
+import com.wqm.entity.water.WaterEntity;
 import com.wqm.service.water.MonitorDataService;
+import com.wqm.service.water.WaterService;
 import com.wqm.web.BaseController;
 
 /**
@@ -41,6 +43,9 @@ public class MonitorDataController extends BaseController{
 
 	@Autowired
 	private MonitorDataService monitorDataService;
+	
+	@Autowired
+	private WaterService waterService;
 	
 	/**
 	 * 监测项管理界面<br/>
@@ -99,6 +104,7 @@ public class MonitorDataController extends BaseController{
 		specf.addSearchParam("user.name", Operator.LIKE,  request.getParameter("userName"));
 		//分页排序信息
 		Page<MonitorData> monitorDatas= monitorDataService.getMonitorDatasByPage(specf.getSpecification(),buildPageRequest(request));
+		
 		return convertToResult(monitorDatas);
 	}
 	
@@ -142,10 +148,12 @@ public class MonitorDataController extends BaseController{
 			md.setItemValue(data.get("value"));
 			md.setMonitorDate(mdate);
 			md.setUpdateDate(new Date());
-			md.setWaterCode(waterCode);
-			md.setWaterName(waterName);
+			WaterEntity  water = waterService.getWaterByCode(waterCode);
+			md.setWater(water);
 			md.setUser(getCurrentUser());
 			monitorDataService.saveMonitorData(md);
+			water.setIsMonitored("Y");
+			waterService.saveWater(water);
 		}
 		return convertToResult("message","录入成功");
 	}

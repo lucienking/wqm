@@ -40,7 +40,7 @@ public class ManagerController {
 		} catch (UnsupportedEncodingException e) {
 			logger.error("UnsupportedEncodingException::",e);
 		}
-		return "/front/dataIndex";
+		return "/front/index";
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,value="admin")

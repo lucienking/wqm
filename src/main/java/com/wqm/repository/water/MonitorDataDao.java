@@ -21,5 +21,6 @@ public interface MonitorDataDao extends PagingAndSortingRepository<MonitorData, 
 	@Query("delete from MonitorData monitorData where monitorData.id in (?1)")
 	public void deleMonitorDatasByIds(List<Long> ids);
 	
+	@Query("select monitorData from MonitorData monitorData where monitorData.water.code =?1")
 	public List<MonitorData> getMonitorDataByWaterCode(String code);
 }
