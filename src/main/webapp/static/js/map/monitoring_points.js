@@ -70,7 +70,7 @@ require(
 			monitoring_point_info.setTitle("监测点信息");
 			monitoring_point_info.setContent(getMonitoringPointContent);
 			var water_pollution_filed = [ "water_body" ];
-			var monitoring_point_filed = [ "scdCode", "fstCode" ];
+			var monitoring_point_filed = [ "scdCode", "water_body","section_name","section_position","section_condition" ];
 			var water_pollution_info = new InfoTemplate();
 			water_pollution_info.setTitle("水体信息");
 			water_pollution_info.setContent(getWaterContent);
@@ -122,11 +122,11 @@ require(
 	                title: "基本信息",
 	            });
 	            var contentMedia = new ContentPane({
-	                title: "多媒体信息"
+	                title: "水体水文信息"
 	            });
 
 	            var contentFiles= new ContentPane({
-	                title: "档案信息"
+	                title: "水体综合信息"
 	            });
 	            waterTab.addChild(contentInfo);
 	            waterTab.addChild(contentMedia);
@@ -135,57 +135,68 @@ require(
 	        }
 			function getMonitoringPointContent(graphic) {
 	            // Make a tab container.
+				var scdCode=graphic.attributes.scdCode;
+				var content_Info="<strong>断面名称:</strong>"+graphic.attributes.section_name+"<br>"+
+								 "<strong>断面位置:</strong>"+graphic.attributes.section_position+"<br>"+
+								 "<strong>水体名称:</strong>"+graphic.attributes.water_body+"<br>"+
+								 "<strong>断面情况:</strong>"+graphic.attributes.section_condition+"<br>"+
+								 "<strong>二级编号:</strong>"+scdCode;
+				
+				var content_Monitor=monitoring_info(1401);
 	            var pointTab = new TabContainer({
 	                style: "width:100%;height:100%;"
 	            }, domConstruct.create("div"));
 	            var contentInfo = new ContentPane({
 	                title: "基本信息",
-	                content: ""
+	                content: content_Info
 	            });
 	            var contentMedia = new ContentPane({
 	                title: "多媒体信息"
 	            });
-	            var contentFiles = new ContentPane({
-	                title: "监测信息"
+	            var contentMonitor = new ContentPane({
+	                title: "监测信息",
+	                content:content_Monitor	
 	            });
-	            var contentMonitor= new ContentPane({
+	            var contentFiles= new ContentPane({
 	                title: "档案信息"
 	            });
 	            pointTab.addChild(contentInfo);
-	            pointTab.addChild(contentMedia);
 	            pointTab.addChild(contentMonitor);
+	            pointTab.addChild(contentMedia);
 	            pointTab.addChild(contentFiles);
 	            return pointTab.domNode;
 	        }
-			function monitoring_info() {
-				var fstCode = $('#scdCode').text();
-				console.log(fstCode);
-				var monitor_inf = [ {
-					"name" : "水温",
-					"value" : "27℃"
-				}, {
-					"name" : "电导率",
-					"value" : "4%"
-				}, {
-					"name" : "溶解氧",
-					"value" : "0.6%"
-				}, {
-					"name" : "总磷",
-					"value" : "7%"
-				}, {
-					"name" : "氨氮",
-					"value" : "0.6%"
-				}, {
-					"name" : "盐度",
-					"value" : "0.6%"
-				}, {
-					"name" : "色度",
-					"value" : "0.6%"
-				} ];
-				var monitor_inf_length = getJsonObjLength(monitor_inf);
+			function monitoring_info(id) {
+				var monitor_inf='';
+				var monitor_inf_length=0;
+				var monitor_inf_Element='';
+					$.ajax({
+				        url: "/wqm/show/getMonitorDataById",
+				        type: 'GET',
+				        async: false,
+				        dataType: 'json',
+				        data: {
+				            "id": id,				         
+				        },
+				        success: function(data, status) {
+				            console.log(data);
+				            monitor_inf=data;
+				            monitor_inf_length = monitor_inf.length;
+				            monitor_inf_Element=getMonitorInfElement(monitor_inf,monitor_inf_length);
+				            
+				        },
+				        error: function(data, status, e) {
+				            console.log("e:"+e);
+				            console.log("status:"+status);   
+				        }
+				    });		
+				//var monitor_inf_length = getJsonObjLength(monitor_inf);
+					return monitor_inf_Element;
+			}
+			function getMonitorInfElement(monitor_inf,monitor_inf_length){
 				var monitor_inf_Element = '';
 				if (monitor_inf_length > 0) {
-					monitor_inf_Element = "<tr style='text-align:center;'><td colspan='2'><b>水质监测指标</b></td></tr>";
+					monitor_inf_Element ="<table cellspacing='0' border='1' width='100%'>";
 					for (var i = 0; i < monitor_inf_length; i++) {
 						if (Math.round(i % 2) === 0) {
 							monitor_inf_Element += "<tr><td><strong>"
@@ -201,9 +212,10 @@ require(
 				if (Math.round(monitor_inf_length % 2) != 0) {
 					monitor_inf_Element += "<td>&nbsp;</td></tr>";
 				}
+				monitor_inf_Element += "</table>";
+				console.log(monitor_inf_Element);
 				return monitor_inf_Element;
 			}
-
 			function getJsonObjLength(jsonObj) {
 				var Length = 0;
 				var item = 0;
