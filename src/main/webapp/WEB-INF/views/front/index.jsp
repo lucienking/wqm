@@ -9,11 +9,11 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <link type="text/css" href="${ctx }/static/styles/front/header_footer.css" rel="Stylesheet" />
-<link rel="stylesheet" href="${ctx }/static/arcgisApi/3.16compact/dijit/themes/nihilo/nihilo.css">
+<link rel="stylesheet" href="${ctx }/static/arcgisApi/3.16compact/dijit/themes/claro/claro.css">
 <link rel="stylesheet" href="${ctx }/static/arcgisApi/3.16compact/esri/css/esri.css">
 <link type="text/css" href="${ctx }/static/styles/front/map.css" rel="Stylesheet" />
 </head>
-<body>
+<body class='claro'>
     <div class="easyui-layout" data-options="fit:true">
         <div data-options="region:'north'" style="height:100px">
         	<div id="north">
@@ -72,7 +72,10 @@
 			</div>
         </div>
         <div data-options="region:'center',iconCls:'icon-ok'" style="padding:5px;">
+        	<div id="navToolbar" data-dojo-type="dijit/Toolbar">
+        	</div>
         	<div id="map">
+        		<div id="homeButton"></div>
 			</div>
 			<div id="info">
 				<div id="legend"></div>

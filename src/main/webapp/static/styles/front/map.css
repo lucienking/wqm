@@ -1,11 +1,22 @@
 @CHARSET "UTF-8";
 /* map element */
-#map {
+body,#map {
 	height: 100%;
 	width: 100%;
 	margin: 0;
 	padding: 0;
+} 
+.infowindow .window {
+  overflow: visible;
+  border-style: none;
+  padding: 0;
 }
+html, body, #map {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
 /* legend element */
 #info {
     width: 25%;
@@ -19,6 +30,12 @@
     border-radius: 10px;
     border: 2px double #95B8E7;
 }
+#homeButton {
+      position: absolute;
+      top: 95px;
+      left: 26px;
+      z-index: 50;
+    }
 /*overridemap*/
 .esriOverviewMap.ovwBL .ovwContainer {
 	border:none;
