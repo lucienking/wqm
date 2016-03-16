@@ -6,7 +6,7 @@ var serviceUrl = "http://10.215.201.151:6080/arcgis/rest/services/";
 var monitor_points_Url = serviceUrl + "monitor_points/MapServer";
 var water_pollution_Url = serviceUrl + "water_pollution/MapServer";
 var haikou_region_Url= serviceUrl +"haikou_region/MapServer";
-var mapSpatialReference='' ;
+var mapSpatialReference='';
 require(
 		[ "esri/map", "esri/layers/WebTiledLayer", "esri/geometry/Extent",
 				"esri/geometry/Point", "esri/layers/TileInfo", "dojo/parser",
@@ -50,27 +50,29 @@ require(
 				logo : false
 			});
 			map.infoWindow.resize(400, 400);
-//			var home = new HomeButton({
-//				map : map
-//			}, "homeButton");
-//			home.startup();
+// var home = new HomeButton({
+// map : map
+// }, "homeButton");
+// home.startup();
 			var scalebar = new Scalebar({ // 比例尺
 				map : map,
 				attachTo : "bottom-left",
 				scalebarUnit : "metric",
 				scalebarStyle : "ruler"
 			});
-
+			var waterId=$("#map_waterId").val();
+			var isLeaf=$("map_isLeaf").val();
+			isJump(waterId,isLeaf);
 			/**
 			 * 鹰眼图
 			 */
-//			var overviewMapDijit = new OverviewMap({
-//				map : map,
-//				attachTo : "bottom-left",
-//				visible : true
-//			}, dom.byId("overViewMap"));
-//			overviewMapDijit.startup();
-//			navToolbar = new Navigation(map);
+// var overviewMapDijit = new OverviewMap({
+// map : map,
+// attachTo : "bottom-left",
+// visible : true
+// }, dom.byId("overViewMap"));
+// overviewMapDijit.startup();
+// navToolbar = new Navigation(map);
 			on(navToolbar, "onExtentHistoryChange", extentHistoryChangeHandler);
 
 			registry.byId("zoomin").on("click", function() {
@@ -100,7 +102,16 @@ require(
 			registry.byId("deactivate").on("click", function() {
 				navToolbar.deactivate();
 			});
-
+			
+			function isJump(waterId,isLeaf){
+				if(waterId!=""&&isLeaf!=""){
+					if(isLeaf=="Y"){
+						selectMontoringpoints(waterId);
+					}else{
+						selectWater(waterId);
+					}
+				}
+			}
 			function extentHistoryChangeHandler() {
 				registry.byId("zoomprev").disabled = navToolbar.isFirstExtent();
 				registry.byId("zoomnext").disabled = navToolbar.isLastExtent();
@@ -331,7 +342,7 @@ require(
 					map.graphics.clear();
 					map.infoWindow.hide();
 					map.graphics.add(pointGraphic);
-					map.infoWindow.show(location);
+					// map.infoWindow.show(location);
 
 				} else {
 					for ( var index in queryResult) {
@@ -437,21 +448,5 @@ require(
 						}
 					}
 				});
-			}
-			function isJump() {
-			    var url = location.search;
-			    var Request = new Object();
-			    if (url.indexOf("?") != -1) { // 判断是否有参数
-			        var str = url.substr(1);
-			        strs = str.split("&");
-			        for (var i = 0; i < strs.length; i++) {
-			            Request[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
-			        }
-			    } else {
-			        return;
-			    }
-			    tzzdCode = Request["zdCode"]; // 取出参数
-			    tzncCode = Request["ncCode"];
-			    queryLand(); // 地图加载慢,等待了3秒
 			}
 		});
