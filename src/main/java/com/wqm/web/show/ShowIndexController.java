@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -126,11 +127,21 @@ public class ShowIndexController extends BaseController{
 	public String workbench(){
 		return "/front/mapIndex";
 	}
+	
 	/**
 	 * 主index界面
 	 */
 	@RequestMapping(method = RequestMethod.GET,value="/index")
 	public String index(){
 		return "/front/index";
+	}
+	
+	/**
+	 * 地图
+	 */
+	@RequestMapping(method = RequestMethod.GET,value="/waterMap")
+	public String waterMap(@RequestParam(value = "waterId", defaultValue = "0") String id,Model model){
+		model.addAttribute("waterId", id);
+		return "/water/waterMap";
 	}
 }
