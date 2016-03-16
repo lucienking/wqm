@@ -91,8 +91,8 @@
 	<jksb:hasAutority authorityId="007001002">
 		<a href="javascript:monitorDataDeleData()" id = "monitorDataDeleButton" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true,disabled:true," >删除</a>
 	</jksb:hasAutority>
-	<a href="javascript:void()" id = "monitorDataDetailButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >详细信息</a>
-	<a href="javascript:void()" id = "monitorDataToMapButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >跳转地图</a>
+	<a href="#" id = "monitorDataDetailButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >详细信息</a>
+	<a href="#" id = "monitorDataToMapButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >跳转地图</a>
 </div>
 
 <script type="text/javascript">
@@ -356,7 +356,7 @@ $("#monitor_LeafWater").combobox({
  * 详细信息展示
  */
  $("#monitorDataDetailButton").click(function(){
-	 var id = $("#formInfoQueryDatagrid").datagrid("getSelected").id;
+	 var id = $("#monitorDataDatagrid").datagrid("getSelected").id;
 	 
 	 $("#monitorDataDetailDialog").show(); //先显示，再弹出
 	 $("#monitorDataDetailDialog").dialog({

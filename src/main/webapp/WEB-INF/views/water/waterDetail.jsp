@@ -46,9 +46,11 @@ $(function(){
 
 <div id="monitorDataDetail_container" style="width:99%;height:99%;">
 <div  class="easyui-tabs" style="width:99%;height:auto;">
-<div title="详细信息" data-options="fit:true" style="padding-bottom:20px;">
+<div title="水体基本信息" data-options="fit:true" style="padding-bottom:20px;">
 </div>
-<div title="家庭用地信息" style="padding-bottom:20px;" data-options="fit:true">
+<div title="水体水文信息" style="padding-bottom:20px;" data-options="fit:true">
+</div>
+<div title="水体综合信息" style="padding-bottom:20px;" data-options="fit:true">
 </div>
 </div>
 </div>
