@@ -20,7 +20,7 @@
 	        	<div id="module_div" class="module_div">
 	        		<div class="mo_div">
 		        		<div class="module_info"><a href="#">水体信息</a></div>
-		        		<div class="module_info"><a href="#" tgt="/show/getWaterTree?type=data">监测信息</a></div>
+		        		<div class="module_info" id="moule_index"><a href="#" tgt="/show/getWaterTree?type=data">监测信息</a></div>
 		        		<div class="module_info"><a href="#">统计分析</a></div>
 		        		<div class="module_info"><a href="#">预警管理</a></div>
 		        		<div class="module_info"><a href="#" tgt="/show/getWaterTree?type=map">电子地图</a></div>
@@ -125,6 +125,8 @@ var ctx = "${ctx}";
 	}
 	return;
  }
+ 
+ $("#moule_index a").click();
 </script>
 </body>
 </html>

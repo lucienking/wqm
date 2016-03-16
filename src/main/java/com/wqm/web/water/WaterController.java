@@ -95,6 +95,17 @@ public class WaterController extends BaseController{
 	}
 	
 	/**
+	 * 水体详细信息界面<br/>
+	 * @param model
+	 * @return
+	 * 
+	 */
+	@RequestMapping(method = RequestMethod.GET,value = "/waterDetail")
+	public String  waterDetail(Model model,@RequestParam(value = "code", defaultValue = "0") String code){		 
+		return "/water/waterDetail";
+	}
+	
+	/**
 	 * 水体编辑，新增界面
 	 * @param model
 	 * @param id

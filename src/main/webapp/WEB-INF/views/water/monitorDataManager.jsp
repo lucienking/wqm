@@ -77,7 +77,9 @@
 		<div id="monitorDataItemDialog"  style="display:none">
 		</div>
 	</form>
-
+	
+<div id="monitorDataDetailDialog"  style="width:99%;height:99%;display:none;">
+</div>
 
 <div id="monitorData_toolbar">
 	<jksb:hasAutority authorityId="007001001">
@@ -89,6 +91,8 @@
 	<jksb:hasAutority authorityId="007001002">
 		<a href="javascript:monitorDataDeleData()" id = "monitorDataDeleButton" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true,disabled:true," >删除</a>
 	</jksb:hasAutority>
+	<a href="javascript:void()" id = "monitorDataDetailButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >详细信息</a>
+	<a href="javascript:void()" id = "monitorDataToMapButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >跳转地图</a>
 </div>
 
 <script type="text/javascript">
@@ -129,20 +133,19 @@ function monitorDataSelectChange(index,row){ 		// 选择行事件 通用。
 	if(selectedNum==1){
 		$("#monitorDataEditButton").linkbutton("enable");
 		$("#monitorDataDeleButton").linkbutton("enable");
-		if($('#monitorDataDatagrid').datagrid('getSelected').monitorDataStatus == '0')
-			$("#monitorDataEnableButton").linkbutton("enable");
-		else if($('#monitorDataDatagrid').datagrid('getSelected').monitorDataStatus == '1')
-			$("#monitorDataDisableButton").linkbutton("enable");
-		
+		$("#monitorDataDetailButton").linkbutton("enable");
+		$("#monitorDataToMapButton").linkbutton("enable");
 	}else if(selectedNum==0 ){
 		$("#monitorDataDeleButton").linkbutton("disable");
 		$("#monitorDataEditButton").linkbutton("disable");
-		$("#monitorDataEnableButton").linkbutton("disable");
+		$("#monitorDataDetailButton").linkbutton("disable");
+		$("#monitorDataToMapButton").linkbutton("disable");
 		$("#monitorDataDisableButton").linkbutton("disable");
 	}else{
 		$("#monitorDataEditButton").linkbutton("disable");
-		$("#monitorDataEnableButton").linkbutton("disable");
+		$("#monitorDataDetailButton").linkbutton("disable");
 		$("#monitorDataDisableButton").linkbutton("disable");
+		$("#monitorDataToMapButton").linkbutton("disable");
 	}
 }
 
@@ -348,16 +351,20 @@ $("#monitor_LeafWater").combobox({
     method:'GET'
 });
 
-function fomatterPamFromItemForm(){
-	var result ="";
-	var names = $("*[name='_itemName']").map(function(){return $(this).val();}).get().join(",").split(",") ;
-	var values = $("*[name='_itemValue']").map(function(){return $(this).val();}).get().join(",").split(",") ;
-	$("input[name='_itemCode']").each(function(i,obj){  
-		result += '{"code":"'+obj.value+'","name":"'+names[i]+'","value":"'+values[i]+'"}';	
-		if(i!=(names.length-1)){result += "@@";}
-	});   	
-	return result;
-}
+ 
+/**
+ * 详细信息展示
+ */
+ $("#monitorDataDetailButton").click(function(){
+	 var id = $("#formInfoQueryDatagrid").datagrid("getSelected").id;
+	 
+	 $("#monitorDataDetailDialog").show(); //先显示，再弹出
+	 $("#monitorDataDetailDialog").dialog({
+		  title:'水体详细信息',
+	      href:"${ctx}/water/waterDetail?id="+id,
+	      modal:true
+	  });
+ });
 </script>
 </div>
 </body>
