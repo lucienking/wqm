@@ -73,7 +73,14 @@
         </div>
         <div data-options="region:'center',iconCls:'icon-ok'" style="padding:5px;">
         	<div id="navToolbar" data-dojo-type="dijit/Toolbar">
-        	</div>
+    			 <div data-dojo-type="dijit/form/Button" id="zoomin" data-dojo-props="iconClass:'zoominIcon'">Zoom In</div>
+   				 <div data-dojo-type="dijit/form/Button" id="zoomout" data-dojo-props="iconClass:'zoomoutIcon'">Zoom Out</div>
+    			 <div data-dojo-type="dijit/form/Button" id="zoomfullext" data-dojo-props="iconClass:'zoomfullextIcon'">Full Extent</div>
+   				 <div data-dojo-type="dijit/form/Button" id="zoomprev" data-dojo-props="iconClass:'zoomprevIcon'">Prev Extent</div>
+    			 <div data-dojo-type="dijit/form/Button" id="zoomnext" data-dojo-props="iconClass:'zoomnextIcon'">Next Extent</div>
+                 <div data-dojo-type="dijit/form/Button" id="pan" data-dojo-props="iconClass:'panIcon'">Pan</div>
+     			 <div data-dojo-type="dijit/form/Button" id="deactivate" data-dojo-props="iconClass:'deactivateIcon'">Deactivate</div>
+			</div>
         	<div id="map">
         		<div id="homeButton"></div>
 			</div>
