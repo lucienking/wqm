@@ -20,10 +20,10 @@
 	        	<div id="module_div" class="module_div">
 	        		<div class="mo_div">
 		        		<div class="module_info"><a href="#">水体信息</a></div>
-		        		<div class="module_info"><a href="#">监测信息</a></div>
+		        		<div class="module_info"><a href="#" tgt="/show/getWaterTree?type=data">监测信息</a></div>
 		        		<div class="module_info"><a href="#">统计分析</a></div>
 		        		<div class="module_info"><a href="#">预警管理</a></div>
-		        		<div class="module_info"><a href="#">电子地图</a></div>
+		        		<div class="module_info"><a href="#" tgt="/show/getWaterTree?type=map">电子地图</a></div>
 		        		<div class="module_info"><a href="#" tgt="/sys/menu/getMenus">系统管理</a></div>
 	        		</div>
 	        	</div>
@@ -45,9 +45,9 @@
 				</ul>
 			</div>
         </div>
-        <div data-options="region:'center',iconCls:'icon-ok',border:false" style="padding:5px;">
+        <div data-options="region:'center',iconCls:'icon-ok',border:false" >
         	 <div id="frontMainTabs">
-				<div id="frontMainTab" title="首页" style="padding: 10px">	</div>	
+				<div id="frontMainTab" title="首页" style="padding: 10px"></div>	
 			</div>
         </div>
     </div>
@@ -58,43 +58,17 @@ var ctx = "${ctx}";
  * 菜单栏点击事件
  */ 
  var ctx = "${ctx}";
+ $('#frontMainTabs').tabs({
+	 border:false,
+	 url:"${ctx}/admin/index"
+	 });
  $('#frontIndexTree').tree({
 		onClick: function(node){
 			if($('#frontIndexTree').tree('isLeaf',node.target)){
-				var title = node.text;
-				var url = '${ctx}'+node.attributes.url;
-				var openType = node.attributes.openType;
-				var id = url.replace(new RegExp("/","g"), "");
-				$('#frontMainTabs').tabs({
-					fit:true,
-					cache:false,
-					onBeforeClose:function(param){
-						$('#mainButtomDiv').nextAll('div').each(function(frontIndex,elem){
-							this.remove();
-						});  //关闭后 清除拼接在body后的dialog
-					}
-					});
-				var flag = $("#frontMainTabs").tabs('exists', title);
-				if (flag) {
-					$("#frontMainTabs").tabs('select', title);
-				} else if(!flag && openType == "IFRAME" ) {
-					var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:99%;height:99%;"></iframe>';  
-					$('#frontMainTabs').tabs('add',{
-						id:id,
-						title:title,
-						content:content,
-						closable:true  
-					});
-				}else if(!flag && openType == "HREF" ) {
-					$('#frontMainTabs').tabs('add',{
-						id:id,
-						title:title,
-						href:url,
-						closable:true, 
-						cache:true
-					});
-				}
-				return;
+				openTab(node);
+			}else if(!$('#frontIndexTree').tree('isLeaf',node.target)&& node.attributes.openTab=="Y"){
+				$('#frontIndexTree').tree(node.state === 'closed' ? 'expand' : 'collapse', node.target);
+				openTab(node);
 			}else{
 				$('#frontIndexTree').tree(node.state === 'closed' ? 'expand' : 'collapse', node.target);
 				return;
@@ -105,7 +79,52 @@ var ctx = "${ctx}";
 	 var href = $(this).attr("tgt");
 	 $("#frontIndexTree").tree("options").url= ctx+href;
 	 $('#frontIndexTree').tree("reload");
+	 closeAll();
  });
+ 
+ function closeAll() {
+     $(".tabs li").each(function(index, obj) {
+           //获取所有可关闭的选项卡
+         var tab = $(this).text();
+         if(tab!="首页") $("#frontMainTabs").tabs('close', tab);
+     });
+   }
+ function openTab(node){
+	var title = node.text;
+	var url = '${ctx}'+node.attributes.url;
+	var openType = node.attributes.openType;
+	var id = url.replace(new RegExp("/","g"), "");
+	$('#frontMainTabs').tabs({
+		fit:true,
+		cache:false,
+		onBeforeClose:function(param){
+			$('#mainButtomDiv').nextAll('div').each(function(frontIndex,elem){
+				this.remove();
+			});  //关闭后 清除拼接在body后的dialog
+		}
+	});
+	var flag = $("#frontMainTabs").tabs('exists', title);
+	if (flag) {
+		$("#frontMainTabs").tabs('select', title);
+	}else if(!flag && openType == "HREF" ) {
+		$('#frontMainTabs').tabs('add',{
+			id:id,
+			title:title,
+			href:url,
+			closable:true, 
+			cache:true
+		});
+	} else{
+		var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
+		$('#frontMainTabs').tabs('add',{
+			id:id,
+			title:title,
+			content:content,
+			closable:true  
+		});
+	}
+	return;
+ }
 </script>
 </body>
 </html>
