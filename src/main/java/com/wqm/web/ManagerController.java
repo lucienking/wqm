@@ -1,13 +1,9 @@
 package com.wqm.web;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.AuthorizationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,22 +20,13 @@ import com.wqm.service.sys.MenuService;
 @Controller
 @RequestMapping(value = "/")
 public class ManagerController {
-	private final static Logger logger = LoggerFactory.getLogger(ManagerController.class);
 	
 	@Autowired
 	private MenuService menuService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String index(Model model) {
-		try {
-			Map<String, String> infomap = PrincipalUtil
-					.getPrincipalInfo(SecurityUtils.getSubject());
-			if (infomap != null) {
-				model.addAttribute("userName", infomap.get("userName"));
-			}
-		} catch (UnsupportedEncodingException e) {
-			logger.error("UnsupportedEncodingException::",e);
-		}
+		model.addAttribute("userName",PrincipalUtil.getCurrentUserName() );
 		return "/front/index";
 	}
 	

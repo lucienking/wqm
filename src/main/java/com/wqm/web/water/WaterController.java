@@ -226,6 +226,8 @@ public class WaterController extends BaseController{
 	@RequestMapping(method = RequestMethod.GET,value = "/getMoniteredWater")
 	public Map<String,Object> getMoniteredWater(HttpServletRequest request){
 		SpecificationFactory<WaterEntity> specf = new SpecificationFactory<WaterEntity>();
+		specf.addSearchParam("parentCode", Operator.EQ, "0".equals(request.getParameter("parentCode"))?"":request.getParameter("parentCode"));
+		specf.addSearchParam("area.code", Operator.EQ, "0".equals(request.getParameter("areaCode"))?"":request.getParameter("areaCode"));
 		specf.addSearchParam("isLeaf",Operator.EQ, true);
 		Page<WaterEntity> waters= waterService.getWatersByPage(specf.getSpecification(),buildPageRequest(request));
 		return convertToResult(waters);

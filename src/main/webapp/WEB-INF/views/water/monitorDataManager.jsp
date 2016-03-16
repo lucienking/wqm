@@ -1,16 +1,19 @@
+<!DOCTYPE html>
 <%@ page language="java"  language="java"  pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="/public/common.jsp"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<html>
+<head>
+<title>监测数据</title>
 <style>
-	.itemInputSpan{
-		margin:5px;
-		width:120px;
-		height:50px;
-		border:solid thin red;	
-		display:inline;
+	#monitorDataSearchConditionPanel{
+		font-size:12px;
 	}
 </style>
+
+</head>
+<body>
 <div id= "monitorDataContainer">
 <div id="monitorDataSearchConditionPanel" title="查询条件" class="easyui-panel" style="width:100%;padding-top:10px;" data-options="collapsible:true">
 	<form id="monitorDataSearchConditionForm">
@@ -19,6 +22,8 @@
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataName">区域</label>
 					<input id="search_monitorDataName" name="name" class="easyui-textbox" style="width:120px;"/>
+					<input type="hidden" name="areaCode" value="${areaCode }">
+					<input type="hidden" name="parentCode" value="${parentCode }">
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataCode">水体</label>
@@ -315,10 +320,10 @@ $("#monitor_Area").combobox({
   //queryParams:{"farmCode":$("#contract_atFarmCode").val()},
    	onSelect:function(value){
    		$('#monitor_Water').combobox('clear'); 
-   		var url = ctx+'/water/getWaterByAreaCode?areaCode='+value.code;
+   		var url = '${ctx}/water/getWaterByAreaCode?areaCode='+value.code;
    		$('#monitor_Water').combobox('reload', url); 
    		$('#monitor_LeafWater').combobox('clear');
-   		var url = ctx+'/water/getWatersByParent?code=';
+   		var url = '${ctx}/water/getWatersByParent?code=';
    		$('#monitor_LeafWater').combobox('reload', url); 
    	}
 });
@@ -331,7 +336,7 @@ $("#monitor_Water").combobox({
     method:'GET',
  	onSelect:function(value){
    		$('#monitor_LeafWater').combobox('clear'); 
-   		var url = ctx+'/water/getWatersByParent?code='+value.code;
+   		var url = '${ctx}/water/getWatersByParent?code='+value.code;
    		$('#monitor_LeafWater').combobox('reload', url); 
    	}
 });
@@ -355,3 +360,4 @@ function fomatterPamFromItemForm(){
 }
 </script>
 </div>
+</body>

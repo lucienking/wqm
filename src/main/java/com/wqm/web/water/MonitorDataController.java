@@ -54,7 +54,10 @@ public class MonitorDataController extends BaseController{
 	 * 
 	 */
 	@RequestMapping(method = RequestMethod.GET,value = "/monitorDataManager")
-	public String  monitorDatasManager(Model model){		 
+	public String  monitorDatasManager(Model model,@RequestParam(value = "parentCode", defaultValue = "0") String parentCode
+			,@RequestParam(value = "areaCode", defaultValue = "0") String areaCode){	
+		model.addAttribute("parentCode", parentCode);
+		model.addAttribute("areaCode", areaCode);
 		return "/water/monitorDataManager";
 	}
 	
