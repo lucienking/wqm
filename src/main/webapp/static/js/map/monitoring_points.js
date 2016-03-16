@@ -5,6 +5,8 @@ var wkid = 4490;
 var serviceUrl = "http://10.215.201.151:6080/arcgis/rest/services/";
 var monitor_points_Url = serviceUrl + "monitor_points/MapServer";
 var water_pollution_Url = serviceUrl + "water_pollution/MapServer";
+var haikou_region_Url= serviceUrl +"haikou_region/MapServer";
+var mapSpatialReference='' ;
 require(
 		[ "esri/map", "esri/layers/WebTiledLayer", "esri/geometry/Extent",
 				"esri/geometry/Point", "esri/layers/TileInfo", "dojo/parser",
@@ -31,14 +33,15 @@ require(
 			var infoWindow = new InfoWindow(null, domConstruct.create("div"));
 			infoWindow.startup();
 			parser.parse();
+			mapSpatialReference = new SpatialReference({"wkt": 'PROJCS["CGCS_2000_3_Degree_GK_CM_111E",GEOGCS["CGCS_2000",DATUM["CGCS_2000",SPHEROID["CGCS_2000",6378137.0,298.257222101]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Gauss_Kruger"],PARAMETER["False_Easting",500000.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",111.0],PARAMETER["Scale_Factor",1.0],PARAMETER["Latitude_Of_Origin",0.0],UNIT["Meter",1.0]]'
+			});
 			var bounds = new Extent({
-				"xmin" : 127.45141764160003,
-				"ymin" : 15.81985415245003,
-				"xmax" : 127.66669821040004,
-				"ymax" : 15.918851260550074,
-				"spatialReference" : {
-					"wkid" : 4490
-				}
+				"xmin" : 416663.40979999956,
+				"ymin" : 2205915.9924,
+				"xmax" : 445812.31259999983,
+				"ymax" : 2221406.5243999995,
+				"spatialReference" : mapSpatialReference
+				
 			});
 			var map = new Map("map", {
 				zoom : 16,
@@ -47,13 +50,13 @@ require(
 				logo : false
 			});
 			map.infoWindow.resize(400, 400);
-			var home = new HomeButton({
-				map : map
-			}, "homeButton");
-			home.startup();
+//			var home = new HomeButton({
+//				map : map
+//			}, "homeButton");
+//			home.startup();
 			var scalebar = new Scalebar({ // 比例尺
 				map : map,
-				attachTo : "bottom-center",
+				attachTo : "bottom-left",
 				scalebarUnit : "metric",
 				scalebarStyle : "ruler"
 			});
@@ -61,13 +64,13 @@ require(
 			/**
 			 * 鹰眼图
 			 */
-			var overviewMapDijit = new OverviewMap({
-				map : map,
-				attachTo : "bottom-left",
-				visible : true
-			}, dom.byId("overViewMap"));
-			overviewMapDijit.startup();
-			navToolbar = new Navigation(map);
+//			var overviewMapDijit = new OverviewMap({
+//				map : map,
+//				attachTo : "bottom-left",
+//				visible : true
+//			}, dom.byId("overViewMap"));
+//			overviewMapDijit.startup();
+//			navToolbar = new Navigation(map);
 			on(navToolbar, "onExtentHistoryChange", extentHistoryChangeHandler);
 
 			registry.byId("zoomin").on("click", function() {
@@ -126,8 +129,8 @@ require(
 				outFields : water_pollution_filed,
 				infoTemplate : water_pollution_info
 			});
-			var water_pollution_Dynamiclayer = new ArcGISDynamicMapServiceLayer(
-					water_pollution_Url);
+			var haikou_region_Dynamiclayer = new ArcGISDynamicMapServiceLayer(
+					haikou_region_Url);
 			map.addLayer();
 			var legend = new Legend({
 				map : map,
@@ -141,7 +144,7 @@ require(
 			}, "legend");
 			legend.startup();
 			var layers = [ water_pollution_layer, monitoring_point_layer,
-					water_pollution_Dynamiclayer ];
+			               haikou_region_Dynamiclayer ];
 			map.addLayers(layers);
 
 			$('#indexTree').tree(
@@ -166,8 +169,11 @@ require(
 				var waterTab = new TabContainer({
 					style : "width:100%;height:100%;class:claro"
 				}, domConstruct.create("div"));
+				var content_Info = "<strong>水体名称:</strong>"
+					+ graphic.attributes.water_body;
 				var contentInfo = new ContentPane({
 					title : "基本信息",
+					content:content_Info
 				});
 				var contentMedia = new ContentPane({
 					title : "水体水文信息"
@@ -202,12 +208,12 @@ require(
 					title : "基本信息",
 					content : content_Info
 				});
-				var contentMedia = new ContentPane({
-					title : "多媒体信息"
-				});
 				var contentMonitor = new ContentPane({
 					title : "监测信息",
 					content : content_Monitor
+				});
+				var contentMedia = new ContentPane({
+					title : "多媒体信息"
 				});
 				var contentFiles = new ContentPane({
 					title : "档案信息"
@@ -228,7 +234,7 @@ require(
 					async : false,
 					dataType : 'json',
 					data : {
-						"id" : id,
+						"Id" : id,
 					},
 					success : function(data, status) {
 						console.log(data);
@@ -249,7 +255,7 @@ require(
 			function getMonitorInfElement(monitor_inf, monitor_inf_length) {
 				var monitor_inf_Element = '';
 				if (monitor_inf_length > 0) {
-					monitor_inf_Element = "<table cellspacing='0' border='1' width='100%'>";
+					monitor_inf_Element = "<table class='infowindow_tab'>";
 					for (var i = 0; i < monitor_inf_length; i++) {
 						if (Math.round(i % 2) === 0) {
 							monitor_inf_Element += "<tr><td><strong>"
@@ -302,7 +308,7 @@ require(
 			 * @param queryResult
 			 * @returns
 			 */
-			function displayResult(queryResult, wkid, isPoint) { // 设置显示结果的符合颜色等
+			function displayResult(queryResult, mapSpatialReference, isPoint) { // 设置显示结果的符合颜色等
 				map.graphics.clear();
 				map.infoWindow.hide();
 				var waterSymbol = new SimpleFillSymbol(
@@ -319,9 +325,7 @@ require(
 					var pointGeometry = queryResult[0].feature.geometry;
 					var x = pointGeometry.x;
 					var y = pointGeometry.y;
-					var location = new Point(x, y, new SpatialReference({
-						wkid : wkid
-					}));
+					var location = new Point(x, y, mapSpatialReference);
 					map.centerAt(location);
 					var pointGraphic = new Graphic(location, pointSymbol);
 					map.graphics.clear();
@@ -335,14 +339,14 @@ require(
 								waterSymbol);
 						map.graphics.add(waterGraphic);
 					}
-					map.setExtent(getExtent(queryResult, wkid));
+					map.setExtent(getExtent(queryResult, mapSpatialReference));
 				}
 
 			}
 			/**
 			 * 获取结果集的范围
 			 */
-			function getExtent(queryResult, wkid) {
+			function getExtent(queryResult, mapSpatialReference) {
 				var xmin = 0;
 				var ymin = 0;
 				var xmax = 0;
@@ -371,9 +375,7 @@ require(
 					"ymin" : ymin,
 					"xmax" : xmax,
 					"ymax" : ymax,
-					"spatialReference" : {
-						"wkid" : wkid
-					}
+					"spatialReference":mapSpatialReference
 				});
 			}
 
@@ -400,7 +402,7 @@ require(
 							queryResult.push(result);
 						}
 						if (queryResult.length > 0) {
-							displayResult(queryResult, wkid, isPoint);
+							displayResult(queryResult,mapSpatialReference, isPoint);
 						} else {
 							$.messager.alert('提示', '没有符合条件的水体', 'info');
 						}
@@ -430,7 +432,7 @@ require(
 							queryResult.push(result);
 						}
 						if (queryResult.length > 0) {
-							displayResult(queryResult, wkid, isPoint);
+							displayResult(queryResult,mapSpatialReference, isPoint);
 						} else {
 							$.messager.alert('提示', '没有符合条件的断面', 'info');
 						}

@@ -11,6 +11,15 @@
 <link type="text/css" href="${ctx }/static/styles/front/header_footer.css" rel="Stylesheet" />
 <link rel="stylesheet" href="${ctx }/static/arcgisApi/3.16compact/dijit/themes/claro/claro.css">
 <link rel="stylesheet" href="${ctx }/static/arcgisApi/3.16compact/esri/css/esri.css">
+<script type="text/javascript">
+	// http://www.sitepen.com/blog/2013/06/20/dojo-faq-what-is-the-difference-packages-vs-paths-vs-aliases/
+	var dojoConfig = {
+		paths : {
+			//if you want to host on your own server, download and put in folders then use path like: 
+			agsjs : location.pathname.replace(/\/[^/]+$/, '')+ '/../static/js/map/Toc'
+		}
+	};
+</script>
 <link type="text/css" href="${ctx }/static/styles/front/map.css" rel="Stylesheet" />
 </head>
 <body class='claro'>
@@ -72,17 +81,18 @@
 			</div>
         </div>
         <div data-options="region:'center',iconCls:'icon-ok'" style="padding:5px;">
-        	<div id="navToolbar" data-dojo-type="dijit/Toolbar">
-    			 <div data-dojo-type="dijit/form/Button" id="zoomin" data-dojo-props="iconClass:'zoominIcon'">Zoom In</div>
-   				 <div data-dojo-type="dijit/form/Button" id="zoomout" data-dojo-props="iconClass:'zoomoutIcon'">Zoom Out</div>
-    			 <div data-dojo-type="dijit/form/Button" id="zoomfullext" data-dojo-props="iconClass:'zoomfullextIcon'">Full Extent</div>
-   				 <div data-dojo-type="dijit/form/Button" id="zoomprev" data-dojo-props="iconClass:'zoomprevIcon'">Prev Extent</div>
-    			 <div data-dojo-type="dijit/form/Button" id="zoomnext" data-dojo-props="iconClass:'zoomnextIcon'">Next Extent</div>
-                 <div data-dojo-type="dijit/form/Button" id="pan" data-dojo-props="iconClass:'panIcon'">Pan</div>
-     			 <div data-dojo-type="dijit/form/Button" id="deactivate" data-dojo-props="iconClass:'deactivateIcon'">Deactivate</div>
-			</div>
+        	
         	<div id="map">
-        		<div id="homeButton"></div>
+        		<div id="navToolbar" data-dojo-type="dijit/Toolbar">
+    			 <div data-dojo-type="dijit/form/Button" id="zoomin" data-dojo-props="iconClass:'zoominIcon'">缩小</div>
+   				 <div data-dojo-type="dijit/form/Button" id="zoomout" data-dojo-props="iconClass:'zoomoutIcon'">放大</div>
+    			 <div data-dojo-type="dijit/form/Button" id="zoomfullext" data-dojo-props="iconClass:'zoomfullextIcon'">全图范围</div>
+   				 <div data-dojo-type="dijit/form/Button" id="zoomprev" data-dojo-props="iconClass:'zoomprevIcon'">上一范围</div>
+    			 <div data-dojo-type="dijit/form/Button" id="zoomnext" data-dojo-props="iconClass:'zoomnextIcon'">下一范围</div>
+                 <div data-dojo-type="dijit/form/Button" id="pan" data-dojo-props="iconClass:'panIcon'">平移</div>
+     			 <div data-dojo-type="dijit/form/Button" id="deactivate" data-dojo-props="iconClass:'deactivateIcon'">停用</div>
+				</div>
+        		<!-- <div id="homeButton"></div> -->
 			</div>
 			<div id="info">
 				<div id="legend"></div>
