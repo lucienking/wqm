@@ -118,7 +118,7 @@ public class WaterEntity extends IdEntity {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "areaId")
+	@JoinColumn(name = "areaCode",referencedColumnName = "code")
 	public AreaEntity getArea() {
 		return area;
 	}

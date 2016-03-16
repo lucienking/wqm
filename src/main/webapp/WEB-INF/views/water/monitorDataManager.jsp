@@ -1,16 +1,19 @@
+<!DOCTYPE html>
 <%@ page language="java"  language="java"  pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="/public/common.jsp"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<html>
+<head>
+<title>监测数据</title>
 <style>
-	.itemInputSpan{
-		margin:5px;
-		width:120px;
-		height:50px;
-		border:solid thin red;	
-		display:inline;
+	#monitorDataSearchConditionPanel{
+		font-size:12px;
 	}
 </style>
+
+</head>
+<body>
 <div id= "monitorDataContainer">
 <div id="monitorDataSearchConditionPanel" title="查询条件" class="easyui-panel" style="width:100%;padding-top:10px;" data-options="collapsible:true">
 	<form id="monitorDataSearchConditionForm">
@@ -19,6 +22,8 @@
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataName">区域</label>
 					<input id="search_monitorDataName" name="name" class="easyui-textbox" style="width:120px;"/>
+					<input type="hidden" name="areaCode" value="${areaCode }">
+					<input type="hidden" name="parentCode" value="${parentCode }">
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataCode">水体</label>
@@ -72,7 +77,9 @@
 		<div id="monitorDataItemDialog"  style="display:none">
 		</div>
 	</form>
-
+	
+<div id="monitorDataDetailDialog"  style="width:99%;height:99%;display:none;">
+</div>
 
 <div id="monitorData_toolbar">
 	<jksb:hasAutority authorityId="007001001">
@@ -84,6 +91,8 @@
 	<jksb:hasAutority authorityId="007001002">
 		<a href="javascript:monitorDataDeleData()" id = "monitorDataDeleButton" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true,disabled:true," >删除</a>
 	</jksb:hasAutority>
+	<a href="#" id = "monitorDataDetailButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >详细信息</a>
+	<a href="#" id = "monitorDataToMapButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >跳转地图</a>
 </div>
 
 <script type="text/javascript">
@@ -124,20 +133,19 @@ function monitorDataSelectChange(index,row){ 		// 选择行事件 通用。
 	if(selectedNum==1){
 		$("#monitorDataEditButton").linkbutton("enable");
 		$("#monitorDataDeleButton").linkbutton("enable");
-		if($('#monitorDataDatagrid').datagrid('getSelected').monitorDataStatus == '0')
-			$("#monitorDataEnableButton").linkbutton("enable");
-		else if($('#monitorDataDatagrid').datagrid('getSelected').monitorDataStatus == '1')
-			$("#monitorDataDisableButton").linkbutton("enable");
-		
+		$("#monitorDataDetailButton").linkbutton("enable");
+		$("#monitorDataToMapButton").linkbutton("enable");
 	}else if(selectedNum==0 ){
 		$("#monitorDataDeleButton").linkbutton("disable");
 		$("#monitorDataEditButton").linkbutton("disable");
-		$("#monitorDataEnableButton").linkbutton("disable");
+		$("#monitorDataDetailButton").linkbutton("disable");
+		$("#monitorDataToMapButton").linkbutton("disable");
 		$("#monitorDataDisableButton").linkbutton("disable");
 	}else{
 		$("#monitorDataEditButton").linkbutton("disable");
-		$("#monitorDataEnableButton").linkbutton("disable");
+		$("#monitorDataDetailButton").linkbutton("disable");
 		$("#monitorDataDisableButton").linkbutton("disable");
+		$("#monitorDataToMapButton").linkbutton("disable");
 	}
 }
 
@@ -315,10 +323,10 @@ $("#monitor_Area").combobox({
   //queryParams:{"farmCode":$("#contract_atFarmCode").val()},
    	onSelect:function(value){
    		$('#monitor_Water').combobox('clear'); 
-   		var url = ctx+'/water/getWaterByAreaCode?areaCode='+value.code;
+   		var url = '${ctx}/water/getWaterByAreaCode?areaCode='+value.code;
    		$('#monitor_Water').combobox('reload', url); 
    		$('#monitor_LeafWater').combobox('clear');
-   		var url = ctx+'/water/getWatersByParent?code=';
+   		var url = '${ctx}/water/getWatersByParent?code=';
    		$('#monitor_LeafWater').combobox('reload', url); 
    	}
 });
@@ -331,7 +339,7 @@ $("#monitor_Water").combobox({
     method:'GET',
  	onSelect:function(value){
    		$('#monitor_LeafWater').combobox('clear'); 
-   		var url = ctx+'/water/getWatersByParent?code='+value.code;
+   		var url = '${ctx}/water/getWatersByParent?code='+value.code;
    		$('#monitor_LeafWater').combobox('reload', url); 
    	}
 });
@@ -343,15 +351,20 @@ $("#monitor_LeafWater").combobox({
     method:'GET'
 });
 
-function fomatterPamFromItemForm(){
-	var result ="";
-	var names = $("*[name='_itemName']").map(function(){return $(this).val();}).get().join(",").split(",") ;
-	var values = $("*[name='_itemValue']").map(function(){return $(this).val();}).get().join(",").split(",") ;
-	$("input[name='_itemCode']").each(function(i,obj){  
-		result += '{"code":"'+obj.value+'","name":"'+names[i]+'","value":"'+values[i]+'"}';	
-		if(i!=(names.length-1)){result += "@@";}
-	});   	
-	return result;
-}
+ 
+/**
+ * 详细信息展示
+ */
+ $("#monitorDataDetailButton").click(function(){
+	 var id = $("#monitorDataDatagrid").datagrid("getSelected").id;
+	 
+	 $("#monitorDataDetailDialog").show(); //先显示，再弹出
+	 $("#monitorDataDetailDialog").dialog({
+		  title:'水体详细信息',
+	      href:"${ctx}/water/waterDetail?id="+id,
+	      modal:true
+	  });
+ });
 </script>
 </div>
+</body>

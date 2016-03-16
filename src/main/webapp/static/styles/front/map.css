@@ -1,6 +1,7 @@
 @CHARSET "UTF-8";
 /* map element */
 @import "../static/arcgisApi/3.16compact/dijit/themes/claro/claro.css";
+
 body,#map {
 	height: 100%;
 	width: 100%;
@@ -14,12 +15,13 @@ body,#map {
 	padding: 0;
 }
 
-html,body,#map {
-	height: 100%;
+.infowindow_tab {
+	border-collapse:collapse;
+	border: 1px;
 	width: 100%;
-	margin: 0;
-	padding: 0;
+	border-color: #D9E7F3;
 }
+
 /* legend element */
 #info {
 	width: 25%;
@@ -50,7 +52,7 @@ html,body,#map {
 .esriOverviewMap .ovwContainer {
 	background-color: #95B8E7;
 }
-
+/*工具条*/
 .zoominIcon {
 	background-image: url(../../images/map/nav_zoomin.png);
 	width: 16px;

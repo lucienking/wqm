@@ -95,6 +95,17 @@ public class WaterController extends BaseController{
 	}
 	
 	/**
+	 * 水体详细信息界面<br/>
+	 * @param model
+	 * @return
+	 * 
+	 */
+	@RequestMapping(method = RequestMethod.GET,value = "/waterDetail")
+	public String  waterDetail(Model model,@RequestParam(value = "code", defaultValue = "0") String code){		 
+		return "/water/waterDetail";
+	}
+	
+	/**
 	 * 水体编辑，新增界面
 	 * @param model
 	 * @param id
@@ -226,6 +237,8 @@ public class WaterController extends BaseController{
 	@RequestMapping(method = RequestMethod.GET,value = "/getMoniteredWater")
 	public Map<String,Object> getMoniteredWater(HttpServletRequest request){
 		SpecificationFactory<WaterEntity> specf = new SpecificationFactory<WaterEntity>();
+		specf.addSearchParam("parentCode", Operator.EQ, "0".equals(request.getParameter("parentCode"))?"":request.getParameter("parentCode"));
+		specf.addSearchParam("area.code", Operator.EQ, "0".equals(request.getParameter("areaCode"))?"":request.getParameter("areaCode"));
 		specf.addSearchParam("isLeaf",Operator.EQ, true);
 		Page<WaterEntity> waters= waterService.getWatersByPage(specf.getSpecification(),buildPageRequest(request));
 		return convertToResult(waters);
