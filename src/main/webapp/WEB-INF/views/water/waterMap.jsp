@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@include file="/public/common.jsp"%>
+<%@include file="/public/common.jsp"%> 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />

@@ -103,19 +103,7 @@ require(
 				navToolbar.deactivate();
 			});
 			
-			function isJump(waterId,isLeaf){
-				if(waterId!=""&&isLeaf!=""){
-					if(isLeaf=="Y"){
-						selectMontoringpoints(waterId);
-					}else{
-						selectWater(waterId);
-					}
-				}
-			}
-			function extentHistoryChangeHandler() {
-				registry.byId("zoomprev").disabled = navToolbar.isFirstExtent();
-				registry.byId("zoomnext").disabled = navToolbar.isLastExtent();
-			}
+			
 			/**
 			 * 定义弹窗
 			 */
@@ -175,7 +163,19 @@ require(
 							}
 						}
 					});
-
+			function isJump(waterId,isLeaf){
+				if(waterId!=""&&isLeaf!=""){
+					if(isLeaf=="Y"){
+						selectMontoringpoints(waterId);
+					}else{
+						selectWater(waterId);
+					}
+				}
+			}
+			function extentHistoryChangeHandler() {
+				registry.byId("zoomprev").disabled = navToolbar.isFirstExtent();
+				registry.byId("zoomnext").disabled = navToolbar.isLastExtent();
+			}
 			function getWaterContent(graphic) {
 				var waterTab = new TabContainer({
 					style : "width:100%;height:100%;class:claro"
