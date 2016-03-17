@@ -84,7 +84,7 @@ jQuery(function($){
             		$.messager.alert({
             			title:'操作失败',
             			msg:'登录失效，请重新登录。',
-            			fn:function(){window.location.href = ctx;}
+            			fn:function(){window.location.href = ctx+"/login";}
             		});
             	 	return;
             	}else{ 

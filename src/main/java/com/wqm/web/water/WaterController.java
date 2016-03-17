@@ -25,9 +25,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wqm.common.persistence.SearchFilter.Operator;
 import com.wqm.common.persistence.SpecificationFactory;
+import com.wqm.entity.water.MonitorData;
 import com.wqm.entity.water.MonitorItem;
 import com.wqm.entity.water.WaterEntity;
 import com.wqm.service.water.AreaService;
+import com.wqm.service.water.MonitorDataService;
 import com.wqm.service.water.MonitorItemService;
 import com.wqm.service.water.WaterService;
 import com.wqm.web.BaseController;
@@ -47,6 +49,9 @@ public class WaterController extends BaseController{
 	
 	@Autowired
 	private MonitorItemService monitorItemService;
+	
+	@Autowired
+	private MonitorDataService monitorDataService;
 	
 	@Autowired
 	private AreaService areaService;
@@ -101,7 +106,11 @@ public class WaterController extends BaseController{
 	 * 
 	 */
 	@RequestMapping(method = RequestMethod.GET,value = "/waterDetail")
-	public String  waterDetail(Model model,@RequestParam(value = "code", defaultValue = "0") String code){		 
+	public String  waterDetail(Model model,@RequestParam(value = "code", defaultValue = "0") String code){	
+		WaterEntity water = waterService.getWaterByCode(code);
+		List<MonitorData> datas =monitorDataService.getMonitorDataByCode(code);
+		model.addAttribute("water", water);
+		model.addAttribute("waterMonitorData", datas);
 		return "/water/waterDetail";
 	}
 	

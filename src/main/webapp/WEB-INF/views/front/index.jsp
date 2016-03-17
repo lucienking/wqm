@@ -86,7 +86,9 @@ var ctx = "${ctx}";
      $(".tabs li").each(function(index, obj) {
            //获取所有可关闭的选项卡
          var tab = $(this).text();
+         console.log(tab);
          if(tab!="首页") $("#frontMainTabs").tabs('close', tab);
+         console.log(tab+"  close");
      });
    }
  function openTab(node){
