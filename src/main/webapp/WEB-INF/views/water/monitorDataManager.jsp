@@ -362,9 +362,32 @@ $("#monitor_LeafWater").combobox({
 	 $("#monitorDataDetailDialog").dialog({
 		  title:'水体详细信息',
 	      href:"${ctx}/water/waterDetail?id="+id,
+	      width:450,
+	      height:350,
+	      left:150,
+	      top:80,
 	      modal:true
 	  });
  });
+ 
+ /**
+  * 详细信息展示
+  */
+  $("#monitorDataToMapButton").click(function(){
+ 	 var code = $("#monitorDataDatagrid").datagrid("getSelected").code;
+ 	 
+ 	 $("#monitorDataDetailDialog").show(); //先显示，再弹出
+ 	 $("#monitorDataDetailDialog").dialog({
+ 		  title:'水体详细信息',
+ 	      href:"${ctx}/show/waterMap?waterId=w"+code,
+ 	      width:450,
+ 	      height:350,
+ 	      left:150,
+ 	      top:80,
+ 	      modal:true
+ 	  });
+  });
+ 
 </script>
 </div>
 </body>

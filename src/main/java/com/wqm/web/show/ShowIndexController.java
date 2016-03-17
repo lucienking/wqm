@@ -53,11 +53,15 @@ public class ShowIndexController extends BaseController{
 	public List<Map<String,Object>> getWatersJson(@RequestParam(value = "id", defaultValue = "a0") String id,
 			@RequestParam(value = "type", defaultValue = "map") String type){
 		String code = id.substring(1);
+		String areaCode = "";
+		String parentCode = "";
 		String url = "";
 		if("data".equals(type)){
 			url = "/monitorData/monitorDataManager";
 		}else{
 			url= "/show/waterMap";
+			areaCode = "a";
+			parentCode = "w";
 		}
 		List<Map<String,Object>> tree =  new ArrayList<Map<String,Object>>();
 		if(id.startsWith("a")){
@@ -71,7 +75,7 @@ public class ShowIndexController extends BaseController{
 				map.put("text",text);
 				map.put("state","closed");
 				Map<String,String> attribute = new HashMap<String,String>();
-				attribute.put("url", url+"?areaCode="+code);
+				attribute.put("url", url+"?areaCode="+areaCode+area.getCode());
 				attribute.put("openTab", "Y");
 				map.put("attributes",attribute );
 				tree.add(map);
@@ -88,7 +92,8 @@ public class ShowIndexController extends BaseController{
 				map.put("text",text);
 				
 				Map<String,String> attribute = new HashMap<String,String>();
-				attribute.put("url", url+"?areaCode="+code);
+				attribute.put("url", url+"?parentCode="+parentCode+water.getCode()
+						+"&isLeaf="+water.getIsLeaf());
 				attribute.put("openTab", "Y");
 				map.put("attributes",attribute );
 				tree.add(map);
@@ -106,7 +111,8 @@ public class ShowIndexController extends BaseController{
 				map.put("text",text);
 				
 				Map<String,String> attribute = new HashMap<String,String>();
-				attribute.put("url", url+"?parentCode="+code);
+				attribute.put("url", url+"?parentCode="+parentCode+water.getCode()
+						+"&isLeaf="+water.getIsLeaf());
 				attribute.put("openTab", "Y");
 				map.put("attributes",attribute );
 				tree.add(map);
@@ -152,8 +158,10 @@ public class ShowIndexController extends BaseController{
 	 * 地图
 	 */
 	@RequestMapping(method = RequestMethod.GET,value="/waterMap")
-	public String waterMap(@RequestParam(value = "waterId", defaultValue = "0") String id,Model model){
+	public String waterMap(@RequestParam(value = "parentCode", defaultValue = "0") String id,
+			@RequestParam(value = "isLeaf", defaultValue = "0") String isLeaf,Model model){
 		model.addAttribute("waterId", id);
+		model.addAttribute("isLeaf", isLeaf);
 		return "/water/waterMap";
 	}
 	
