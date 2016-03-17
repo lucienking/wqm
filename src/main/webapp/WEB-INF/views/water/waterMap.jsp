@@ -16,7 +16,7 @@
 	var dojoConfig = {
 		paths : {
 			//if you want to host on your own server, download and put in folders then use path like: 
-			agsjs : location.pathname.replace(/\/[^/]+$/, '')+ '/../static/js/map/Toc'
+			CustomModules : location.pathname.replace(/\/[^/]+$/, '')+ '/../static/js/map/CustomModules'
 		}
 	};
 </script>
@@ -29,8 +29,8 @@
         <div data-options="region:'center',iconCls:'icon-ok'" style="padding:5px;">
         	<div id="map">
         		<div id="navToolbar" data-dojo-type="dijit/Toolbar">
-    			 <div data-dojo-type="dijit/form/Button" id="zoomin" data-dojo-props="iconClass:'zoominIcon'">缩小</div>
-   				 <div data-dojo-type="dijit/form/Button" id="zoomout" data-dojo-props="iconClass:'zoomoutIcon'">放大</div>
+    			 <div data-dojo-type="dijit/form/Button" id="zoomin" data-dojo-props="iconClass:'zoominIcon'">放大</div>
+   				 <div data-dojo-type="dijit/form/Button" id="zoomout" data-dojo-props="iconClass:'zoomoutIcon'">缩小</div>
     			 <div data-dojo-type="dijit/form/Button" id="zoomfullext" data-dojo-props="iconClass:'zoomfullextIcon'">全图范围</div>
    				 <div data-dojo-type="dijit/form/Button" id="zoomprev" data-dojo-props="iconClass:'zoomprevIcon'">上一范围</div>
     			 <div data-dojo-type="dijit/form/Button" id="zoomnext" data-dojo-props="iconClass:'zoomnextIcon'">下一范围</div>
