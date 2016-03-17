@@ -101,10 +101,7 @@ require(
 				navToolbar.deactivate();
 			});
 
-			function extentHistoryChangeHandler() {
-				registry.byId("zoomprev").disabled = navToolbar.isFirstExtent();
-				registry.byId("zoomnext").disabled = navToolbar.isLastExtent();
-			}
+			
 			/**
 			 * 定义弹窗
 			 */
@@ -164,7 +161,24 @@ require(
 							}
 						}
 					});
-
+			isJump();
+			function isJump() {
+				var waterId = $("#map_waterId").val();
+				var isLeaf = $("map_isLeaf").val();
+				if (waterId != "" && isLeaf != ""&&waterId != 0&&isLeaf !=0) {
+					if (isLeaf == "Y") {
+						selectMontoringpoints(waterId);
+					} else {
+						selectWater(waterId);
+					}
+				}
+			}
+			
+			function extentHistoryChangeHandler() {
+				registry.byId("zoomprev").disabled = navToolbar.isFirstExtent();
+				registry.byId("zoomnext").disabled = navToolbar.isLastExtent();
+			}
+			
 			function getWaterContent(graphic) {
 				var waterTab = new TabContainer({
 					style : "width:100%;height:100%;class:claro"
@@ -283,6 +297,7 @@ require(
 				}
 				return Length;
 			}
+			
 			function calcOffset() {
 				return (map.extent.getWidth() / map.width);
 			}
@@ -331,7 +346,7 @@ require(
 					map.graphics.clear();
 					map.infoWindow.hide();
 					map.graphics.add(pointGraphic);
-					map.infoWindow.show(location);
+					//map.infoWindow.show(location);
 
 				} else {
 					for ( var index in queryResult) {
@@ -437,21 +452,5 @@ require(
 						}
 					}
 				});
-			}
-			function isJump() {
-			    var url = location.search;
-			    var Request = new Object();
-			    if (url.indexOf("?") != -1) { // 判断是否有参数
-			        var str = url.substr(1);
-			        strs = str.split("&");
-			        for (var i = 0; i < strs.length; i++) {
-			            Request[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
-			        }
-			    } else {
-			        return;
-			    }
-			    tzzdCode = Request["zdCode"]; // 取出参数
-			    tzncCode = Request["ncCode"];
-			    queryLand(); // 地图加载慢,等待了3秒
 			}
 		});
