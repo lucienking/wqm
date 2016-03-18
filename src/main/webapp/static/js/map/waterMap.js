@@ -4,6 +4,7 @@
 var wkid = 4490;
 //var serviceUrl = "http://localhost:6080/arcgis/rest/services/";
 var serviceUrl = "http://10.215.201.151:6080/arcgis/rest/services/";
+//var serviceUrl = "http://127.0.0.1:6080/arcgis/rest/services/";
 var monitor_points_Url = serviceUrl + "monitor_points/MapServer";
 var water_pollution_Url = serviceUrl + "water_pollution/MapServer";
 var haikou_region_Url= serviceUrl +"haikou_region/MapServer";
