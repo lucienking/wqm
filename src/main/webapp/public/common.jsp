@@ -19,7 +19,6 @@
 <script src="${ctx }/static/js/jksb.land.validate.js"></script>
 <link href="${ctx }/static/styles/default.css" type="text/css" rel="stylesheet" />
 <link href="${ctx }/static/styles/iconstyle.css" type="text/css" rel="stylesheet" />
-<link href="${ctx }/static/styles/echarts-land.css" type="text/css" rel="stylesheet" />
 
 <script src="${ctx }/static/js/jksb.land.fileupload.js"></script>
 

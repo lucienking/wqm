@@ -22,7 +22,7 @@
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataName">区域</label>
 					<input id="search_monitorDataName" name="name" class="easyui-textbox" style="width:120px;"/>
-					<input type="hidden" name="areaCode" value="${areaCode }">
+					<input type="hidden" name="areaCode" value="${areaCode =='01'?'0':areaCode }">
 					<input type="hidden" name="parentCode" value="${parentCode }">
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
@@ -80,8 +80,11 @@
 	
 <div id="monitorDataDetailDialog"  style="width:99%;height:99%;display:none;">
 </div>
+<div id="monitorDataToMapDialog"  style="width:99%;height:99%;display:none;">
+</div>
 
 <div id="monitorData_toolbar">
+	<c:if test="${ areaCode=='0'&&parentCode=='0'}">
 	<jksb:hasAutority authorityId="007001001">
 		<a href="javascript:monitorDataAddData()" id = "monitorDataAddButton" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" >监测登记</a>
 	</jksb:hasAutority>
@@ -91,6 +94,7 @@
 	<jksb:hasAutority authorityId="007001002">
 		<a href="javascript:monitorDataDeleData()" id = "monitorDataDeleButton" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true,disabled:true," >删除</a>
 	</jksb:hasAutority>
+	</c:if>
 	<a href="#" id = "monitorDataDetailButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >详细信息</a>
 	<a href="#" id = "monitorDataToMapButton" class="easyui-linkbutton" data-options="iconCls:'icon-tip',plain:true,disabled:true," >跳转地图</a>
 </div>
@@ -116,8 +120,8 @@ $('#monitorDataDatagrid').datagrid({
         }},
         {field:'parentCode',title:'所属水体',width:'10%'},
         {field:'createDate',title:'最后监测日期',width:'10%'},
-        {field:'parentCode',title:'水体负责人',width:'10%'},
-        {field:'createDate',title:'联系方式',width:'10%'} 
+        {field:'operator',title:'水体负责人',width:'10%'},
+        {field:'telephone',title:'联系方式',width:'10%'} 
     ]],
     queryParams:$('#monitorDataSearchConditionForm').getFormData(), 
     toolbar:"#monitorData_toolbar",					//根据权限动态生成按钮
@@ -356,15 +360,39 @@ $("#monitor_LeafWater").combobox({
  * 详细信息展示
  */
  $("#monitorDataDetailButton").click(function(){
-	 var id = $("#monitorDataDatagrid").datagrid("getSelected").id;
+	 var code = $("#monitorDataDatagrid").datagrid("getSelected").code;
 	 
 	 $("#monitorDataDetailDialog").show(); //先显示，再弹出
 	 $("#monitorDataDetailDialog").dialog({
 		  title:'水体详细信息',
-	      href:"${ctx}/water/waterDetail?id="+id,
+	      href:"${ctx}/water/waterDetail?code="+code,
+	      width:500,
+	      left:150,
+	      top:80,
 	      modal:true
 	  });
  });
+ 
+ /**
+  * 地图展示
+  */
+  $("#monitorDataToMapButton").click(function(){
+ 	 var code = $("#monitorDataDatagrid").datagrid("getSelected").code;
+ 	 var name = $("#monitorDataDatagrid").datagrid("getSelected").name+"地图信息";
+ 	 var url = "${ctx}/show/waterMap?waterId=w"+code+"&&isLeaf=true";
+ 	 var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
+ 	 $("#monitorDataToMapDialog").show(); //先显示，再弹出
+ 	 $("#monitorDataToMapDialog").dialog({
+ 		  title:name,
+ 	      content:content,
+ 	      width:1280,
+ 	      height:600,
+ 	      left:50,
+ 	      top:30,
+ 	      modal:true
+ 	  });
+  });
+ 
 </script>
 </div>
 </body>

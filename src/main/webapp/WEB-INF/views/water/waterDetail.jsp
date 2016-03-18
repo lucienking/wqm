@@ -12,46 +12,70 @@
 		border:1px solid red;
 	}
 	 
-	#monitorDataDetail_container td{border:solid black; border-width:1px 0px 0px 1px;}
+	#monitorDataDetail_container td{border:none;height:30px;width:33%}
 	#monitorDataDetail_container table{ border:none;}
 	#monitorDataDetail_container input[type="text"]{border:0px solid #c00;color:blue;readonly:readonly;}
 	#selfsupp_search_table span{color:blue;}
 </style>
+<div id="monitorDataDetail_container" style="width:100%;height:100%;">
+	<div id="monitorDataDetailTabs" class="easyui-tabs" style="width:100%;height:100%;">
+		<div title="水体基本信息" data-options="fit:true" style="padding-bottom:20px;">
+		<table style="width:99%;cellspacing:0;cellpadding:0;border-collapse:collapse;" align="center"  border="0" cellspacing="0" >
+			<tr>
+				<td width="33%">水体名称:${water.name}</td><td width="33%">所在区域:${water.area.name} </td><td width="33%">水体面积 :</td>
+			</tr>
+			<tr>
+				<td>平均水深:</td><td>周边乡镇 :</td><td>周边人口:</td>
+			</tr>
+			<tr>
+				<td>水体负责人:</td><td>联系方式 :</td><td>水质类别:  </td>
+			</tr>
+			<tr>
+				<td>水体性质:</td><td>监测站点个数:</td><td>监测站名称:</td>
+			</tr>
+			<tr>
+				<td>监测频率: </td><td>监测站点: </td><td>监测站: </td>
+			</tr>
+			<!-- <tr>
+				<td height="20px" colspan="3" style="padding-top:15px;text-align:center;"> 
+					<a href="#" class="easyui-linkbutton detail_close_btn" style="width:60px;">关闭</a>
+				</td>
+			</tr> -->
+		</table>
+		</div>
+		<div title="水体监测信息" style="padding-bottom:20px;" data-options="fit:true">
+			<table style="width:99%;cellspacing:0;cellpadding:0;border-collapse:collapse;" align="center"  border="0" cellspacing="0" >
+			<tr>
+			<c:forEach items="${waterMonitorData}" var="data" varStatus="i"> 
+					<td>${data.itemName}:${data.itemValue}</td>
+				<c:if test="${(i.index+1)%3==0}">
+					</tr>
+					<tr>
+				</c:if>
+			</c:forEach>
+			</tr>
+		</table>
+		</div>
+		<div title="水体水文信息" style="padding-bottom:20px;" data-options="fit:true">
+		</div>
+		<div title="水体综合信息" style="padding-bottom:20px;" data-options="fit:true">
+		</div>
+	</div>
+</div>
 <script type="text/javascript">
 $(function(){
 	$('#monitorDataDetail_container input').attr("readonly","readonly");
 	
-	$("input[name='personStatus']").each(function(){
-		var num = parseInt($("#sf"+$(this).val()).html());
-		$("#sf"+$(this).val()).html(num+1);
-	});
-	
-	/*
-	 * 关闭
-	 */
 	$(".detail_close_btn").click(function(){
 		$("#monitorDataQueryDetailInfoDialog").dialog('close');
 	});
 	
-	var totalNum = "${totalNum}";
+	$('#monitorDataDetailTabs').tabs({
+        plain:true
+    });
 	
-	$(".addColspan").each(function(){
-		var colspan = parseInt($(this).attr("colspan"));
-		var add = totalNum -7;
-		if(add>0)
-			$(this).attr("colspan",colspan+add);
+	$(".detail_close_btn").click(function(){
+		$("#monitorDataDetailDialog").dialog('close');
 	});
 });
 </script>
-
-<div id="monitorDataDetail_container" style="width:99%;height:99%;">
-<div  class="easyui-tabs" style="width:99%;height:auto;">
-<div title="水体基本信息" data-options="fit:true" style="padding-bottom:20px;">
-</div>
-<div title="水体水文信息" style="padding-bottom:20px;" data-options="fit:true">
-</div>
-<div title="水体综合信息" style="padding-bottom:20px;" data-options="fit:true">
-</div>
-</div>
-</div>
-

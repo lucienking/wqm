@@ -19,12 +19,21 @@
 	        	</div>
 	        	<div id="module_div" class="module_div">
 	        		<div class="mo_div">
-		        		<div class="module_info"><a href="#">水体信息</a></div>
+		        		<!-- <div class="module_info"><a href="#">水体信息</a></div>
 		        		<div class="module_info" id="moule_index"><a href="#" tgt="/show/getWaterTree?type=data">监测信息</a></div>
 		        		<div class="module_info"><a href="#">统计分析</a></div>
 		        		<div class="module_info"><a href="#">预警管理</a></div>
 		        		<div class="module_info"><a href="#" tgt="/show/getWaterTree?type=map">电子地图</a></div>
 		        		<div class="module_info"><a href="#" tgt="/sys/menu/getMenus">系统管理</a></div>
+		        		 -->
+		        		<div class="module_info"><a href="#">水资源</a></div>
+		        		<div class="module_info"><a href="#">水环境</a></div>
+		        		<div class="module_info"><a href="#">供排水</a></div>
+		        		<div class="module_info"><a href="#">水文</a></div>
+		        		<div class="module_info"><a href="#">水利普查</a></div>
+		        		<div class="module_info"><a href="#">工程项目</a></div>
+		        		<div class="module_info"><a href="#">规划管理</a></div>
+		        		<div class="module_info"><a href="#">地图管理</a></div>
 	        		</div>
 	        	</div>
 	        	<div class="logout_div">
@@ -86,7 +95,9 @@ var ctx = "${ctx}";
      $(".tabs li").each(function(index, obj) {
            //获取所有可关闭的选项卡
          var tab = $(this).text();
+         console.log(tab);
          if(tab!="首页") $("#frontMainTabs").tabs('close', tab);
+         console.log(tab+"  close");
      });
    }
  function openTab(node){

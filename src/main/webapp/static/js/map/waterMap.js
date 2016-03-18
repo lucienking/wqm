@@ -2,7 +2,9 @@
  * 2016.03.04 author by tangweilong
  */
 var wkid = 4490;
+//var serviceUrl = "http://localhost:6080/arcgis/rest/services/";
 var serviceUrl = "http://10.215.201.151:6080/arcgis/rest/services/";
+//var serviceUrl = "http://127.0.0.1:6080/arcgis/rest/services/";
 var monitor_points_Url = serviceUrl + "monitor_points/MapServer";
 var water_pollution_Url = serviceUrl + "water_pollution/MapServer";
 var haikou_region_Url= serviceUrl +"haikou_region/MapServer";
@@ -22,14 +24,14 @@ require(
 				"esri/dijit/Scalebar", "dijit/layout/TabContainer",
 				"dijit/layout/ContentPane", "esri/dijit/InfoWindow",
 				"dojo/dom-construct", "esri/toolbars/navigation",
-				"dijit/registry", "dijit/Toolbar", "dojo/domReady!" ],
+				"dijit/registry","CustomModules/geometryUtils", "dijit/Toolbar", "dojo/domReady!" ],
 		function(Map, WebTiledLayer, Extent, Point, TileInfo, parser,
 				OverviewMap, SpatialReference, ArcGISDynamicMapServiceLayer,
 				Navigation, FeatureLayer, InfoTemplate, on, dom, Legend,
 				HomeButton, SimpleFillSymbol, SimpleMarkerSymbol,
 				SimpleLineSymbol, Color, Graphic, Query, QueryTask, Scalebar,
 				TabContainer, ContentPane, InfoWindow, domConstruct,
-				Navigation, registry) {
+				Navigation, registry,geometryUtils) {
 			var infoWindow = new InfoWindow(null, domConstruct.create("div"));
 			infoWindow.startup();
 			parser.parse();
@@ -49,7 +51,7 @@ require(
 				infoWindow : infoWindow,
 				logo : false
 			});
-			map.infoWindow.resize(400, 400);
+			map.infoWindow.resize(400, 300);
 //			var home = new HomeButton({
 //				map : map
 //			}, "homeButton");
@@ -70,7 +72,10 @@ require(
 //				visible : true
 //			}, dom.byId("overViewMap"));
 //			overviewMapDijit.startup();
-//			navToolbar = new Navigation(map);
+			/**
+			 * 工具栏
+			 */
+			navToolbar = new Navigation(map);
 			on(navToolbar, "onExtentHistoryChange", extentHistoryChangeHandler);
 
 			registry.byId("zoomin").on("click", function() {
@@ -101,17 +106,14 @@ require(
 				navToolbar.deactivate();
 			});
 
-			function extentHistoryChangeHandler() {
-				registry.byId("zoomprev").disabled = navToolbar.isFirstExtent();
-				registry.byId("zoomnext").disabled = navToolbar.isLastExtent();
-			}
+			
 			/**
 			 * 定义弹窗
 			 */
 			var monitoring_point_info = new InfoTemplate();
 			monitoring_point_info.setTitle("监测点信息");
 			monitoring_point_info.setContent(getMonitoringPointContent);
-			var water_pollution_filed = [ "water_body" ];
+			var water_pollution_filed = [ "water_body","water_id" ];
 			var monitoring_point_filed = [ "scdCode", "water_body",
 					"section_name", "section_position", "section_condition" ];
 			var water_pollution_info = new InfoTemplate();
@@ -146,25 +148,45 @@ require(
 			var layers = [ water_pollution_layer, monitoring_point_layer,
 			               haikou_region_Dynamiclayer ];
 			map.addLayers(layers);
-
-			$('#indexTree').tree(
-					{
-						onClick : function(node) {
-							// alert(node.text); // alert node text property
-							// when clicked
-							// 断面
-							if (!$('#indexTree').tree('isLeaf', node.target)
-									&& (node.id).substr(0, 1) == "w") {
-								selectWater(node.id);
-								console.log(node.id);
-							} else if ($('#indexTree').tree('isLeaf',
-									node.target)) {
-								selectMontoringpoints(node.id);
-								console.log(node.id);
-							}
-						}
-					});
-
+			
+			isJump();
+			//selectMontoringpoints('w010400101');
+			//on(layers,'loaded',isJump);
+			function isJump() {
+//				var waterId = $("#map_waterId").val();
+//				var isLeaf = $("#map_isLeaf").val();
+				var Request=getRequest();
+				var waterId = Request["waterId"]; // 取出参数
+			    var isLeaf = Request["isLeaf"];
+				if (waterId != "" && isLeaf != "" && waterId != 0 && isLeaf !=0) {
+					if (isLeaf == "Y") {
+						selectMontoringpoints(waterId);
+						console.log(0);
+					} else {
+						selectWater(waterId);
+					}
+				}
+			}
+			function getRequest() {
+			    var url = location.search;
+			    var Request = new Object();
+			    if (url.indexOf("?") != -1) { // 判断是否有参数
+			        var str = url.substr(1);
+			        strs = str.split("&&");
+			        for (var i = 0; i < strs.length; i++) {
+			            Request[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+			        }
+			    } else {
+			        return;
+			    }
+			    return Request;
+			}
+			
+			function extentHistoryChangeHandler() {
+				registry.byId("zoomprev").disabled = navToolbar.isFirstExtent();
+				registry.byId("zoomnext").disabled = navToolbar.isLastExtent();
+			}
+			
 			function getWaterContent(graphic) {
 				var waterTab = new TabContainer({
 					style : "width:100%;height:100%;class:claro"
@@ -283,6 +305,7 @@ require(
 				}
 				return Length;
 			}
+			
 			function calcOffset() {
 				return (map.extent.getWidth() / map.width);
 			}
@@ -312,12 +335,16 @@ require(
 				map.graphics.clear();
 				map.infoWindow.hide();
 				var waterSymbol = new SimpleFillSymbol(
-						SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(
-								SimpleLineSymbol.STYLE_SOLID, new Color([ 238,
-										238, 0 ]), 1), new Color([ 238, 238, 0,
-								1 ]));
+									SimpleFillSymbol.STYLE_SOLID, 
+									new SimpleLineSymbol(
+											SimpleLineSymbol.STYLE_SOLID, 
+											new Color([ 238,238, 0 ]),
+											1
+											), 
+									new Color([ 238, 238, 0,
+									1 ]));
 				var pointSymbol = new SimpleMarkerSymbol(
-						SimpleMarkerSymbol.STYLE_CIRCLE, 18,
+						SimpleMarkerSymbol.STYLE_CIRCLE, 0,
 						new SimpleLineSymbol(SimpleLineSymbol.STYLE_NULL,
 								new Color(0, 255, 255, 1), 1), new Color([ 0,
 								229, 238, 1 ]));
@@ -328,9 +355,9 @@ require(
 					var location = new Point(x, y, mapSpatialReference);
 					map.centerAt(location);
 					var pointGraphic = new Graphic(location, pointSymbol);
-					map.graphics.clear();
-					map.infoWindow.hide();
 					map.graphics.add(pointGraphic);
+					map.infoWindow.setTitle("断面信息");
+					map.infoWindow.setContent(getJumpMonitoringPointContent(queryResult[0].feature.attributes));
 					map.infoWindow.show(location);
 
 				} else {
@@ -340,9 +367,50 @@ require(
 								waterSymbol);
 						map.graphics.add(waterGraphic);
 					}
-					map.setExtent(getExtent(queryResult, mapSpatialReference));
+					var extent=getExtent(queryResult, mapSpatialReference);
+					map.setExtent(extent);
+					var labelPt = geometryUtils.getPolygonCenterPoint(queryResult[0].feature.geometry);
+					map.infoWindow.setTitle("水体信息");
+					map.infoWindow.setContent(getJumpWaterContent(queryResult[0].feature.attributes));
+				    map.infoWindow.show( map.toScreen(labelPt));
 				}
-				map.infoWindow.show();
+				
+			}
+			function getJumpMonitoringPointContent(attributes) {
+				// Make a tab container.
+				var scdCode = attributes.scdCode;
+				var content_Info = "<strong>断面名称:</strong>"
+						+ attributes.section_name + "<br>"
+						+ "<strong>断面位置:</strong>"
+						+ attributes.section_position + "<br>"
+						+ "<strong>水体名称:</strong>"
+						+ attributes.water_body + "<br>"
+						+ "<strong>断面情况:</strong>"
+						+ attributes.section_condition + "<br>"
+						+ "<strong>二级编号:</strong>" + scdCode;
+				var content_Monitor = monitoring_info(1401);
+				var pointTab = new TabContainer({
+					style : "width:100%;height:100%;"
+				}, domConstruct.create("div"));
+				var contentInfo = new ContentPane({
+					title : "基本信息",
+					content : content_Info
+				});
+				var contentMonitor = new ContentPane({
+					title : "监测信息",
+					content : content_Monitor
+				});
+				var contentMedia = new ContentPane({
+					title : "多媒体信息"
+				});
+				var contentFiles = new ContentPane({
+					title : "档案信息"
+				});
+				pointTab.addChild(contentInfo);
+				pointTab.addChild(contentMonitor);
+				pointTab.addChild(contentMedia);
+				pointTab.addChild(contentFiles);
+				return pointTab.domNode;
 			}
 			/**
 			 * 获取结果集的范围
@@ -379,7 +447,65 @@ require(
 					"spatialReference":mapSpatialReference
 				});
 			}
+			function getMonitoringPointContent(graphic) {
+				// Make a tab container.
+				var scdCode = graphic.attributes.scdCode;
+				var content_Info = "<strong>断面名称:</strong>"
+						+ graphic.attributes.section_name + "<br>"
+						+ "<strong>断面位置:</strong>"
+						+ graphic.attributes.section_position + "<br>"
+						+ "<strong>水体名称:</strong>"
+						+ graphic.attributes.water_body + "<br>"
+						+ "<strong>断面情况:</strong>"
+						+ graphic.attributes.section_condition + "<br>"
+						+ "<strong>二级编号:</strong>" + scdCode;
 
+				var content_Monitor = monitoring_info(1401);
+				var pointTab = new TabContainer({
+					style : "width:100%;height:100%;"
+				}, domConstruct.create("div"));
+				var contentInfo = new ContentPane({
+					title : "基本信息",
+					content : content_Info
+				});
+				var contentMonitor = new ContentPane({
+					title : "监测信息",
+					content : content_Monitor
+				});
+				var contentMedia = new ContentPane({
+					title : "多媒体信息"
+				});
+				var contentFiles = new ContentPane({
+					title : "档案信息"
+				});
+				pointTab.addChild(contentInfo);
+				pointTab.addChild(contentMonitor);
+				pointTab.addChild(contentMedia);
+				pointTab.addChild(contentFiles);
+				return pointTab.domNode;
+			}
+			function getJumpWaterContent(attributes) {
+				var waterTab = new TabContainer({
+					style : "width:100%;height:100%;class:claro"
+				}, domConstruct.create("div"));
+				var content_Info = "<strong>水体名称:</strong>"
+					+ attributes.water_body;
+				var contentInfo = new ContentPane({
+					title : "基本信息",
+					content:content_Info
+				});
+				var contentMedia = new ContentPane({
+					title : "水体水文信息"
+				});
+
+				var contentFiles = new ContentPane({
+					title : "水体综合信息"
+				});
+				waterTab.addChild(contentInfo);
+				waterTab.addChild(contentMedia);
+				waterTab.addChild(contentFiles);
+				return waterTab.domNode;
+			}
 			function selectWater(id) {
 				var query = new Query();
 				var queryTask = new QueryTask(water_pollution_Url + "/0");
@@ -425,7 +551,6 @@ require(
 							var feature = results.features[index];
 							var extent = feature.geometry.getExtent();
 							var result = {
-								extent : extent,
 								feature : feature
 							};
 							queryResult.push(result);
@@ -437,21 +562,5 @@ require(
 						}
 					}
 				});
-			}
-			function isJump() {
-			    var url = location.search;
-			    var Request = new Object();
-			    if (url.indexOf("?") != -1) { // 判断是否有参数
-			        var str = url.substr(1);
-			        strs = str.split("&");
-			        for (var i = 0; i < strs.length; i++) {
-			            Request[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
-			        }
-			    } else {
-			        return;
-			    }
-			    tzzdCode = Request["zdCode"]; // 取出参数
-			    tzncCode = Request["ncCode"];
-			    queryLand(); // 地图加载慢,等待了3秒
 			}
 		});
