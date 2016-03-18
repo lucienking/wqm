@@ -158,7 +158,7 @@ public class ShowIndexController extends BaseController{
 	 * 地图
 	 */
 	@RequestMapping(method = RequestMethod.GET,value="/waterMap")
-	public String waterMap(@RequestParam(value = "parentCode", defaultValue = "0") String id,
+	public String waterMap(@RequestParam(value = "waterId", defaultValue = "0") String id,
 			@RequestParam(value = "isLeaf", defaultValue = "0") String isLeaf,Model model){
 		model.addAttribute("waterId", id);
 		model.addAttribute("isLeaf", isLeaf);
