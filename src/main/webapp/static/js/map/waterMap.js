@@ -2,6 +2,7 @@
  * 2016.03.04 author by tangweilong
  */
 var wkid = 4490;
+//var serviceUrl = "http://localhost:6080/arcgis/rest/services/";
 var serviceUrl = "http://10.215.201.151:6080/arcgis/rest/services/";
 //var serviceUrl = "http://127.0.0.1:6080/arcgis/rest/services/";
 var monitor_points_Url = serviceUrl + "monitor_points/MapServer";
