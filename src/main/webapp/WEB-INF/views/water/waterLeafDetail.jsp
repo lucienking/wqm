@@ -25,13 +25,7 @@
 				<td width="33%">水体名称:${water.name}</td><td width="33%">所在区域:${water.area.name} </td><td width="33%">水体面积 :</td>
 			</tr>
 			<tr>
-				<td>平均水深:</td><td>周边乡镇 :</td><td>周边人口:</td>
-			</tr>
-			<tr>
-				<td>水体负责人:</td><td>联系方式 :</td><td>水质类别:  </td>
-			</tr>
-			<tr>
-				<td>水体性质:</td><td>监测站点个数:</td><td>&nbsp;</td>
+				<td>监测站名称:</td><td>监测频率: </td><td>监测站点: </td>
 			</tr>
 			<!-- <tr>
 				<td height="20px" colspan="3" style="padding-top:15px;text-align:center;"> 
@@ -39,6 +33,21 @@
 				</td>
 			</tr> -->
 		</table>
+		</div>
+		<div title="水体监测信息" style="padding-bottom:20px;" data-options="fit:true">
+			<input name="monitorDate" class="easyui-datebox" style="width:120px;"/>
+			<a class="easyui-linkbutton" href="#" >查询</a>
+			<table style="width:99%;cellspacing:0;cellpadding:0;border-collapse:collapse;" align="center"  border="0" cellspacing="0" >
+				<tr>
+					<c:forEach items="${waterMonitorData}" var="data" varStatus="i"> 
+							<td>${data.itemName}:${data.itemValue}</td>
+						<c:if test="${(i.index+1)%3==0}">
+							</tr>
+							<tr>
+						</c:if>
+					</c:forEach>
+				</tr>
+			</table>
 		</div>
 		<div title="水体水文信息" style="padding-bottom:20px;" data-options="fit:true">
 		</div>

@@ -111,6 +111,7 @@ public class WaterController extends BaseController{
 		List<MonitorData> datas =monitorDataService.getMonitorDataByCode(code);
 		model.addAttribute("water", water);
 		model.addAttribute("waterMonitorData", datas);
+		if(water.getIsLeaf()) return "/water/waterLeafDetail";
 		return "/water/waterDetail";
 	}
 	
@@ -248,7 +249,7 @@ public class WaterController extends BaseController{
 		SpecificationFactory<WaterEntity> specf = new SpecificationFactory<WaterEntity>();
 		specf.addSearchParam("parentCode", Operator.EQ, "0".equals(request.getParameter("parentCode"))?"":request.getParameter("parentCode"));
 		specf.addSearchParam("area.code", Operator.EQ, "0".equals(request.getParameter("areaCode"))?"":request.getParameter("areaCode"));
-		specf.addSearchParam("isLeaf",Operator.EQ, true);
+		//specf.addSearchParam("isLeaf",Operator.EQ, true);
 		Page<WaterEntity> waters= waterService.getWatersByPage(specf.getSpecification(),buildPageRequest(request));
 		return convertToResult(waters);
 	}

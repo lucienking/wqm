@@ -50,6 +50,8 @@ public class WaterEntity extends IdEntity {
 	
 	private String parentCode;	//父水体Code
 	
+	private String parentName;	//父水体Name
+	
 	private UserEntity user;	//创建人员
 	
 	private Date createDate;	//创建时间
@@ -104,6 +106,14 @@ public class WaterEntity extends IdEntity {
 
 	public void setParentCode(String parentCode) {
 		this.parentCode = parentCode;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 
 	// JPA 基于USERID列的多对一关系定义

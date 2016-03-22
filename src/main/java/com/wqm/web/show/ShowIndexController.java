@@ -51,7 +51,8 @@ public class ShowIndexController extends BaseController{
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET,value = "/getWaterTree")
 	public List<Map<String,Object>> getWatersJson(@RequestParam(value = "id", defaultValue = "a0") String id,
-			@RequestParam(value = "type", defaultValue = "map") String type){
+			@RequestParam(value = "type", defaultValue = "map") String type,
+			@RequestParam(value = "showLeaf", defaultValue = "N") String showLeaf){
 		String code = id.substring(1);
 		String areaCode = "";
 		String parentCode = "";
@@ -115,7 +116,10 @@ public class ShowIndexController extends BaseController{
 						+"&isLeaf="+water.getIsLeaf());
 				attribute.put("openTab", "Y");
 				map.put("attributes",attribute );
-				tree.add(map);
+				if("Y".equals(showLeaf))
+					tree.add(map);
+				else if(("N".equals(showLeaf)&&!water.getIsLeaf()))
+					tree.add(map);
 			}
 		}
 		return tree;
@@ -172,4 +176,19 @@ public class ShowIndexController extends BaseController{
 	public String indexIntroduce(@RequestParam(value = "introUrl", defaultValue = "0") String introUrl){
 		return introUrl;
 	}
+	
+	/**
+	 * 下拉内容页
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET,value="/accordionPanelContent")
+	public String accordionPanelContent(String treeId,String url,String tabName,Model model){
+		String view  = "/front/waterTree";
+		model.addAttribute("treeId", treeId);
+		model.addAttribute("url", url);
+		model.addAttribute("tabName", tabName);
+		if(url.indexOf("/sys/")>0) return "/front/sysManagerTree";
+		return view;
+	}
+	
 }
