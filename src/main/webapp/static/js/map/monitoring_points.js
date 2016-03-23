@@ -152,7 +152,7 @@ require(
 						onClick : function(node) {
 							// alert(node.text); // alert node text property
 							// when clicked
-							// 断面
+							// 监测站
 							if (!$('#indexTree').tree('isLeaf', node.target)
 									&& (node.id).substr(0, 1) == "w") {
 								selectWater(node.id);
@@ -190,13 +190,13 @@ require(
 			function getMonitoringPointContent(graphic) {
 				// Make a tab container.
 				var scdCode = graphic.attributes.scdCode;
-				var content_Info = "<strong>断面名称:</strong>"
+				var content_Info = "<strong>监测站名称:</strong>"
 						+ graphic.attributes.section_name + "<br>"
-						+ "<strong>断面位置:</strong>"
+						+ "<strong>监测站位置:</strong>"
 						+ graphic.attributes.section_position + "<br>"
 						+ "<strong>水体名称:</strong>"
 						+ graphic.attributes.water_body + "<br>"
-						+ "<strong>断面情况:</strong>"
+						+ "<strong>监测站情况:</strong>"
 						+ graphic.attributes.section_condition + "<br>"
 						+ "<strong>二级编号:</strong>" + scdCode;
 
@@ -433,7 +433,7 @@ require(
 						if (queryResult.length > 0) {
 							displayResult(queryResult,mapSpatialReference, isPoint);
 						} else {
-							$.messager.alert('提示', '没有符合条件的断面', 'info');
+							$.messager.alert('提示', '没有符合条件的监测站', 'info');
 						}
 					}
 				});

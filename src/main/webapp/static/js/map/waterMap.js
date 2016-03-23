@@ -212,13 +212,13 @@ require(
 			function getMonitoringPointContent(graphic) {
 				// Make a tab container.
 				var scdCode = graphic.attributes.scdCode;
-				var content_Info = "<strong>断面名称:</strong>"
+				var content_Info = "<strong>监测站名称:</strong>"
 						+ graphic.attributes.section_name + "<br>"
-						+ "<strong>断面位置:</strong>"
+						+ "<strong>监测站位置:</strong>"
 						+ graphic.attributes.section_position + "<br>"
 						+ "<strong>水体名称:</strong>"
 						+ graphic.attributes.water_body + "<br>"
-						+ "<strong>断面情况:</strong>"
+						+ "<strong>监测站情况:</strong>"
 						+ graphic.attributes.section_condition + "<br>"
 						+ "<strong>二级编号:</strong>" + scdCode;
 
@@ -356,7 +356,7 @@ require(
 					map.centerAt(location);
 					var pointGraphic = new Graphic(location, pointSymbol);
 					map.graphics.add(pointGraphic);
-					map.infoWindow.setTitle("断面信息");
+					map.infoWindow.setTitle("监测站信息");
 					map.infoWindow.setContent(getJumpMonitoringPointContent(queryResult[0].feature.attributes));
 					map.infoWindow.show(location);
 
@@ -379,13 +379,13 @@ require(
 			function getJumpMonitoringPointContent(attributes) {
 				// Make a tab container.
 				var scdCode = attributes.scdCode;
-				var content_Info = "<strong>断面名称:</strong>"
+				var content_Info = "<strong>监测站名称:</strong>"
 						+ attributes.section_name + "<br>"
-						+ "<strong>断面位置:</strong>"
+						+ "<strong>监测站位置:</strong>"
 						+ attributes.section_position + "<br>"
 						+ "<strong>水体名称:</strong>"
 						+ attributes.water_body + "<br>"
-						+ "<strong>断面情况:</strong>"
+						+ "<strong>监测站情况:</strong>"
 						+ attributes.section_condition + "<br>"
 						+ "<strong>二级编号:</strong>" + scdCode;
 				var content_Monitor = monitoring_info(1401);
@@ -450,13 +450,13 @@ require(
 			function getMonitoringPointContent(graphic) {
 				// Make a tab container.
 				var scdCode = graphic.attributes.scdCode;
-				var content_Info = "<strong>断面名称:</strong>"
+				var content_Info = "<strong>监测站名称:</strong>"
 						+ graphic.attributes.section_name + "<br>"
-						+ "<strong>断面位置:</strong>"
+						+ "<strong>监测站位置:</strong>"
 						+ graphic.attributes.section_position + "<br>"
 						+ "<strong>水体名称:</strong>"
 						+ graphic.attributes.water_body + "<br>"
-						+ "<strong>断面情况:</strong>"
+						+ "<strong>监测站情况:</strong>"
 						+ graphic.attributes.section_condition + "<br>"
 						+ "<strong>二级编号:</strong>" + scdCode;
 
@@ -558,7 +558,7 @@ require(
 						if (queryResult.length > 0) {
 							displayResult(queryResult,mapSpatialReference, isPoint);
 						} else {
-							$.messager.alert('提示', '没有符合条件的断面', 'info');
+							$.messager.alert('提示', '没有符合条件的监测站', 'info');
 						}
 					}
 				});

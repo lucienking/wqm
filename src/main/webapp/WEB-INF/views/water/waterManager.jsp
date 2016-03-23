@@ -20,7 +20,7 @@
 					<select id="search_waterIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
 						 <option value="" selected="selected">--请选择--</option>
 					     <option value="false">水体</option>
-			   			 <option value="true">断面</option>
+			   			 <option value="true">监测站</option>
 					</select>
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
@@ -62,7 +62,7 @@
 			水体类型：
 			<select id="waterIsLeaf" class="easyui-combobox" name="isLeaf" style="width:120px;">
 			    <option value="false" selected="selected">水体</option>
-			    <option value="true">断面</option>
+			    <option value="true">监测站</option>
 			</select>
 		</div>
 		<div class="line-div">
@@ -126,7 +126,7 @@ $('#waterDatagrid').datagrid({
         {field:'sortNum',title:'排序',width:'5%'},
         {field:'isLeaf',title:'是否水体',width:'5%',formatter:function(value,rec){
         	if(value)  
-        		return "断面";
+        		return "监测站";
         	else  		  
         		return "水体";
         }},

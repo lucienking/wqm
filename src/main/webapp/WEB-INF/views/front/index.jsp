@@ -11,96 +11,113 @@
 <link type="text/css" href="${ctx }/static/styles/front/header_footer.css" rel="Stylesheet" />
 </head>
 <body>
-    <div class="easyui-layout" data-options="fit:true">
-        <div data-options="region:'north'" style="height:100px">
-        	<div id="north">
-	        	<div class="frosted_glass">
-	        		<div id="title"><h1>海口市智慧水务管理平台</h1></div>
-	        	</div>
-	        	<div id="module_div" class="module_div">
-	        		<div class="mo_div">
-		        		<!-- <div class="module_info"><a href="#">水体信息</a></div>
-		        		<div class="module_info" id="moule_index"><a href="#" tgt="/show/getWaterTree?type=data">监测信息</a></div>
-		        		<div class="module_info"><a href="#">统计分析</a></div>
-		        		<div class="module_info"><a href="#">预警管理</a></div>
-		        		<div class="module_info"><a href="#" tgt="/show/getWaterTree?type=map">电子地图</a></div>
-		        		<div class="module_info"><a href="#" tgt="/sys/menu/getMenus">系统管理</a></div>
-		        		 -->
-		        		<div class="module_info"><a href="#">水资源</a></div>
-		        		<div class="module_info"><a href="#">水环境</a></div>
-		        		<div class="module_info"><a href="#">供排水</a></div>
-		        		<div class="module_info"><a href="#">水文</a></div>
-		        		<div class="module_info"><a href="#">水利普查</a></div>
-		        		<div class="module_info"><a href="#">工程项目</a></div>
-		        		<div class="module_info"><a href="#">规划管理</a></div>
-		        		<div class="module_info"><a href="#">地图管理</a></div>
-	        		</div>
-	        	</div>
-	        	<div class="logout_div">
-	        		<div class="re_div">
-		        		<div class="login_info">当前登录：${userName }</div>
-		        		<div class="login_info"><a href="#">退出登录</a></div>
-		        		<div class="login_info"><a href="#">修改密码</a></div>
-	        		</div>
-	        	</div>
-        	</div>
-        </div>
-        <div data-options="region:'south'" style="height:30px;text-align:center;font-size: 10px;color:gray;">
-        	©2015 海口市龙华区水务局 copyright
-        </div>
-        <div data-options="region:'west',title:'菜单栏'" style="width:250px;">
-        	<div class="easyui-panel" style="padding:5px;height:100%;border:0 solid #FFFFFF">
-				<ul id= "frontIndexTree" class="easyui-tree"  data-options="url:'${ctx }/show/getWaterTree',method:'get'"> 
-				</ul>
-			</div>
-        </div>
-        <div data-options="region:'center',iconCls:'icon-ok',border:false" >
-        	 <div id="frontMainTabs">
-				<div id="frontMainTab" title="首页" style="padding: 10px"></div>	
-			</div>
-        </div>
-    </div>
+ <div class="easyui-layout" data-options="fit:true">
+     <div data-options="region:'north'" style="height:100px">
+     	<div id="north">
+      	<div class="frosted_glass">
+      		<div id="title"><h1>海口市智慧水务管理平台</h1></div>
+      	</div>
+      	<div id="module_div" class="module_div">
+      		<div class="mo_div">
+       		<div class="module_info" ><a href="#" onclick="moduleOnclick('waterEnviromentAccordion')">水资源</a></div>
+       		<div class="module_info" id="module_index"><a href="#" onclick="moduleOnclick('waterResourceAccordion')">水环境</a></div>
+       		<div class="module_info"><a href="#">供排水</a></div>
+       		<div class="module_info"><a href="#">水文</a></div>
+       		<div class="module_info"><a href="#">水利普查</a></div>
+       		<div class="module_info"><a href="#">工程项目</a></div>
+       		<div class="module_info"><a href="#">规划管理</a></div>
+       		<div class="module_info"><a href="#">地图管理</a></div>
+      		</div>
+      	</div>
+      	<div class="logout_div">
+      		<div class="re_div">
+       		<div class="login_info">当前登录：${userName }
+       			<input id="currentUserName" type="hidden" name="currentUserName" value="${userName }"/>
+       		</div>
+       		<div class="login_info"><a href="#">退出登录</a></div>
+       		<div class="login_info"><a href="#">修改密码</a></div>
+      		</div>
+      	</div>
+     	</div>
+     </div>
+     <div data-options="region:'south'" style="height:30px;text-align:center;font-size: 10px;color:gray;">
+     	©2015 海口市龙华区水务局 copyright
+     </div>
+     <div data-options="region:'west'" style="width:250px;">
+     	<div  id="westRegionAccordion" style="width:100%;">
+     	</div>
+     <%-- 	 
+      		<!-- <a href="#" tgt="/show/getWaterTree?type=data">监测信息</a> -->
+      		<!-- <a href="#" tgt="/show/getWaterTree?type=map">电子地图</a> -->
+      		<!-- <a href="#" tgt="/sys/menu/getMenus">系统管理</a> -->
+       --%>
+     </div> 
+     <div data-options="region:'center',iconCls:'icon-ok',border:false" >
+     	 <div id="frontMainTabs">
+			<div id="frontMainTab" title="首页" style="padding: 10px"></div>	
+		 </div>
+     </div>
+ </div>
 <script>
-var ctx = "${ctx}";
-
-/*
- * 菜单栏点击事件
- */ 
- var ctx = "${ctx}";
- $('#frontMainTabs').tabs({
-	 border:false,
-	 url:"${ctx}/admin/index"
+$(function(){
+	 var ctx = "${ctx}";
+	 $('#frontMainTabs').tabs({
+		 border:false,
+		 url:"${ctx}/admin/index"
 	 });
- $('#frontIndexTree').tree({
-		onClick: function(node){
-			if($('#frontIndexTree').tree('isLeaf',node.target)){
-				openTab(node);
-			}else if(!$('#frontIndexTree').tree('isLeaf',node.target)&& node.attributes.openTab=="Y"){
-				$('#frontIndexTree').tree(node.state === 'closed' ? 'expand' : 'collapse', node.target);
-				openTab(node);
-			}else{
-				$('#frontIndexTree').tree(node.state === 'closed' ? 'expand' : 'collapse', node.target);
-				return;
+	 $('#westRegionAccordion').accordion({
+		    animate:false,
+		    onSelect:function(title,index){
+				if(title=="系统管理"&&$("#currentUserName").val()=="") {
+					window.location.href = "${ctx}/";
+					//window.location.href = "${ctx}/login";
+				}
 			}
+	 });
+	 $("#module_index a").click();
+});
+function moduleOnclick(id){
+	
+	var array = "";  
+	if(id == "waterEnviromentAccordion"){
+		array = {'污水处理厂进出水':"",'市政污水提升泵站污水':"",'s水网动力工程地表水':"/wqm/show/getWaterTree?type=data&showLeaf=Y",'饮用水源地':"",'自来水厂出水':"",'供水管网点':"",'中型水库':"",'主要河流':""};
+	}else{
+		array = {'水体信息':"",'s监测信息':"/wqm/show/getWaterTree?type=data&showLeaf=N",'统计分析':"",'预警管理':"",'电子地图':"/wqm/show/getWaterTree?type=map&showLeaf=Y",'系统管理':"/wqm/sys/menu/getMenus"};
+	}
+	closeAll();
+	removeAllAccordion();
+	var i = 0;
+	$.each(array,function(name,value){
+		var selected = false;
+		if(name.substring(0,1)== 's'){
+			name = name.substring(1);
+			selected = true;
 		}
-	});  
- $("#module_div a").click(function(){
-	 var href = $(this).attr("tgt");
-	 $("#frontIndexTree").tree("options").url= ctx+href;
-	 $('#frontIndexTree').tree("reload");
-	 closeAll();
- });
- 
- function closeAll() {
-     $(".tabs li").each(function(index, obj) {
-           //获取所有可关闭的选项卡
-         var tab = $(this).text();
-         console.log(tab);
-         if(tab!="首页") $("#frontMainTabs").tabs('close', tab);
-         console.log(tab+"  close");
-     });
-   }
- function openTab(node){
+		$('#westRegionAccordion').accordion('add', {
+			title: name,
+			href:"${ctx}/show/accordionPanelContent?treeId="+id+i+"&url="+value+"&tabName="+name,
+			selected: selected
+		});
+		i++;
+	});
+}
+
+
+function removeAllAccordion(){
+	$(".panel-title").each(function(index, obj) {
+		 var panel = $(this).text();
+		 $('#westRegionAccordion').accordion("remove",panel);
+	});
+}
+
+function closeAll() {
+    $(".tabs-title").each(function(index, obj) {
+          //获取所有可关闭的选项卡
+        var tab = $(this).text();
+        if(tab!="首页") $("#frontMainTabs").tabs('close', tab);
+    });
+}
+function openTab(node){
 	var title = node.text;
 	var url = '${ctx}'+node.attributes.url;
 	var openType = node.attributes.openType;
@@ -135,9 +152,7 @@ var ctx = "${ctx}";
 		});
 	}
 	return;
- }
- 
- $("#moule_index a").click();
+}
 </script>
 </body>
 </html>

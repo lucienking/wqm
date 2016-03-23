@@ -21,17 +21,17 @@
 			<tr>
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataName">区域</label>
-					<input id="search_monitorDataName" name="name" class="easyui-textbox" style="width:120px;"/>
-					<input type="hidden" name="areaCode" value="${areaCode =='01'?'0':areaCode }">
-					<input type="hidden" name="parentCode" value="${parentCode }">
+					<input id="search_Area" name="areaCode"  class="easyui-textbox" style="width:120px;"/>
+					<input id="hidden_areaCode" type="hidden" name="areaCode" value="${areaCode =='01'?'0':areaCode }">
+					<input id="hidden_parentCode" type="hidden" name="parentCode" value="${parentCode }">
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataCode">水体</label>
-					<input id="search_monitorDataCode" name="code" class="easyui-textbox" style="width:120px;"/>
+					<input id="search_Water" name="waterCode"  style="width:120px;" />
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
-					<label for="search_monitorDataCode">截面</label>
-					<input id="search_monitorDataCode" name="code" class="easyui-textbox" style="width:120px;"/>
+					<label for="search_monitorDataCode">监测站</label>
+					<input id="search_LeafWater" name="leafWaterCode" style="width:120px;" />
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_userName">操作员</label>
@@ -68,7 +68,7 @@
 				<input id="monitor_Water" name="" style="width:120px;" />
 				</div>
 			<div id="monitorDataCreateDiv" class="line-div">
-				选择截面：
+				选择监测站：
 				<input id="monitor_LeafWater" name="waterCode" style="width:120px;" />
 				监测时间：
 				<input id="monitor_Date" name="monitorDate" value="${currentDate }" class="easyui-datebox" style="width:120px;"/>
@@ -110,15 +110,14 @@ $('#monitorDataDatagrid').datagrid({
     columns:[[
         {checkbox:true,field:'',title:'' },
         {field:'id',title:'编号',width:'5%',sortable:true},
-        {field:'code',title:'断面编码',width:'10%'},
-        {field:'name',title:'断面名称',width:'10%'},
+        {field:'name',title:'监测站名称',width:'10%'},
         {field:'area',title:'所属区域',width:'10%',formatter:function(value,rec){
         	if(rec.area)  
         		return rec.area.name;
         	else  		  
         		return "未知";
         }},
-        {field:'parentCode',title:'所属水体',width:'10%'},
+        {field:'parentName',title:'所属水体',width:'10%'},
         {field:'createDate',title:'最后监测日期',width:'10%'},
         {field:'operator',title:'水体负责人',width:'10%'},
         {field:'telephone',title:'联系方式',width:'10%'} 
@@ -128,7 +127,15 @@ $('#monitorDataDatagrid').datagrid({
 	onSelect: function(index,row){monitorDataSelectChange(index,row);},
 	onUnselect: function(index,row){monitorDataSelectChange(index,row);},
     onDblClickRow:function (index,row){	   //双击行事件 
-    	monitorDataDataDialog("监测数据编辑",row);
+    	$("#monitorDataDetailDialog").show(); //先显示，再弹出
+	   	 $("#monitorDataDetailDialog").dialog({
+	   		  title:'水体详细信息',
+	   	      href:"${ctx}/water/waterDetail?code="+row.code,
+	   	      width:500,
+	   	      left:150,
+	   	      top:80,
+	   	      modal:true
+	   	  });
     } 
 });
 
@@ -324,7 +331,6 @@ $("#monitor_Area").combobox({
     valueField:'code',
     textField:'name',
     method:'GET',
-  //queryParams:{"farmCode":$("#contract_atFarmCode").val()},
    	onSelect:function(value){
    		$('#monitor_Water').combobox('clear'); 
    		var url = '${ctx}/water/getWaterByAreaCode?areaCode='+value.code;
@@ -334,8 +340,6 @@ $("#monitor_Area").combobox({
    		$('#monitor_LeafWater').combobox('reload', url); 
    	}
 });
-
-
 $("#monitor_Water").combobox({
     url:'${ctx}/water/getWaterByAreaCode',
     valueField:'code',
@@ -347,7 +351,6 @@ $("#monitor_Water").combobox({
    		$('#monitor_LeafWater').combobox('reload', url); 
    	}
 });
-
 $("#monitor_LeafWater").combobox({
     url:'${ctx}/water/getWatersByParent',
     valueField:'code',
@@ -378,21 +381,63 @@ $("#monitor_LeafWater").combobox({
   */
   $("#monitorDataToMapButton").click(function(){
  	 var code = $("#monitorDataDatagrid").datagrid("getSelected").code;
- 	 var name = $("#monitorDataDatagrid").datagrid("getSelected").name+"地图信息";
+ 	 var name ="电子地图";
  	 var url = "${ctx}/show/waterMap?waterId=w"+code+"&&isLeaf=true";
- 	 var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
- 	 $("#monitorDataToMapDialog").show(); //先显示，再弹出
- 	 $("#monitorDataToMapDialog").dialog({
- 		  title:name,
- 	      content:content,
- 	      width:1280,
- 	      height:600,
- 	      left:50,
- 	      top:30,
- 	      modal:true
- 	  });
+ 	var flag = parent.$("#frontMainTabs").tabs('exists', name);
+	if (flag) {
+		parent.$("#frontMainTabs").tabs('select', name);
+	} else{
+		var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
+		parent.$('#frontMainTabs').tabs('add',{
+			id:"elecMapTab",
+			title:name,
+			content:content,
+			closable:true  
+		});
+	}
   });
  
+  $("#search_Area").combobox({
+	    url:'${ctx}/area/getParents',
+	    valueField:'code',
+	    textField:'name',
+	    method:'GET',
+	   	onSelect:function(value){
+	   		$('#search_Water').combobox('clear'); 
+	   		var url = '${ctx}/water/getWaterByAreaCode?areaCode='+value.code;
+	   		$('#search_Water').combobox('reload', url); 
+	   		$('#search_LeafWater').combobox('clear');
+	   		var url = '${ctx}/water/getWatersByParent?code=';
+	   		$('#search_LeafWater').combobox('reload', url); 
+	   	} 
+	});
+	$("#search_Water").combobox({
+	    url:'${ctx}/water/getWaterByAreaCode',
+	    valueField:'code',
+	    textField:'name',
+	    method:'GET',
+	 	onSelect:function(value){
+	   		$('#search_LeafWater').combobox('clear'); 
+	   		var url = '${ctx}/water/getWatersByParent?code='+value.code;
+	   		$('#search_LeafWater').combobox('reload', url); 
+	   	} 
+	});
+	$("#search_LeafWater").combobox({
+	    url:'${ctx}/water/getWatersByParent',
+	    valueField:'code',
+	    textField:'name',
+	    method:'GET'
+	});
+ $(function(){
+	 var parentCode = "0";
+	 var areaCode  = "01";
+	 if($("#hidden_parentCode").val() != ""&&$("#hidden_parentCode").val() != undefined) 
+	 	 parentCode = $("#hidden_parentCode").val();
+	 if($("#hidden_areaCode").val() != ""&&$("#hidden_areaCode").val() != undefined&&$("#hidden_areaCode").val() != "0") 
+	 	 areaCode = $("#hidden_areaCode").val();
+	 $("#search_Area").combobox("setValue",areaCode);
+	 $("#search_Water").combobox("setValue",parentCode);
+ })
 </script>
 </div>
 </body>

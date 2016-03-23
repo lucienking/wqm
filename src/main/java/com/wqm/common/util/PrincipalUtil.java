@@ -44,6 +44,7 @@ public class PrincipalUtil {
 		}
 		ShiroUser user = (ShiroUser) principalCollection.getPrimaryPrincipal();
 		infomap.put("userName", user.getName());
+		infomap.put("name", user.getName());
 		return infomap;
 	}
 	
