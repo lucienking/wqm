@@ -22,16 +22,13 @@
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataName">区域</label>
 					<input id="search_Area" name="areaCode"  class="easyui-textbox" style="width:120px;"/>
-					<input id="hidden_areaCode" type="hidden" name="areaCode" value="${areaCode =='01'?'0':areaCode }">
-					<input id="hidden_parentCode" type="hidden" name="parentCode" value="${parentCode }">
+					<input id="hidden_areaCode" type="hidden" name="areaCode" value="${areaCode =='01'?'0':areaCode }"/>
+					<input id="hidden_parentCode" type="hidden" name="parentCode" value="${parentCode }"/>
+					<input type="hidden" name="isLeaf" value="false"/>
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataCode">水体</label>
 					<input id="search_Water" name="waterCode"  style="width:120px;" />
-				</td>
-				<td width="18%" align="center" style="min-width:150px">
-					<label for="search_monitorDataCode">监测站</label>
-					<input id="search_LeafWater" name="leafWaterCode" style="width:120px;" />
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_userName">操作员</label>
@@ -42,7 +39,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="4"  width="90%" >
+				<td colspan="3"  width="90%" >
 					&nbsp;
 				</td>
 				<td colspan="1" width="10%" align="left" >
@@ -84,7 +81,7 @@
 </div>
 
 <div id="monitorData_toolbar">
-	<c:if test="${ areaCode=='0'&&parentCode=='0'}">
+	<c:if test="${ userName==''&&userName==null}">
 	<jksb:hasAutority authorityId="007001001">
 		<a href="javascript:monitorDataAddData()" id = "monitorDataAddButton" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" >监测登记</a>
 	</jksb:hasAutority>
@@ -104,13 +101,13 @@
  *  datagrid 初始化 
  */
 $('#monitorDataDatagrid').datagrid({
-    url:"${ctx}/water/getMoniteredWater",
+    url:"${ctx}/water/getWaterData",
     method:'get',
     pagination:true,
     columns:[[
         {checkbox:true,field:'',title:'' },
         {field:'id',title:'编号',width:'5%',sortable:true},
-        {field:'name',title:'监测站名称',width:'10%'},
+        {field:'name',title:'水体名称',width:'10%'},
         {field:'area',title:'所属区域',width:'10%',formatter:function(value,rec){
         	if(rec.area)  
         		return rec.area.name;
