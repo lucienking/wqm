@@ -2,9 +2,9 @@
  * 2016.03.04 author by tangweilong
  */
 var wkid = 4490;
-//var serviceUrl = "http://localhost:6080/arcgis/rest/services/";
+// var serviceUrl = "http://localhost:6080/arcgis/rest/services/";
 var serviceUrl = "http://10.215.201.151:6080/arcgis/rest/services/";
-//var serviceUrl = "http://127.0.0.1:6080/arcgis/rest/services/";
+// var serviceUrl = "http://127.0.0.1:6080/arcgis/rest/services/";
 var monitor_points_Url = serviceUrl + "monitor_points/MapServer";
 var water_pollution_Url = serviceUrl + "water_pollution/MapServer";
 var haikou_region_Url= serviceUrl +"haikou_region/MapServer";
@@ -43,19 +43,20 @@ require(
 				"xmax" : 445812.31259999983,
 				"ymax" : 2221406.5243999995,
 				"spatialReference" : mapSpatialReference
-				
 			});
 			var map = new Map("map", {
 				zoom : 16,
 				extent : bounds,
 				infoWindow : infoWindow,
+				isZoomSlider:false,
 				logo : false
 			});
 			map.infoWindow.resize(400, 300);
-//			var home = new HomeButton({
-//				map : map
-//			}, "homeButton");
-//			home.startup();
+
+// var home = new HomeButton({
+// map : map
+// }, "homeButton");
+// home.startup();
 			var scalebar = new Scalebar({ // 比例尺
 				map : map,
 				attachTo : "bottom-left",
@@ -66,47 +67,14 @@ require(
 			/**
 			 * 鹰眼图
 			 */
-//			var overviewMapDijit = new OverviewMap({
-//				map : map,
-//				attachTo : "bottom-left",
-//				visible : true
-//			}, dom.byId("overViewMap"));
-//			overviewMapDijit.startup();
-			/**
-			 * 工具栏
-			 */
-			navToolbar = new Navigation(map);
-			on(navToolbar, "onExtentHistoryChange", extentHistoryChangeHandler);
+// var overviewMapDijit = new OverviewMap({
+// map : map,
+// attachTo : "bottom-left",
+// visible : true
+// }, dom.byId("overViewMap"));
+// overviewMapDijit.startup();
+			//toolBar(map);
 
-			registry.byId("zoomin").on("click", function() {
-				navToolbar.activate(Navigation.ZOOM_IN);
-			});
-
-			registry.byId("zoomout").on("click", function() {
-				navToolbar.activate(Navigation.ZOOM_OUT);
-			});
-
-			registry.byId("zoomfullext").on("click", function() {
-				navToolbar.zoomToFullExtent();
-			});
-
-			registry.byId("zoomprev").on("click", function() {
-				navToolbar.zoomToPrevExtent();
-			});
-
-			registry.byId("zoomnext").on("click", function() {
-				navToolbar.zoomToNextExtent();
-			});
-
-			registry.byId("pan").on("click", function() {
-				navToolbar.activate(Navigation.PAN);
-			});
-
-			registry.byId("deactivate").on("click", function() {
-				navToolbar.deactivate();
-			});
-
-			
 			/**
 			 * 定义弹窗
 			 */
@@ -121,65 +89,119 @@ require(
 			water_pollution_info.setContent(getWaterContent);
 			var monitoring_point_layer = new FeatureLayer(monitor_points_Url
 					+ "/0", {
-				"opacity" : 1,
+				"opacity" : 0,
 				outFields : monitoring_point_filed,
 				infoTemplate : monitoring_point_info
 			});
+			var water_pollution_Dynamiclayer = new ArcGISDynamicMapServiceLayer(water_pollution_Url,{
+				"id": "layer0",
+		        "opacity": 1
+			});
+//			water_pollution_Dynamiclayer.setInfoTemplates({
+//			        0: { infoTemplate: water_pollution_info }
+//			      });
 			var water_pollution_layer = new FeatureLayer(water_pollution_Url
 					+ "/0", {
 				"opacity" : 1,
 				outFields : water_pollution_filed,
 				infoTemplate : water_pollution_info
 			});
+			var monitoring_point_Dynamiclayer= new ArcGISDynamicMapServiceLayer(monitor_points_Url,{
+				"id": "layer1",
+		        "opacity": 1
+			});
+//			monitoring_point_Dynamiclayer.setInfoTemplates({
+//			        0: { infoTemplate: monitoring_point_info}
+//			      });
 			var haikou_region_Dynamiclayer = new ArcGISDynamicMapServiceLayer(
-					haikou_region_Url);
-			map.addLayer();
-			var legend = new Legend({
-				map : map,
-				layerInfos : [ {
-					layer : monitoring_point_layer,
-					title : "监测点"
-				}, {
-					layer : water_pollution_layer,
-					title : "监测水体"
-				} ]
-			}, "legend");
-			legend.startup();
-			var layers = [ water_pollution_layer, monitoring_point_layer,
-			               haikou_region_Dynamiclayer ];
-			map.addLayers(layers);
+					haikou_region_Url,{
+						"id": "layer2"
+					});
 			
+			
+
+			var subNodes = [];
+			var visible = [];
+			var layers = [{"layer": water_pollution_Dynamiclayer,"name":"水体","id":2},
+			          {"layer": monitoring_point_Dynamiclayer,"name":"监测点","id":2},
+			          {"layer": haikou_region_Dynamiclayer,"name":"区划","id":13},
+			          {"layer":monitoring_point_layer },{"layer":water_pollution_layer}];
+			 for (let i = 0; i < layers.length; i++) {
+				 if(i<3){
+		            if (layers[i].layer.loaded) {
+		              buildLayerList(layers[i].layer);
+		            } else {
+		              dojo.connect(layers[i].layer, "onLoad", buildLayerList);
+		            }
+				 } 
+		            // 添加到地图控件进行显示
+		            map.addLayer(layers[i].layer);
+		          }
+//			 var legend = new Legend({
+//					map : map,
+//					layerInfos : [ {
+//						layer : monitoring_point_Dynamiclayer,
+//						title : "监测点"
+//					}, {
+//						layer : water_pollution_Dynamiclayer,
+//						title : "监测水体"
+//					} ,{
+//						layer : haikou_region_Dynamiclayer,
+//						title : "区划"
+//					}]
+//				}, "legend");
+//				legend.startup();
 			isJump();
-			//selectMontoringpoints('w010400101');
-			//on(layers,'loaded',isJump);
+			
 			function isJump() {
-//				var waterId = $("#map_waterId").val();
-//				var isLeaf = $("#map_isLeaf").val();
-				var Request=getRequest();
-				var waterId = Request["waterId"]; // 取出参数
-			    var isLeaf = Request["isLeaf"];
+				var waterId = $("#map_waterId").val();
+				var isLeaf = $("#map_isLeaf").val();
+// var Request=getRequest();
+// var waterId = Request["waterId"]; // 取出参数
+// var isLeaf = Request["isLeaf"];
 				if (waterId != "" && isLeaf != "" && waterId != 0 && isLeaf !=0) {
-					if (isLeaf == "Y") {
+					if (isLeaf == "true") {
 						selectMontoringpoints(waterId);
 						console.log(0);
-					} else {
+					} else if(isLeaf == "false") {
 						selectWater(waterId);
 					}
 				}
 			}
-			function getRequest() {
-			    var url = location.search;
-			    var Request = new Object();
-			    if (url.indexOf("?") != -1) { // 判断是否有参数
-			        var str = url.substr(1);
-			        strs = str.split("&&");
-			        for (var i = 0; i < strs.length; i++) {
-			            Request[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
-			        }
-			    } else {
-			        return;
-			    }
-			    return Request;
+			function toolBar(map){
+				/**
+				 * 工具栏
+				 */
+				var navToolbar = new Navigation(map);
+				on(navToolbar, "onExtentHistoryChange", extentHistoryChangeHandler);
+
+				registry.byId("zoomin").on("click", function() {
+					navToolbar.activate(Navigation.ZOOM_IN);
+				});
+
+				registry.byId("zoomout").on("click", function() {
+					navToolbar.activate(Navigation.ZOOM_OUT);
+				});
+
+				registry.byId("zoomfullext").on("click", function() {
+					navToolbar.zoomToFullExtent();
+				});
+
+				registry.byId("zoomprev").on("click", function() {
+					navToolbar.zoomToPrevExtent();
+				});
+
+				registry.byId("zoomnext").on("click", function() {
+					navToolbar.zoomToNextExtent();
+				});
+
+				registry.byId("pan").on("click", function() {
+					navToolbar.activate(Navigation.PAN);
+				});
+
+				registry.byId("deactivate").on("click", function() {
+					navToolbar.deactivate();
+				});
 			}
 			
 			function extentHistoryChangeHandler() {
@@ -271,7 +293,6 @@ require(
 						console.log("status:" + status);
 					}
 				});
-				// var monitor_inf_length = getJsonObjLength(monitor_inf);
 				return monitor_inf_Element;
 			}
 			function getMonitorInfElement(monitor_inf, monitor_inf_length) {
@@ -412,6 +433,149 @@ require(
 				pointTab.addChild(contentFiles);
 				return pointTab.domNode;
 			}
+			
+			function getChildrenNodes(parentnodes, node) {
+		          for (let i = parentnodes.length - 1; i >= 0; i--) {
+		            var pnode = parentnodes[i];
+		            // 如果是父子关系，为父节点增加子节点，退出for循环
+		            if (pnode.id == node.pid) {
+		              pnode.state = "closed";// 关闭二级树
+		              pnode.children.push(node);
+		              return;
+		            } else {
+		              // 如果不是父子关系，删除父节点栈里当前的节点，
+		              // 继续此次循环，直到确定父子关系或不存在退出for循环
+		              parentnodes.pop();
+		            }
+		          }
+		        }
+		    function buildLayerList(layer) {
+		          // 构建图层树形结构
+		        console.log("构建节点");	
+		        var id = 0;
+		        var name = "";
+		        for (let i = 0; i < layers.length; i++) {
+		            if (layer == layers[i].layer) {
+		              id = layers[i].id;
+		              name = layers[i].name;
+		              break;
+		            }
+		          }	
+		          var layerinfos = layer.layerInfos;
+		          //console.log(layerinfos);
+		          // var treeList = [];//jquery-easyui的tree用到的tree_data.json数组
+		          var parentnodes = [];// 保存所有的父亲节点
+		          var pnode = {"id": "node" & id, "text": name, "children": []};// 增加一个根节点
+		          console.log(layerinfos.length);
+		          console.log(pnode);
+		          
+		          var node = {};
+		          
+		          if (layerinfos !=null && layerinfos.length > 0) {
+		        	  console.log("002");
+		            for (let z = 0, j = layerinfos.length; z < j; z++) {
+		              var info = layerinfos[z];
+		              if (info.defaultVisibility) {
+		                visible.push(info.id);
+		              }
+		              // node为tree用到的json数据
+		              node = {
+		                "id": info.id,
+		                "text": info.name,
+		                "pid": info.parentLayerId,
+		                "checked": info.defaultVisibility ? true : false,
+		                "attr":layer.id,
+		                "children": []
+		              };
+		              if (info.parentLayerId == -1) {
+		                parentnodes.push(node);
+		                pnode.children.push(node);
+		              } else {
+		                getChildrenNodes(parentnodes, node);
+		                parentnodes.push(node);
+		              }
+		            }
+		            console.log("加载节点");
+		            subNodes.push(pnode);
+		          }
+		          if(subNodes[2]!=undefined&&subNodes[0]!=undefined&&subNodes[1]!=undefined){
+		          var root = {
+		            "id": "rootnode", "text": "海口市", "children": [
+		              {
+		                "id": 1,
+		                "text": "基础地理数据",
+		                "children": [{
+		                  "id": 11,
+		                  "text": "影像图"
+		                },
+		                  {
+		                    "id": 12,
+		                    "text": "道路",
+		                    "checked": true,
+		                  },
+		                  {
+		                    "id": 13,
+		                    "text": "行政区划",
+		                    "checked": true,
+		                    "children": [subNodes[2]],
+		                  },
+		                  {
+		                    "id": 14,
+		                    "text": "地名",
+		                    "value": "anno",
+		                    "checked": true,
+		                    "children":[]
+		                  }
+		                ]
+		              },
+		              {
+		                "id": 2,
+		                "text": "水资源",
+		                "checked": true,
+		                "children": [subNodes[0],subNodes[1]]
+		              }
+		            ]
+		          };
+		          addTree(root);
+		          }
+		        }
+
+		        function addTree(root) {
+		          var treeList = [];// jquery-easyui的tree用到的tree_data.json数组
+		          treeList.push(root);
+		          // jquery-easyui的树
+		          $('#toc').tree({
+		            data: treeList,
+		            checkbox: true, // 使节点增加选择框
+		            onCheck: function (node, checked) {// 更新显示选择的图层
+		            	var nodes = $('#toc').tree("getChecked") ;
+		                setVisibleLayer("layer0",nodes);
+		                setVisibleLayer("layer1",nodes);
+		                setVisibleLayer("layer2",nodes);
+		            }
+		          });
+		        }
+
+		        function isLeaf(node) {
+		          return $(node).tree('isLeaf', node.target);
+		        }
+		        
+		        function setVisibleLayer(name,nodes){
+		            var visible1=[];
+		            dojo.forEach(nodes, function(node) {
+		              if(node.attr==name&&isLeaf(node)==true){
+		                visible1.push(node.id);
+		              }
+		            });
+
+		            if (visible1.length === 0) {
+		              visible1.push(-1);
+		            }
+		            console.log(visible1);
+		            var layer=map.getLayer(name);
+		            layer.setVisibleLayers(visible1);
+		          } 
+			
 			/**
 			 * 获取结果集的范围
 			 */
@@ -447,6 +611,7 @@ require(
 					"spatialReference":mapSpatialReference
 				});
 			}
+			
 			function getMonitoringPointContent(graphic) {
 				// Make a tab container.
 				var scdCode = graphic.attributes.scdCode;
@@ -506,6 +671,7 @@ require(
 				waterTab.addChild(contentFiles);
 				return waterTab.domNode;
 			}
+			
 			function selectWater(id) {
 				var query = new Query();
 				var queryTask = new QueryTask(water_pollution_Url + "/0");
@@ -535,6 +701,7 @@ require(
 					}
 				});
 			}
+			
 			function selectMontoringpoints(id) {
 				var query = new Query();
 				var queryTask = new QueryTask(monitor_points_Url + "/0");
@@ -549,7 +716,6 @@ require(
 					if (results.features) {
 						for ( var index in results.features) {
 							var feature = results.features[index];
-							var extent = feature.geometry.getExtent();
 							var result = {
 								feature : feature
 							};
