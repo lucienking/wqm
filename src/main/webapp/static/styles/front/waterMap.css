@@ -1,0 +1,98 @@
+@CHARSET "UTF-8";
+/* map element */
+@import "../static/arcgisApi/3.16compact/dijit/themes/claro/claro.css";
+
+body,#map {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+.dijitSliderIncrementIconV, .dijitSliderDecrementIconV {  
+    display: none;  
+}
+.infowindow .window {
+	overflow: visible;
+	border-style: none;
+	padding: 0;
+}
+
+.infowindow_tab {
+	border-collapse:collapse;
+	border: 1px;
+	width: 100%;
+	border-color: #D9E7F3;
+}
+
+/* legend element */
+#info {
+	width: 10%;
+	height: 20%;
+	background-color: #fff;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	padding-left: 10px;
+	padding-top: 10px;
+	border-radius: 10px;
+	border: 2px double #95B8E7;
+}
+
+#homeButton {
+	position: absolute;
+	top: 95px;
+	left: 26px;
+	z-index: 50;
+}
+/*overridemap*/
+.esriOverviewMap.ovwBL .ovwContainer {
+	border: none;
+	border: 1px solid #95B8E7;
+	border-radius: 10px;
+}
+
+.esriOverviewMap .ovwContainer {
+	background-color: #95B8E7;
+}
+/*工具条*/
+.zoominIcon {
+	background-image: url(../../images/map/nav_zoomin.png);
+	width: 16px;
+	height: 16px;
+}
+
+.zoomoutIcon {
+	background-image: url(../../images/map/nav_zoomout.png);
+	width: 16px;
+	height: 16px;
+}
+
+.zoomfullextIcon {
+	background-image: url(../../images/map/nav_fullextent.png);
+	width: 16px;
+	height: 16px;
+}
+
+.zoomprevIcon {
+	background-image: url(../../images/map/nav_previous.png);
+	width: 16px;
+	height: 16px;
+}
+
+.zoomnextIcon {
+	background-image: url(../../images/map/nav_next.png);
+	width: 16px;
+	height: 16px;
+}
+
+.panIcon {
+	background-image: url(../../images/map/nav_pan.png);
+	width: 16px;
+	height: 16px;
+}
+
+.deactivateIcon {
+	background-image: url(../../images/map/nav_decline.png);
+	width: 16px;
+	height: 16px;
+}
