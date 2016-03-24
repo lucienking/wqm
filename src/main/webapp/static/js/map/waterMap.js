@@ -23,15 +23,15 @@ require(
 				"esri/tasks/query", "esri/tasks/QueryTask",
 				"esri/dijit/Scalebar", "dijit/layout/TabContainer",
 				"dijit/layout/ContentPane", "esri/dijit/InfoWindow",
-				"dojo/dom-construct", "esri/toolbars/navigation",
-				"dijit/registry","CustomModules/geometryUtils", "dijit/Toolbar", "dojo/domReady!" ],
+				"dojo/dom-construct","dijit/registry",
+				"CustomModules/geometryUtils", "dijit/Toolbar", "dojo/domReady!" ],
 		function(Map, WebTiledLayer, Extent, Point, TileInfo, parser,
 				OverviewMap, SpatialReference, ArcGISDynamicMapServiceLayer,
 				Navigation, FeatureLayer, InfoTemplate, on, dom, Legend,
 				HomeButton, SimpleFillSymbol, SimpleMarkerSymbol,
 				SimpleLineSymbol, Color, Graphic, Query, QueryTask, Scalebar,
 				TabContainer, ContentPane, InfoWindow, domConstruct,
-				Navigation, registry,geometryUtils) {
+				registry,geometryUtils) {
 			var infoWindow = new InfoWindow(null, domConstruct.create("div"));
 			infoWindow.startup();
 			parser.parse();
@@ -48,7 +48,7 @@ require(
 				zoom : 16,
 				extent : bounds,
 				infoWindow : infoWindow,
-				isZoomSlider:false,
+				slider:false,
 				logo : false
 			});
 			map.infoWindow.resize(400, 300);
@@ -73,7 +73,7 @@ require(
 // visible : true
 // }, dom.byId("overViewMap"));
 // overviewMapDijit.startup();
-			//toolBar(map);
+			toolBar(map);
 
 			/**
 			 * 定义弹窗
