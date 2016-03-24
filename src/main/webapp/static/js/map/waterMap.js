@@ -102,7 +102,7 @@ require(
 //			      });
 			var water_pollution_layer = new FeatureLayer(water_pollution_Url
 					+ "/0", {
-				"opacity" : 1,
+				"opacity" : 0,
 				outFields : water_pollution_filed,
 				infoTemplate : water_pollution_info
 			});
