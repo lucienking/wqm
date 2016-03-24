@@ -55,8 +55,19 @@ function openTab(node,tabName){
 	});
 	var flag = $("#frontMainTabs").tabs('exists', title);
 	if (flag) {
-		var tab = $('#frontMainTabs').tabs('getTab',title);   
-		tab.panel('refresh', url);
+		if(url.indexOf("waterMap")>0){
+			$('#frontMainTabs').tabs('close',title); 
+			var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
+			$('#frontMainTabs').tabs('add',{
+				id:id,
+				title:title,
+				content:content,
+				closable:true  
+			});
+		}else{
+			var tab = $('#frontMainTabs').tabs('getTab',title);   
+			tab.panel('refresh', url);
+		}
 	}else{
 		var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
 		$('#frontMainTabs').tabs('add',{

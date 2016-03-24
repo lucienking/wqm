@@ -93,12 +93,15 @@ public class ShowIndexController extends BaseController{
 				Map<String,String> attribute = new HashMap<String,String>();
 				if(!water.getIsLeaf()){
 					map.put("state","closed");
+					
 					attribute.put("url", url+"?parentCode="+parentCode+water.getCode()
 							+"&areaCode="+areaCode+water.getArea().getCode()
+							+"&waterId="+parentCode+water.getCode()
 							+"&isLeaf="+("Y".equals(showLeaf)?"true":"false"));
 				}else{
 					attribute.put("url", url+"?code="+parentCode+water.getCode()
 							+"&areaCode="+areaCode+water.getArea().getCode()
+							+"&waterId="+parentCode+water.getCode()
 							+"&isLeaf="+("Y".equals(showLeaf)?"true":"false"));
 				}
 				map.put("text",text);
@@ -122,8 +125,9 @@ public class ShowIndexController extends BaseController{
 				}else{
 					if("data".equals(type))url = "/monitorData/waterLeafData";
 					attribute.put("url", url+"?code="+parentCode+water.getCode()
-							+"?parentCode="+parentCode+water.getParentCode()
+							+"&parentCode="+parentCode+water.getParentCode()
 							+"&areaCode="+areaCode+water.getArea().getCode()
+							+"&waterId="+parentCode+water.getCode()
 							+"&isLeaf="+("Y".equals(showLeaf)?"true":"false"));
 				}
 				map.put("text",text);
@@ -133,6 +137,24 @@ public class ShowIndexController extends BaseController{
 						||(!water.getIsLeaf()))
 					tree.add(map);
 			}
+		}
+		return tree;
+	}
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET,value = "/getStatisticTree")
+	public List<Map<String,Object>> getStatisticTree(){
+		List<Map<String,Object>> tree =  new ArrayList<Map<String,Object>>();
+		for(int i=1;i<4;i++){
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id","001"+i);
+			map.put("text","水体统计分析"+i);
+			map.put("state","open");
+			Map<String,String> attribute = new HashMap<String,String>();
+			attribute.put("url", "/statistic/example"+i);
+			attribute.put("openTab", "Y");
+			map.put("attributes", attribute);
+			tree.add(map);
 		}
 		return tree;
 	}
