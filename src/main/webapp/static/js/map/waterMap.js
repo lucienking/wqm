@@ -1,6 +1,7 @@
 /**
  * 2016.03.04 author by tangweilong
  */
+"use strict"
 var wkid = 4490;
 // var serviceUrl = "http://localhost:6080/arcgis/rest/services/";
 var serviceUrl = "http://10.215.201.151:6080/arcgis/rest/services/";
@@ -23,15 +24,15 @@ require(
 				"esri/tasks/query", "esri/tasks/QueryTask",
 				"esri/dijit/Scalebar", "dijit/layout/TabContainer",
 				"dijit/layout/ContentPane", "esri/dijit/InfoWindow",
-				"dojo/dom-construct", "esri/toolbars/navigation",
-				"dijit/registry","CustomModules/geometryUtils", "dijit/Toolbar", "dojo/domReady!" ],
+				"dojo/dom-construct","dijit/registry",
+				"CustomModules/geometryUtils", "dijit/Toolbar", "dojo/domReady!" ],
 		function(Map, WebTiledLayer, Extent, Point, TileInfo, parser,
 				OverviewMap, SpatialReference, ArcGISDynamicMapServiceLayer,
 				Navigation, FeatureLayer, InfoTemplate, on, dom, Legend,
 				HomeButton, SimpleFillSymbol, SimpleMarkerSymbol,
 				SimpleLineSymbol, Color, Graphic, Query, QueryTask, Scalebar,
 				TabContainer, ContentPane, InfoWindow, domConstruct,
-				Navigation, registry,geometryUtils) {
+				registry,geometryUtils) {
 			var infoWindow = new InfoWindow(null, domConstruct.create("div"));
 			infoWindow.startup();
 			parser.parse();
@@ -48,7 +49,7 @@ require(
 				zoom : 16,
 				extent : bounds,
 				infoWindow : infoWindow,
-				isZoomSlider:false,
+				slider:false,
 				logo : false
 			});
 			map.infoWindow.resize(400, 300);
@@ -73,7 +74,7 @@ require(
 // visible : true
 // }, dom.byId("overViewMap"));
 // overviewMapDijit.startup();
-			//toolBar(map);
+			toolBar(map);
 
 			/**
 			 * 定义弹窗
@@ -102,7 +103,7 @@ require(
 //			      });
 			var water_pollution_layer = new FeatureLayer(water_pollution_Url
 					+ "/0", {
-				"opacity" : 1,
+				"opacity" : 0,
 				outFields : water_pollution_filed,
 				infoTemplate : water_pollution_info
 			});
