@@ -57,8 +57,10 @@ public class ShowIndexController extends BaseController{
 		String areaCode = "";
 		String parentCode = "";
 		String url = "";
+		String openTab = "Y";
 		if("data".equals(type)){
-			url = "/monitorData/monitorDataManager";
+			url = "/monitorData/waterData";
+			if("Y".equals(showLeaf)) url = "/monitorData/waterLeafData";
 		}else{
 			url= "/show/waterMap";
 			areaCode = "a";
@@ -77,7 +79,8 @@ public class ShowIndexController extends BaseController{
 				map.put("state","closed");
 				Map<String,String> attribute = new HashMap<String,String>();
 				attribute.put("url", url+"?areaCode="+areaCode+area.getCode());
-				attribute.put("openTab", "Y");
+				if("map".equals(type)) openTab = "N";
+				attribute.put("openTab", openTab);
 				map.put("attributes",attribute );
 				tree.add(map);
 			}
@@ -87,15 +90,19 @@ public class ShowIndexController extends BaseController{
 				String text = water.getName();
 				map.put("id","w"+water.getCode());
 				map.put("iconCls", water.getIconCls());
+				Map<String,String> attribute = new HashMap<String,String>();
 				if(!water.getIsLeaf()){
 					map.put("state","closed");
+					attribute.put("url", url+"?parentCode="+parentCode+water.getCode()
+							+"&areaCode="+areaCode+water.getArea().getCode()
+							+"&isLeaf="+("Y".equals(showLeaf)?"true":"false"));
+				}else{
+					attribute.put("url", url+"?code="+parentCode+water.getCode()
+							+"&areaCode="+areaCode+water.getArea().getCode()
+							+"&isLeaf="+("Y".equals(showLeaf)?"true":"false"));
 				}
 				map.put("text",text);
-				
-				Map<String,String> attribute = new HashMap<String,String>();
-				attribute.put("url", url+"?parentCode="+parentCode+water.getCode()
-						+"&isLeaf="+water.getIsLeaf());
-				attribute.put("openTab", "Y");
+				attribute.put("openTab", openTab);
 				map.put("attributes",attribute );
 				tree.add(map);
 			}
@@ -106,19 +113,24 @@ public class ShowIndexController extends BaseController{
 				String text = water.getName();
 				map.put("id","w"+water.getCode());
 				map.put("iconCls", water.getIconCls());
-				if(!water.getIsLeaf()){
-					map.put("state","closed");
-				}
-				map.put("text",text);
 				
 				Map<String,String> attribute = new HashMap<String,String>();
-				attribute.put("url", url+"?parentCode="+parentCode+water.getCode()
-						+"&isLeaf="+water.getIsLeaf());
-				attribute.put("openTab", "Y");
+				if(!water.getIsLeaf()){
+					map.put("state","closed");
+					attribute.put("url", url+"?parentCode="+parentCode+water.getCode()
+							+"&isLeaf="+("Y".equals(showLeaf)?"true":"false"));
+				}else{
+					if("data".equals(type))url = "/monitorData/waterLeafData";
+					attribute.put("url", url+"?code="+parentCode+water.getCode()
+							+"?parentCode="+parentCode+water.getParentCode()
+							+"&areaCode="+areaCode+water.getArea().getCode()
+							+"&isLeaf="+("Y".equals(showLeaf)?"true":"false"));
+				}
+				map.put("text",text);
+				attribute.put("openTab", openTab);
 				map.put("attributes",attribute );
-				if("Y".equals(showLeaf))
-					tree.add(map);
-				else if(("N".equals(showLeaf)&&!water.getIsLeaf()))
+				if((water.getIsLeaf()&&"Y".equals(showLeaf))
+						||(!water.getIsLeaf()))
 					tree.add(map);
 			}
 		}
@@ -187,8 +199,8 @@ public class ShowIndexController extends BaseController{
 		model.addAttribute("treeId", treeId);
 		model.addAttribute("url", url);
 		model.addAttribute("tabName", tabName);
-		if(url.indexOf("/sys/")>0) return "/front/sysManagerTree";
+		if(url.indexOf("/sys/")>0) view  =  "/front/sysManagerTree";
+		else if(url.indexOf("/statisticTree")>0)view  =  "/front/statisticTree";	
 		return view;
 	}
-	
 }

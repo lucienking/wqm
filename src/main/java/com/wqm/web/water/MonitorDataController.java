@@ -53,12 +53,22 @@ public class MonitorDataController extends BaseController{
 	 * @return
 	 * 
 	 */
-	@RequestMapping(method = RequestMethod.GET,value = "/monitorDataManager")
-	public String  monitorDatasManager(Model model,@RequestParam(value = "parentCode", defaultValue = "0") String parentCode
+	@RequestMapping(method = RequestMethod.GET,value = "/waterData")
+	public String  waterData(Model model,@RequestParam(value = "parentCode", defaultValue = "0") String parentCode
 			,@RequestParam(value = "areaCode", defaultValue = "0") String areaCode){	
 		model.addAttribute("parentCode", parentCode);
 		model.addAttribute("areaCode", areaCode);
-		return "/water/monitorDataManager";
+		return "/water/waterData";
+	}
+	
+	@RequestMapping(method = RequestMethod.GET,value = "/waterLeafData")
+	public String  waterLeafData(Model model,@RequestParam(value = "parentCode", defaultValue = "0") String parentCode
+			,@RequestParam(value = "areaCode", defaultValue = "0") String areaCode
+			,@RequestParam(value = "code", defaultValue = "0") String code){	
+		model.addAttribute("parentCode", parentCode);
+		model.addAttribute("areaCode", areaCode);
+		model.addAttribute("code", code);
+		return "/water/waterLeafData";
 	}
 	
 	/**
