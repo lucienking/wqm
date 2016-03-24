@@ -69,7 +69,7 @@ $(function(){
 		    animate:false,
 		    onSelect:function(title,index){
 				if(title=="系统管理"&&$("#currentUserName").val()=="") {
-					window.location.href = "${ctx}/";
+					//window.location.href = "${ctx}/";
 					//window.location.href = "${ctx}/login";
 				}
 			}
@@ -80,9 +80,9 @@ function moduleOnclick(id){
 	
 	var array = "";  
 	if(id == "waterEnviromentAccordion"){
-		array = {'污水处理厂进出水':"",'市政污水提升泵站污水':"",'s水网动力工程地表水':"/wqm/show/getWaterTree?type=data&showLeaf=Y",'饮用水源地':"",'自来水厂出水':"",'供水管网点':"",'中型水库':"",'主要河流':""};
+		array = {'污水处理厂进出水':"",'市政污水提升泵站污水':"",'s水网动力工程地表水':"/wqm/show/getWaterTree?type=data%26showLeaf=Y",'饮用水源地':"",'自来水厂出水':"",'供水管网点':"",'中型水库':"",'主要河流':""};
 	}else{
-		array = {'水体信息':"",'s监测信息':"/wqm/show/getWaterTree?type=data&showLeaf=N",'统计分析':"",'预警管理':"",'电子地图':"/wqm/show/getWaterTree?type=map&showLeaf=Y",'系统管理':"/wqm/sys/menu/getMenus"};
+		array = {'水体信息':"",'s监测信息':"/wqm/show/getWaterTree?type=data%26showLeaf=N",'统计分析':"/wqm/show/statisticTree",'预警管理':"",'电子地图':"/wqm/show/getWaterTree?type=map%26showLeaf=Y",'系统管理':"/wqm/sys/menu/getMenus"};
 	}
 	closeAll();
 	removeAllAccordion();

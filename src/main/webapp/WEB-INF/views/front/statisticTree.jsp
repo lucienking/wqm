@@ -1,15 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<c:set var="treeId" value="${treeId }" />
 <div id="accordionPanelContent" class="easyui-panel" style="border:0 solid #FFFFFF;">
-	<ul id= "${treeId }" class="easyui-tree"  data-options="url:'${url }',method:'get'"> 
+	<ul id= "statisticTree" class="easyui-tree" option-data="{data:[{
+        'text':'统计分析',
+        'state':'open',
+        'attributes':{
+            'url':'/statistic/example' 
+        }]}"> 
 	</ul>
 </div>
 <script>
-$(function(){
-	var treeId = "${treeId}";
-	var tabName = "${tabName}";
-	var url = "${url}";
+/* $(function(){
+	var treeId = "statisticTree";
+	var tabName = "统计分析";
+	var url = "/wqm/statistic/example";
 	$('#'+treeId).tree({
 		onClick: function(node){
 			if($('#'+treeId).tree('isLeaf',node.target)){
@@ -67,5 +71,5 @@ function openTab(node,tabName){
 		});
 	}
 	return;
- }
+ } */
 </script>
