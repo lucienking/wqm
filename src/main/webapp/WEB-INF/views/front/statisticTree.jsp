@@ -1,52 +1,24 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <div id="accordionPanelContent" class="easyui-panel" style="border:0 solid #FFFFFF;">
-	<ul id= "statisticTree" class="easyui-tree" option-data="{data:[{
-        'text':'统计分析',
-        'state':'open',
-        'attributes':{
-            'url':'/statistic/example' 
-        }]}"> 
+	<ul id= "statisticTree" class="easyui-tree" data-options="url:'/wqm/show/getStatisticTree',method:'get'"> 
 	</ul>
 </div>
 <script>
-/* $(function(){
-	var treeId = "statisticTree";
-	var tabName = "统计分析";
-	var url = "/wqm/statistic/example";
-	$('#'+treeId).tree({
+$(function(){
+	$('#statisticTree').tree({
 		onClick: function(node){
-			if($('#'+treeId).tree('isLeaf',node.target)){
-				openTab(node,tabName);
-			}else if(!$('#'+treeId).tree('isLeaf',node.target)&& node.attributes.openTab=="Y"){
-				$('#'+treeId).tree(node.state === 'closed' ? 'expand' : 'collapse', node.target);
-				openTab(node,tabName);
-			}else{
-				$('#'+treeId).tree(node.state === 'closed' ? 'expand' : 'collapse', node.target);
-				return;
-			}
-		},
-		onLoadSuccess:function(node,data){  
-            $('#'+treeId+" li:eq(0)").find("div").addClass("tree-node-selected");  
-            var n = $('#'+treeId).tree("getSelected"); 
-            $('#'+treeId+" li:eq(0)").find("div").removeClass("tree-node-selected");  
-            if(n!=null){  
-            	$('#'+treeId).tree('expand', n.target);
-            	$(".tabs-title").each(function(index, obj) {
-                  var tab = $(this).text();
-                  if(tab!="首页") $("#frontMainTabs").tabs('close', tab);
-             	 });
-            	openTab(n,tabName);
-            }  
-        }  
+			if($('#statisticTree').tree('isLeaf',node.target)){
+				openTab(node,node.text);
+			} 
+		} 
 	});  
 });
 function openTab(node,tabName){
-	var title = tabName;
+	var title = node.text;
 	if(title.substring(0,5)=="<span")
 		title = title.substring(title.indexOf(">") + 1,title.indexOf("</"));
 	var url = '/wqm'+node.attributes.url;
-	var openType = node.attributes.openType;
 	var id = url.replace(new RegExp("/","g"), "");
 	$('#frontMainTabs').tabs({
 		fit:true,
@@ -60,7 +32,7 @@ function openTab(node,tabName){
 	var flag = $("#frontMainTabs").tabs('exists', title);
 	if (flag) {
 		var tab = $('#frontMainTabs').tabs('getTab',title);   
-		tab.panel('refresh', url);
+		$('#frontMainTabs').tabs('select',title);   
 	}else{
 		var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
 		$('#frontMainTabs').tabs('add',{
@@ -71,5 +43,5 @@ function openTab(node,tabName){
 		});
 	}
 	return;
- } */
+ } 
 </script>

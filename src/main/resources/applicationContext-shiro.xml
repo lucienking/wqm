@@ -34,6 +34,7 @@
 				/admin/** = roles[admin]
 				/sys/** = authc
 				/** = anon
+				/statistic/** = anon
 			</value>
 		</property>
 	</bean>

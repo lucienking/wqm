@@ -25,7 +25,7 @@
 					<input id="hidden_areaCode" type="hidden" name="areaCode" value="${areaCode =='01'?'0':areaCode }"/>
 					<input id="hidden_parentCode" type="hidden" name="parentCode" value="${parentCode }"/>
 					<input type="hidden" name="isLeaf" value="true"/>
-					<input id="hidden_parentCode" type="hidden" name="code" value="${code }"/>
+					<input id="hidden_waterCode" type="hidden" name="waterCode" value="${code }"/>
 				</td>
 				<td width="18%" align="center" style="min-width:150px">
 					<label for="search_monitorDataCode">水体</label>
@@ -439,6 +439,10 @@ $("#monitor_LeafWater").combobox({
 	 	 areaCode = $("#hidden_areaCode").val();
 	 $("#search_Area").combobox("setValue",areaCode);
 	 $("#search_Water").combobox("setValue",parentCode);
+	 if($("#hidden_waterCode").val()!="") {
+		 $("#hidden_parentCode").val("");
+		 $("#hidden_areaCode").val("");
+	 } 
  })
 </script>
 </div>
