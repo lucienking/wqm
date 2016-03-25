@@ -47,11 +47,11 @@
 					<div data-dojo-type="dijit/form/Button" id="zoomout"
 						data-dojo-props="iconClass:'zoomoutIcon'">缩小</div>
 					<div data-dojo-type="dijit/form/Button" id="zoomfullext"
-						data-dojo-props="iconClass:'zoomfullextIcon'">全图范围</div>
+						data-dojo-props="iconClass:'zoomfullextIcon'">全图缩放</div>
 					<div data-dojo-type="dijit/form/Button" id="zoomprev"
-						data-dojo-props="iconClass:'zoomprevIcon'">上一范围</div>
+						data-dojo-props="iconClass:'zoomprevIcon'">前一视图</div>
 					<div data-dojo-type="dijit/form/Button" id="zoomnext"
-						data-dojo-props="iconClass:'zoomnextIcon'">下一范围</div>
+						data-dojo-props="iconClass:'zoomnextIcon'">后一视图</div>
 					<div data-dojo-type="dijit/form/Button" id="pan"
 						data-dojo-props="iconClass:'panIcon'">平移</div>
 					<div data-dojo-type="dijit/form/Button" id="deactivate"
