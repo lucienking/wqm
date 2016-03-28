@@ -19,8 +19,8 @@
       	</div>
       	<div id="module_div" class="module_div">
       		<div class="mo_div">
-       		<div class="module_info" ><a href="#" onclick="moduleOnclick('waterEnviromentAccordion')">水资源</a></div>
-       		<div class="module_info" id="module_index"><a href="#" onclick="moduleOnclick('waterResourceAccordion')">水环境</a></div>
+       		<div class="module_info" ><a href="#" onclick="moduleOnclick('waterEnviromentAccordion')">水环境</a></div>
+       		<div class="module_info" id="module_index"><a href="#" onclick="moduleOnclick('waterResourceAccordion')">水资源</a></div>
        		<div class="module_info"><a href="#">供排水</a></div>
        		<div class="module_info"><a href="#">水文</a></div>
        		<div class="module_info"><a href="#">水利普查</a></div>
@@ -46,11 +46,6 @@
      <div data-options="region:'west'" style="width:250px;">
      	<div  id="westRegionAccordion" style="width:100%;">
      	</div>
-     <%-- 	 
-      		<!-- <a href="#" tgt="/show/getWaterTree?type=data">监测信息</a> -->
-      		<!-- <a href="#" tgt="/show/getWaterTree?type=map">电子地图</a> -->
-      		<!-- <a href="#" tgt="/sys/menu/getMenus">系统管理</a> -->
-       --%>
      </div> 
      <div data-options="region:'center',iconCls:'icon-ok',border:false" >
      	 <div id="frontMainTabs">
