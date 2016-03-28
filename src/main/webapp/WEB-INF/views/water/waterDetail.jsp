@@ -21,7 +21,7 @@
 </style>
 <div id="monitorDataDetail_container" style="width:100%;height:100%;">
 	<div id="monitorDataDetailTabs" class="easyui-tabs" style="width:100%;height:100%;">
-		<div title="水体基本信息" data-options="fit:true" style="padding-bottom:20px;border:none;">
+		<div title="水体基本信息" data-options="fit:true" style="padding-bottom:10px;border:none;">
 		<table id="baseInfoTable" style="width:99%;cellspacing:0;cellpadding:0;border-collapse:collapse;" align="center"  border="0" cellspacing="0" >
 			<tr>
 				<td width="33%">水体名称:${water.name}</td><td width="33%">所在区域:${water.area.name} </td><td width="33%">水体面积 :</td>
@@ -37,7 +37,7 @@
 			</tr>
 		</table>
 		</div>
-		<div title="水体水文信息" style="padding-bottom:20px;" data-options="fit:true">
+		<div title="水体水文信息" style="padding-bottom:10px;" data-options="fit:true">
 			<table id="waterInfoTable" style="width:99%;cellspacing:0;cellpadding:0;border-collapse:collapse;" align="center"  border="0" cellspacing="0" >
 				<tr>
 					<td>当前水位:</td><td>预警水位:</td><td>历史最大水位:</td>
@@ -50,7 +50,7 @@
 				</tr>
 			</table>
 		</div>
-		<div title="水体综合信息" style="padding-bottom:20px;" data-options="fit:true">
+		<div title="水体综合信息" style="padding-bottom:10px;" data-options="fit:true">
 			图片、监控视频、文字资料
 		</div>
 	</div>
