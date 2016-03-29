@@ -53,30 +53,15 @@ function openTab(node,tabName){
 			});  //关闭后 清除拼接在body后的dialog
 		}
 	});
-	var flag = $("#frontMainTabs").tabs('exists', title);
-	if (flag) {
-		if(url.indexOf("waterMap")>0){
-			$('#frontMainTabs').tabs('close',title); 
-			var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
-			$('#frontMainTabs').tabs('add',{
-				id:id,
-				title:title,
-				content:content,
-				closable:true  
-			});
-		}else{
-			var tab = $('#frontMainTabs').tabs('getTab',title);   
-			tab.panel('refresh', url);
-		}
-	}else{
-		var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
-		$('#frontMainTabs').tabs('add',{
-			id:id,
-			title:title,
-			content:content,
-			closable:true  
-		});
-	}
+	if ($("#frontMainTabs").tabs('exists', title)) 
+		$('#frontMainTabs').tabs('close',title);   
+	var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99%;"></iframe>';  
+	$('#frontMainTabs').tabs('add',{
+		id:id,
+		title:title,
+		content:content,
+		closable:false   
+	});
 	return;
  }
 </script>

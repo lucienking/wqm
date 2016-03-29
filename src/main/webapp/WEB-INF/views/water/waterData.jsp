@@ -432,8 +432,8 @@ $("#monitor_LeafWater").combobox({
 	 	 parentCode = $("#hidden_parentCode").val();
 	 if($("#hidden_areaCode").val() != ""&&$("#hidden_areaCode").val() != undefined&&$("#hidden_areaCode").val() != "0") 
 	 	 areaCode = $("#hidden_areaCode").val();
-	 $("#search_Area").combobox("setValue",areaCode);
-	 $("#search_Water").combobox("setValue",parentCode);
+	 $("#search_Area").combobox("select",areaCode);
+	 $("#search_Water").combobox("select",parentCode);
  })
 </script>
 </div>

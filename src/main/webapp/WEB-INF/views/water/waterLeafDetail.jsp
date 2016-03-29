@@ -21,7 +21,7 @@
 </style>
 <div id="monitorDataDetail_container" style="width:100%;height:100%;">
 	<div id="monitorDataDetailTabs" class="easyui-tabs" style="width:100%;height:100%;">
-		<div title="基本信息" data-options="fit:true" style="">
+		<div title="基本信息" data-options="fit:true" style="padding-bottom:10px;">
 		<table id="baseInfoTable" style="width:99%;cellspacing:0;cellpadding:0;border-collapse:collapse;" align="center"  border="0" cellspacing="0" >
 			<tr>
 				<td width="33%">水体名称:${water.name}</td><td width="33%">所在区域:${water.area.name} </td><td width="33%">水体面积 :</td>
@@ -31,7 +31,7 @@
 			</tr>
 		</table>
 		</div>
-		<div title="监测信息" style="" data-options="fit:true">
+		<div title="监测信息" style="padding-bottom:10px;" data-options="fit:true">
 			<input name="monitorDate" class="easyui-datebox" style="width:120px;"/>
 			<a class="easyui-linkbutton" href="#" >查询</a>
 			<table id="monitorDataTable" style="width:99%;cellspacing:0;cellpadding:0;border-collapse:collapse;" align="center"  border="0" cellspacing="0" >
@@ -46,7 +46,7 @@
 				</tr>
 			</table>
 		</div>
-		<div title="预警信息" style="" data-options="fit:true">
+		<div title="预警信息" style="padding-bottom:10px;" data-options="fit:true">
 		</div>
 	</div>
 </div>

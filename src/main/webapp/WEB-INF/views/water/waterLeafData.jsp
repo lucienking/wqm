@@ -369,7 +369,7 @@ $("#monitor_LeafWater").combobox({
 	 
 	 $("#monitorDataDetailDialog").show(); //先显示，再弹出
 	 $("#monitorDataDetailDialog").dialog({
-		  title:'水体详细信息',
+		  title:'监测站点详细信息',
 	      href:"${ctx}/water/waterDetail?code="+code,
 	      width:500,
 	      left:150,
