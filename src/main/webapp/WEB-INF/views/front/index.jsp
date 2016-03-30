@@ -41,7 +41,7 @@
      	</div>
      </div>
      <div data-options="region:'south'" style="height:30px;text-align:center;font-size: 10px;color:gray;">
-     	©2015 海口市龙华区水务局 copyright
+     	©2015 海口市龙华区水务局 copyright 
      </div>
      <div data-options="region:'west'" style="width:250px;">
      	<div  id="westRegionAccordion" style="width:100%;">
