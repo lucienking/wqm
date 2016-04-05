@@ -16,12 +16,15 @@ body,#map {
 	border-style: none;
 	padding: 0;
 }
-
+/*弹窗样式*/
+.infowindow_tab th, .infowindow_tab td {
+    border: 1px solid #1DCBE4;
+}
 .infowindow_tab {
-	border-collapse:collapse;
+	border-collapse:collapse; 
 	border: 1px;
 	width: 100%;
-	border-color: #D9E7F3;
+	border-color: #1DCBE4;
 }
 
 /* legend element */
